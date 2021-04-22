@@ -3,6 +3,7 @@
     height: 400px;
     overflow-y: visible;
     background-color: #4ED38C;
+    color:#333;
 }
 
 .HotelItemCard a {
@@ -22,18 +23,12 @@
     border-radius: 2px;
 }
 
-.HotelItemCard .card-body {
-    height: 30%;
-    position: absolute;
-    bottom: 0;
+.Star {
+    color: #343A40; 
+    text-shadow: 0 0 1px #343A40, 0 0 1px #343A40, 0 0 1px #343A40, 0 0 1px #343A40;
 }
 
-.HotelItemCard .fa-star {
-    color: red !important; /*565C63*/
-    //text-shadow: 0 0 1px #343A40, 0 0 1px #343A40, 0 0 1px #343A40, 0 0 1px #343A40;
-}
-
-/*.HotelItemCard .checked {
-    color:blue;// #FFD119;
+.CheckedStar {
+    color: #FFD119;
     text-shadow: 0 0 1px black, 0 0 1px black, 0 0 1px black, 0 0 1px black;
-}*/
+}

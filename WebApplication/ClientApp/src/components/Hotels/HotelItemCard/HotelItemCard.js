@@ -12,7 +12,8 @@ const HotelItemCard = props => {
     let stars = [];
     for (var i = 0; i < 5; i++) {
         stars.push(
-            <span className={['fa', 'fa-star', (props.hotel.stars > i ? 'checked' : '')].join(' ')}>
+            <span className={['fa', 'fa-star', 
+                (props.hotel.stars > i ? classes.CheckedStar : classes.Star)].join(' ')}>
             </span>
         );
     }
