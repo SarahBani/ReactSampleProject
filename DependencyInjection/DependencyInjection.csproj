@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.ApplicationService\Core.ApplicationService.csproj" />
+    <ProjectReference Include="..\Core\Core.DomainModel\Core.DomainModel.csproj" />
+    <ProjectReference Include="..\Infrastructure\Infrastructure.Postgres\Infrastructure.Postgres.csproj" />
+  </ItemGroup>
+
+</Project>

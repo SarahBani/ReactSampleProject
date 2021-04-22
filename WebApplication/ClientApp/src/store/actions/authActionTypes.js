@@ -1,0 +1,11 @@
+﻿export const SHOW_LOADER1 = 'SHOW_LOADER1';
+export const SIGN_IN_START = 'SIGN_IN_START';
+export const SIGN_IN_SUCCEEDED = 'SIGN_IN_SUCCEEDED';
+export const SIGN_IN_FAILED = 'SIGN_IN_FAILED';
+export const SIGN_OUT = 'SIGN_OUT';
+export const SIGN_OUT_START = 'SIGN_OUT_START';
+export const SIGN_OUT_SUCCEEDED = 'SIGN_OUT_SUCCEEDED';
+export const AUTO_SIGN_IN = 'AUTO_SIGN_IN';
+export const CHECK_AUTH_TIMEOUT = 'CHECK_AUTH_TIMEOUT';
+export const SET_AUTH_REDIRECT_PATH = 'SET_AUTH_REDIRECT_PATH';
+export const RAISE_ERROR1 = 'RAISE_ERROR1';

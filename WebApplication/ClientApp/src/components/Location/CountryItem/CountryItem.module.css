@@ -1,0 +1,26 @@
+﻿.CountryItem {
+    width: 150px;
+    padding: 16px;
+    text-align: center;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 3px #ccc;
+    margin: 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+    .CountryItem:hover,
+    .CountryItem:active {
+        background-color: #C0DDF5;
+    }
+
+h3 {
+    font-size: 15px;
+    padding:10px 0;
+}
+
+img {
+    width:50px;
+    height:30px;
+}
+ 

@@ -1,0 +1,25 @@
+﻿.BreadCrumb {
+    background-color: #FCFFC9;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+    .BreadCrumb ol {
+        background-color: transparent;
+        margin: 0;
+    }
+
+    .BreadCrumb li:not(:first-child) {
+        padding-top: 5px;
+    }
+
+    .BreadCrumb li:first-of-type {
+        font-size: 1.75rem;
+        color: #6c757d;
+        padding-right: 5px;
+        margin: -5px 0;
+    }
+
+    .BreadCrumb a {
+        text-decoration: none;
+    }
