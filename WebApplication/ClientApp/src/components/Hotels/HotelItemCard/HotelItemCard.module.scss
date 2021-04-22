@@ -6,8 +6,8 @@
 }
 
 .HotelItemCard a {
-    color: #000;
-    font-size:20px;
+    color: #276843;
+    font-size: 20px;
 }
 
 .HotelItemCard a:hover {
@@ -28,8 +28,8 @@
     bottom: 0;
 }
 
-.HotelItemCard .fa {
-    color: red; /*565C63*/
+.HotelItemCard .fa-star {
+    color: red !important; /*565C63*/
     //text-shadow: 0 0 1px #343A40, 0 0 1px #343A40, 0 0 1px #343A40, 0 0 1px #343A40;
 }
 
