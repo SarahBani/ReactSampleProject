@@ -1,6 +1,6 @@
 ﻿import React, { useEffect, useState } from 'react';
 
-import classes from './Cities.module.css';
+import classes from './Cities.module.scss';
 import CityItem from './CityItem/CityItem';
 import axiosInstance from '../../../axios-instance';
 

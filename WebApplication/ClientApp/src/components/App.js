@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap';
 
-import './custom.css'
+import './custom.scss'
 import Layout from '../hoc/Layout/Layout';
 import { Home } from './Home/Home';
 import About from './About/About';

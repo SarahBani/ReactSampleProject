@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect, Fragment, useCallback } from 'react';
 
-import classes from './Location.module.css';
+import classes from './Location.module.scss';
 import { connect } from 'react-redux';
 import * as actions from '../../store/actions/locationActions';
 import DropDown from '../UI/DropDown/DropDown';

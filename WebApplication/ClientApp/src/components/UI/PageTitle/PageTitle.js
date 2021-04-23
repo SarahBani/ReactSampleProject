@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 
-import classes from './PageTitle.module.css';
+import classes from './PageTitle.module.scss';
 
 const PageTitle = props => (
     <div className={classes.PageTitle}>

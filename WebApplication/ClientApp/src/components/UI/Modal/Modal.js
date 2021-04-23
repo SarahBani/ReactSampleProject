@@ -1,7 +1,7 @@
 ﻿import React, { Fragment, useEffect } from 'react';
 
 import Backdrop from '../Backdrop/Backdrop';
-import classes from './Modal.module.css';
+import classes from './Modal.module.scss';
 
 const modal = props => {
     return (<Fragment>

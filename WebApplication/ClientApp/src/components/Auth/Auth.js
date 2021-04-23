@@ -2,11 +2,11 @@
 import { connect } from "react-redux";
 import { Redirect } from "react-router";
 
+import classes from './Auth.module.scss';
 import FormElement from '../UI/FormElement/FormElement';
 import Button from '../UI/Button/Button';
 import Spinner from "../UI/Spinner/Spinner";
 import * as actions from '../../store/actions/authActions';
-import classes from './Auth.module.css';
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import { updateObject, getFormElements, getUpdatedForm, isFormValid } from '../../shared/utility';
 //import AuthContext from "../../context/AuthContext";

@@ -1,4 +1,10 @@
-﻿.HotelItemCard {
+﻿$shadow-item: 0 0 1px;
+
+@mixin shadow($color) {
+    text-shadow: $shadow-item $color, $shadow-item $color, $shadow-item $color, $shadow-item $color;
+}
+
+.HotelItemCard {
     width: 400px;
     height: 400px;
     overflow-y: visible;
@@ -24,11 +30,11 @@
 }
 
 .Star {
-    color: #343A40; 
-    text-shadow: 0 0 1px #343A40, 0 0 1px #343A40, 0 0 1px #343A40, 0 0 1px #343A40;
+    color: #343A40;
+    @include shadow(#343A40);
 }
 
 .CheckedStar {
     color: #FFD119;
-    text-shadow: 0 0 1px black, 0 0 1px black, 0 0 1px black, 0 0 1px black;
+    @include shadow(black);
 }

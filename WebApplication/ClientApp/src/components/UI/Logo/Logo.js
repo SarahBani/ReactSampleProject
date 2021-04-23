@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 
 import siteLogo from '../../../assets/img/logo.png';
-import classes from './Logo.module.css';
+import classes from './Logo.module.scss';
 
 const Logo = props => (
     <div className={classes.Logo} style={{ height: props.height }}>

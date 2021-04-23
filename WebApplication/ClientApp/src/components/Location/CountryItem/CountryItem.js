@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 
-import classes from './CountryItem.module.css';
+import classes from './CountryItem.module.scss';
 
 const CountryItem = props => {
     const flagUrl = '/images/' +

@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import { Link } from 'react-router-dom';
 
-import classes from './BreadCrumb.module.css';
+import classes from './BreadCrumb.module.scss';
 
 const BreadCrumb = props => (
     <div className={classes.BreadCrumb}>

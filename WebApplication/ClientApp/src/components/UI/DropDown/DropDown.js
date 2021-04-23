@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect, useRef, Fragment } from 'react';
 
-import classes from './DropDown.module.css';
+import classes from './DropDown.module.scss';
 import { useCallback } from 'react';
 
 const initialItem = { id: 0, text: '------' };

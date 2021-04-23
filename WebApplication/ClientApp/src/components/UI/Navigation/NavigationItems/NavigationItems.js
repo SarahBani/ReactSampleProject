@@ -1,7 +1,7 @@
 ﻿import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 
-import classes from './NavigationItems.module.css';
+import classes from './NavigationItems.module.scss';
 import NavigationItem from './NavigationItem/NavigationItem';
 import * as actions from '../../../../store/actions/authActions';
 
