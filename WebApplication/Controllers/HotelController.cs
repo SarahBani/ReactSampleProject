@@ -6,6 +6,7 @@ using Core.DomainModel;
 using Core.DomainModel.Entities;
 using Core.DomainService;
 using Microsoft.AspNetCore.Mvc;
+using WebApplication.Models;
 
 namespace WebApplication.Controllers
 {
@@ -31,13 +32,33 @@ namespace WebApplication.Controllers
 
         #endregion /Constructors
 
-        #region Actions          
+        #region Actions   
+
+        [HttpGet("GetRandomList")]
+        public Task<IList<Hotel>> GetSummaryListAsync()
+        {
+            return this._hotelService.GetListAsync(null, null, new Page(1, 6));
+        }
 
         [HttpGet("GetList")]
-        [HttpGet("GetList/{cityId}/{countryId}")]
-        public Task<IList<Hotel>> GetListAsync(long? cityId, short? countryId)
+        //public Task<IList<Hotel>> GetListAsync([FromQuery] long? cityId, [FromQuery] short? countryId,
+        //   [FromQuery] short? pageNo, [FromQuery] short? pageCount)
+        //      {
+        //        Page page = null;
+        //        if (pageNo.HasValue && pageCount.HasValue)
+        //        {
+        //            page = new Page(pageNo.Value, pageCount.Value);
+        //}
+        //        return this._hotelService.GetListAsync(cityId, countryId, page);
+        //    }
+        public Task<IList<Hotel>> GetListAsync([FromQuery] GetHotelListQueryModel model)
         {
-           return this._hotelService.GetListAsync(cityId, countryId);
+            Page page = null;
+            if (model.PageNo.HasValue && model.PageCount.HasValue)
+            {
+                page = new Page(model.PageNo.Value, model.PageCount.Value);
+            }
+            return this._hotelService.GetListAsync(model.CityId, model.CountryId, page);
         }
 
         [HttpGet("GetCount")]

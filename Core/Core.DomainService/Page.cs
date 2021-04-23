@@ -5,7 +5,7 @@
 
         #region Constructors
 
-        public Page(int pageNo, int count)
+        public Page(short pageNo, short count)
         {
             this.FirstRowIndex = ((pageNo - 1) * count);
             this.Count = count;

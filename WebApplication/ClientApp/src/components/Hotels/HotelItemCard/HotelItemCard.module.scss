@@ -1,15 +1,7 @@
-﻿$shadow-item: 0 0 1px;
-
-@mixin shadow($color) {
-    text-shadow: $shadow-item $color, $shadow-item $color, $shadow-item $color, $shadow-item $color;
-}
-
-.HotelItemCard {
-    width: 400px;
+﻿.HotelItemCard {
     height: 400px;
-    overflow-y: visible;
     background-color: #4ED38C;
-    color:#333;
+    color: #333;
 }
 
 .HotelItemCard a {
@@ -21,20 +13,21 @@
     color: #FFD800;
 }
 
+.HotelItemCard a:first-child {
+    height: 70%;
+}
+
 .HotelItemCard img {
     width: 100%;
-    height: 70%;
+    height: 100%;
     margin: auto;
     border: 1px solid #000;
     border-radius: 2px;
 }
 
-.Star {
-    color: #343A40;
-    @include shadow(#343A40);
-}
-
-.CheckedStar {
-    color: #FFD119;
-    @include shadow(black);
+.HotelItemCard > div {
+    width: 100%;
+    height: 30%;
+    position: absolute;
+    bottom: 0;
 }

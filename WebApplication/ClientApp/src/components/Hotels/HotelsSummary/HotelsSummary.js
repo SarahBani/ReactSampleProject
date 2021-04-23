@@ -20,7 +20,7 @@ const HotelsSummary = props => {
     }, [hotels]);
 
     return (
-        <div className="card-columns">
+        <div className="card-deck">
             {hotelItems}
         </div>
     );
@@ -34,7 +34,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchHotels: () => dispatch(actions.fetchHotels())
+        onFetchHotels: () => dispatch(actions.fetchHotels(null, null, 1, 6))
     };
 };
 

@@ -13,12 +13,18 @@ export function* fetchHotelsSaga(action) {
     try {
         const filters = [];
         if (action.cityId) {
-            filters.push(`cityId=${action.cityId}`);
+            yield filters.push(`cityId=${action.cityId}`);
         }
         if (action.countryId) {
-            filters.push(`countryId=${action.countryId}`);
+            yield filters.push(`countryId=${action.countryId}`);
         }
-        const queryString = (filters.length > 0 ? '?' + filters.join('&') : '');
+        if (action.pageNo) {
+            yield filters.push(`pageNo=${action.pageNo}`);
+        }
+        if (action.pageCount) {
+            yield filters.push(`pageCount=${action.pageCount}`);
+        }
+        const queryString = yield (filters.length > 0 ? '?' + filters.join('&') : '');
         const response = yield axiosInstance.get('/Hotel/GetList' + queryString, headers);
         yield put(actions.setHotels(response.data));
         yield put(commonActions.hideLoader());
@@ -45,5 +51,5 @@ export function* fetchHotelPhotosSaga(action) {
 //export function* selectHotelSaga(action) {
 //    yield put(commonActions.showLoader());
 //    yield put(commonActions.hideLoader());
-   
+
 //}

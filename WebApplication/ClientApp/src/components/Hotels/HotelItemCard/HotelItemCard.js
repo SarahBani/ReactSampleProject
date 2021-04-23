@@ -12,8 +12,8 @@ const HotelItemCard = props => {
     let stars = [];
     for (var i = 0; i < 5; i++) {
         stars.push(
-            <span className={['fa', 'fa-star', 
-                (props.hotel.stars > i ? classes.CheckedStar : classes.Star)].join(' ')}>
+            <span key={i} className={['fa', 'fa-star',
+                (props.hotel.stars > i ? 'checked' : '')].join(' ')}>
             </span>
         );
     }
@@ -28,7 +28,7 @@ const HotelItemCard = props => {
     return (
         <div className={["card", classes.HotelItemCard].join(' ')}>
             <Link to={'/hotel/' + props.hotel.id}>
-                <img className="card-img-top" src={imageUrl} alt={props.hotel.name} />
+                <img src={imageUrl} alt={props.hotel.name} />
             </Link>
             <div className="card-body text-center">
                 <Link to={'/hotel/' + props.hotel.id}>

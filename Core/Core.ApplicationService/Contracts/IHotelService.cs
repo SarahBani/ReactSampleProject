@@ -10,11 +10,7 @@ namespace Core.ApplicationService.Contracts
 
         Task<Hotel> GetByIdAsync(long id);
 
-        Task<IList<Hotel>> GetAllAsync();
-
-        Task<int> GetCountAsync();
-
-        Task<IList<Hotel>> GetListAsync(long? cityId, short? countryId);
+        Task<IList<Hotel>> GetListAsync(long? cityId, short? countryId, Page page = null);
 
         Task<int> GetCountAsync(long? cityId, short? countryId);
 

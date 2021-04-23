@@ -1,10 +1,12 @@
 ﻿import * as actionTypes from './hotelActionTypes';
 
-export const fetchHotels = (cityId, countryId) => {
+export const fetchHotels = (cityId, countryId, pageNo, pageCount) => {
     return {
         type: actionTypes.FETCH_HOTELS,
         cityId: cityId,
-        countryId: countryId
+        countryId: countryId,
+        pageNo: pageNo,
+        pageCount: pageCount
     };
 };
 

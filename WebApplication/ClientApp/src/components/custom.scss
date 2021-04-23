@@ -1,3 +1,9 @@
+$shadow-item: 0 0 1px;
+
+@mixin shadow($color) {
+    text-shadow: $shadow-item $color, $shadow-item $color, $shadow-item $color, $shadow-item $color;
+}
+
 body {
     background-color: #D2F4E3;
     min-height: 100vh;
@@ -11,4 +17,28 @@ main {
 .fa.fa-home {
     font-size: 30px;
     margin: -5px 10px;
+}
+
+.fa.fa-star {
+    color: #343A40;
+    @include shadow(#343A40);
+}
+
+.fa.fa-star.checked {
+    color: #FFD119;
+    @include shadow(black);
+}
+
+
+.card-columns {
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
+    column-count: 3;
+}
+
+.card-deck > .card {
+    width: 30%;
+    flex-wrap: wrap;
+    flex: initial;
+    margin:10px;
 }

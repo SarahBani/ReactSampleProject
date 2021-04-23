@@ -3,6 +3,7 @@ using Core.DomainModel.Entities;
 using Core.DomainService;
 using Core.DomainService.Repositoy;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,16 +28,16 @@ namespace Core.ApplicationService.Implementation
 
         #region Methods
 
-        public override Task<IList<Hotel>> GetAllAsync() =>
-            base.GetQueryable().Include(q => q.City).Include(q => q.City.Country).ToIListAsync();
-
         public override Task<Hotel> GetByIdAsync(long id) =>
            base.GetQueryable().Include(q => q.City).Include(q => q.City.Country).Include(q => q.Photos)
             .SingleAsync(q => q.Id == id);
 
-        public Task<int> GetCountAsync() => base.GetQueryable().CountAsync();
+        //public override Task<IList<Hotel>> GetAllAsync() =>
+        //    base.GetQueryable().Include(q => q.City).Include(q => q.City.Country).ToIListAsync();
 
-        public async  Task<IList<Hotel>> GetListAsync(long? cityId, short? countryId)
+        //public Task<int> GetCountAsync() => base.GetQueryable().CountAsync();
+
+        public async Task<IList<Hotel>> GetListAsync(long? cityId, short? countryId, Page page = null)
         {
             var list = base.GetQueryable();
             if (cityId.HasValue)
@@ -46,6 +47,10 @@ namespace Core.ApplicationService.Implementation
             if (countryId.HasValue)
             {
                 list = list.Where(q => q.City.CountryId.Equals(countryId.Value));
+            }
+            if (page != null)
+            {
+                list = list.Skip(page.FirstRowIndex * page.Count).Take(page.Count);
             }
             var hotels = await list.Include(q => q.City).Include(q => q.City.Country).ToListAsync();
             foreach (var hotel in hotels)
