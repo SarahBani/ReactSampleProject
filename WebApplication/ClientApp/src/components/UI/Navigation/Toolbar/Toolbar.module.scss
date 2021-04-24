@@ -12,17 +12,18 @@
     box-sizing: border-box;
     z-index: 90;
     border-bottom: 1px solid #000;
-}
 
-    .Toolbar nav {
+    nav {
         height: 100%;
     }
 
-    .Toolbar > div {
+    > div {
         height: 80%;
     }
+}
 
 @media(max-width:499px) {
+
     header > nav {
         display: none;
     }

@@ -1,0 +1,5 @@
+$gradient-background: linear-gradient(to bottom right, #4BA18E, #50AF9C, #63BB84, #DDE65A);
+
+@mixin border($color) {
+    border: 1px solid $color;
+}

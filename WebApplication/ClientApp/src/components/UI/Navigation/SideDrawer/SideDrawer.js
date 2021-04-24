@@ -1,16 +1,22 @@
-﻿import React, { Fragment } from 'react';
+﻿import React, { Fragment, useState, useEffect } from 'react';
 
 import classes from './SideDrawer.module.scss';
-import Logo from '../../Logo/Logo';
 import Backdrop from '../../Backdrop/Backdrop';
 import NavigationItems from '../NavigationItems/NavigationItems';
 
 const SideDrawer = props => {
 
-    const attachedClasses = [
-        classes.SideDrawer,
-        classes[props.show ? 'Open' : 'Close']
-    ].join(' ');
+    const { show } = props;
+    const [attachedClasses, setAttachedClasses] = useState('');
+    useEffect(() => {
+        setAttachedClasses(
+            [
+                classes.SideDrawer,
+                classes[props.show ? 'Open' : 'Close']
+            ].join(' ')
+        );
+    }, [show]);
+
     return (
         <Fragment>
             <Backdrop show={props.show} clicked={props.hide} />

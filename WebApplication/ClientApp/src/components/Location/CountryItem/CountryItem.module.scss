@@ -7,20 +7,18 @@
     margin: 10px;
     box-sizing: border-box;
     cursor: pointer;
-}
 
-    .CountryItem:hover,
-    .CountryItem:active {
+    &:hover, &:active {
         background-color: #C0DDF5;
     }
 
-h3 {
-    font-size: 15px;
-    padding:10px 0;
-}
+    h3 {
+        font-size: 15px;
+        padding: 10px 0;
+    }
 
-img {
-    width:50px;
-    height:30px;
+    img {
+        width: 50px;
+        height: 30px;
+    }
 }
- 

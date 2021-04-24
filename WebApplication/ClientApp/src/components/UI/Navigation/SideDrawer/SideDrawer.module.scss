@@ -10,6 +10,11 @@
     padding: 32px 16px;
     box-sizing: border-box;
     transition: transform 0.3s ease-out;
+
+    > div {
+        height: 11%;
+        margin-bottom: 32px;
+    }
 }
 
 @media(min-width:500px) {
@@ -24,9 +29,4 @@
 
 .Close {
     transform: translateX(-100%);
-}
-
-.SideDrawer > div {
-    height: 11%;
-    margin-bottom: 32px;
 }

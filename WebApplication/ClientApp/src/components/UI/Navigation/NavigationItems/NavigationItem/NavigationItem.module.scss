@@ -1,51 +1,71 @@
-﻿.NavigationItem {
+﻿@import "../../../../colors.scss";
+
+@mixin item-border($selected) {
+    @if($selected) {
+        border: {
+            right: 1px solid $black-border-hover;
+            left: 1px solid $black-border-hover;
+            bottom: 4px solid $light-blue-highlight;
+        }
+    }
+    @else {
+        border: {
+            right: 1px solid transparent;
+            left: 1px solid transparent;
+            bottom: 4px solid transparent;
+        }
+    }
+}
+
+.NavigationItem {
     margin: 10px 0;
     box-sizing: border-box;
     display: block;
     width: 100%;
-}
 
-    .NavigationItem a {
-        color: #FFD800;
+    a {
+        color: $yellow;
         text-decoration: underline;
         width: 100%;
         box-sizing: border-box;
         display: block;
-    }
 
-        .NavigationItem a:active,
-        .NavigationItem a:hover
-        .NavigationItem a.active {
-            color: #1D1D1D;
+        &:hover, &:active, &.active {
+            color: $dark-green;
         }
 
+        &.active {
+            font-weight: 700;
+            text-decoration: none;
+            cursor: default;
+        }
+    }
+}
+
 @media(min-width:500px) {
+
     .NavigationItem {
         margin: 0;
         display: flex;
         height: 100%;
         width: auto;
         align-items: center;
-    }
 
-        .NavigationItem a {
+        a {
             font-size: 18px;
             color: #FFF;
             text-decoration: none;
             height: 100%;
             padding: 28px 20px;
-            border-right: 1px solid transparent;
-            border-left: 1px solid transparent;
-            border-bottom: 4px solid transparent;
-        }
+            @include item-border(false);
 
-            .NavigationItem a:hover,
-            .NavigationItem a:active,
-            .NavigationItem a.active {
-                border-right: 1px solid #2D2D2D;
-                border-left: 1px solid #2D2D2D;
-                border-bottom: 4px solid #6CF7DB;
+            &:hover,
+            &:active,
+            &.active {
                 color: #FFF;
-                background-color: #1D1D1D;
+                background-color: $black-backgound-hover;
+                @include item-border(true);
             }
+        }
+    }
 }

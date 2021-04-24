@@ -54,7 +54,7 @@ const DropDown = props => {
         <Fragment>
             {label}
             <div id={title} className={["dropdown", classes.DropDown].join(' ')} onKeyDown={(event) => filterHandler(event)}>
-                <button type="button" className="btn btn-secondary dropdown-toggle"
+                <button type="button" className="btn dropdown-toggle"
                     data-toggle="dropdown">
                     <div>{selectedItem?.text ?? initialItem.text}</div>
                 </button>

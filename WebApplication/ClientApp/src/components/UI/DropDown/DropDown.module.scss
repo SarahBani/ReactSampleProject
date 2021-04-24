@@ -1,41 +1,54 @@
-﻿.DropDown > button {
-    border: 1px solid #96A3BC;
-    text-align: right;
-    width: 100%
-}
+﻿@import "../../_globals";
+@import "../../colors";
 
-    .DropDown > button > div {
-        float: left;
-        padding-right: 50px;
+.DropDown {
+
+    > button {
+        width: 100%;
+        text-align: right;
+        background-color: $medium-green;
+        @include border(#5AB690);
+
+        &:focus {
+            color: $dark-green;
+            box-shadow: 0 0 0.2rem rgba(78, 211, 140, 25%);
+        }
+
+        > div {
+            float: left;
+            padding-right: 50px;
+        }
     }
 
-.DropDown ul {
-    padding: 0;
-    max-height: 200px;
-    overflow-y: auto;
-    width: 100%;
-}
+    ul {
+        padding: 0;
+        max-height: 200px;
+        overflow-y: auto;
+        width: 100%;
 
-    .DropDown ul > li {
-        padding: 5px;
-        border: 1px solid #96A3BC;
-        cursor: pointer;
+        > li {
+            padding: 5px;
+            @include border(#96A3BC);
+            cursor: pointer;
+
+            &:hover {
+                background-color: $light-green-highlight;
+            }
+
+            &.selected {
+                background-color: $light-green;
+            }
+
+            > img {
+                width: 20px;
+                height: auto;
+                margin-right: 10px;
+            }
+
+            /*> span {
+                margin: 0 30px;
+            }*/
+        }
     }
 
-        .DropDown ul > li:hover {
-            background-color: #74ECFF;
-        }
-
-        .DropDown ul > li.selected {
-            background-color: #99D1DB;
-        }
-
-        .DropDown ul > li > img {
-            width: 20px;
-            height: auto;
-            margin-right: 10px;
-        }
-
-    /*    .DropDown ul > li > span {
-            margin: 0 30px;
-        }*/
+}

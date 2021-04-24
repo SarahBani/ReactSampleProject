@@ -1,11 +1,14 @@
-﻿.Footer {
+﻿@import "../../_globals";
+@import "../../colors";
+
+.Footer {
     display: none;
 }
 
 @media(min-width:500px) {
     .Footer {
         display: block;
-        background: linear-gradient(to bottom right, #4BA18E, #50AF9C, #63BB84, #DDE65A);
+        background: $gradient-background;
         color: #000;
         position: fixed;
         bottom: 0;
@@ -14,25 +17,25 @@
         font-size: 14px;
         z-index: 100;
         border-top: 1px solid #ccc;
-    }
 
-        .Footer img {
+        img {
             width: 120px;
             height: 120px;
         }
 
-        .Footer ul, .Footer ul li {
+        ul, li {
             margin: 10px;
         }
 
-        .Footer a {
+        a {
             font-weight: 600;
             color: #000;
             text-decoration: none;
-        }
 
-            .Footer a:hover {
-                color: #FFD800;
+            &:hover {
+                color: $yellow;
                 text-decoration: underline;
             }
+        }
+    }
 }
