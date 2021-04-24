@@ -1,6 +1,7 @@
 ﻿import { React, useState } from 'react';
 import { connect } from 'react-redux';
 
+import classes from './HotelsSummary.module.scss';
 import * as actions from '../../../store/actions/hotelActions';
 import { useEffect } from 'react';
 import HotelItemCard from '../HotelItemCard/HotelItemCard';
@@ -20,7 +21,7 @@ const HotelsSummary = props => {
     }, [hotels]);
 
     return (
-        <div className="card-deck">
+        <div className={["card-deck", classes.HotelsSummary].join(' ')}>
             {hotelItems}
         </div>
     );

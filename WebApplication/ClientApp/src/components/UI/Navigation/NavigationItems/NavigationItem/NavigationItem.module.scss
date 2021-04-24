@@ -62,6 +62,7 @@
             &:hover,
             &:active,
             &.active {
+                font-weight: 400;
                 color: #FFF;
                 background-color: $black-backgound-hover;
                 @include item-border(true);
