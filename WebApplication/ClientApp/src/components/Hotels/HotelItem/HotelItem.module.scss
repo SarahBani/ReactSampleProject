@@ -1,0 +1,20 @@
+﻿@import "../../_globals";
+@import "../../colors";
+
+.HotelItem {
+    background-color: $light-green;
+    color: $dark-green;
+    cursor: pointer;
+
+    &:hover {
+        color: $yellow;
+    }
+
+    img {
+        max-width: 50px;
+        max-height: 50px;
+        margin-right: 5px;
+        border: 1px solid #000;
+        border-radius: 2px;
+    }
+}

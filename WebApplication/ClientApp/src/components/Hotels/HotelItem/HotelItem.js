@@ -1,16 +1,42 @@
-﻿import { React } from 'react';
+﻿import { React, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-const HotelItem = props => {
-    return (
-        <Link class="list-group-item clearfix" >
-            <img src='images/no-image.png' class="img-response" />
-            <strong class="list-group-item-heading">{props.hotel.name}</strong>
-            <em> {props.hotel.city.name} - {props.hotel.city.country.name}</em>
-            <div class='float-right'>
-            </div >
-        </Link >
+import classes from './HotelItem.module.scss';
 
+const HotelItem = props => {
+
+    const { stars, photos } = props.hotel;
+    const [imageUrl, setImageUrl] = useState('images/no-image.png');
+    const [starsUI, setStarsUI] = useState([]);
+
+    useEffect(() => {
+        if (photos.length > 0) {
+            setImageUrl(`Resources/Images/hotels/${photos[0].photoUrl}`);
+        }
+    }, [photos]);
+
+    useEffect(() => {
+        const arr = [];
+        for (var i = 0; i < 5; i++) {
+            arr.push(
+                <span key={i} className={['fa', 'fa-star',
+                    (stars > i ? 'checked' : '')].join(' ')}>
+                </span>
+            );
+        }
+        setStarsUI(arr);
+    }, [stars]);
+
+    return (
+        <Link className={["list-group-item", "clearfix", classes.HotelItem].join(' ')}
+            to={`/hotels/${props.hotel.id}`} >
+            <img src={imageUrl} className="img-response" />
+            <strong className="list-group-item-heading">{props.hotel.name}</strong>
+            <em> {props.hotel.city.name} - {props.hotel.city.country.name}</em>
+            <div className='float-right'>
+                {starsUI}
+            </div>
+        </Link>
     );
 };
 

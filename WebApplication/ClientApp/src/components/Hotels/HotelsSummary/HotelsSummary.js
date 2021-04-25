@@ -5,11 +5,12 @@ import classes from './HotelsSummary.module.scss';
 import * as actions from '../../../store/actions/hotelActions';
 import { useEffect } from 'react';
 import HotelItemCard from '../HotelItemCard/HotelItemCard';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 
 const HotelsSummary = props => {
 
     const { hotels, onFetchHotels } = props;
-    const [hotelItems, setHotelItems] = useState([]);
+    const [hotelItemCards, setHotelItemCards] = useState([]);
 
     useEffect(() => {
         onFetchHotels();
@@ -17,12 +18,12 @@ const HotelsSummary = props => {
 
     useEffect(() => {
         const list = hotels.map(hotel => <HotelItemCard key={hotel.id} hotel={hotel} />);
-        setHotelItems(list);
+        setHotelItemCards(list);
     }, [hotels]);
 
     return (
         <div className={["card-deck", classes.HotelsSummary].join(' ')}>
-            {hotelItems}
+            {hotelItemCards}
         </div>
     );
 };
@@ -39,4 +40,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HotelsSummary);
+export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler(HotelsSummary));

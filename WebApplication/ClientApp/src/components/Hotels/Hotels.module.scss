@@ -1,0 +1,8 @@
+﻿@import "../_globals";
+
+.Hotels {
+
+    .HotelItems {
+        @include border(#ccc);
+    }
+}

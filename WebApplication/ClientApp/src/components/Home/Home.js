@@ -1,9 +1,8 @@
 import React from 'react';
 
-import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import HotelsSummary from '../Hotels/HotelsSummary/HotelsSummary';
 
-export const Home = (props) => {
+export const Home = () => {
 
     return (
         <div className="container">
@@ -12,4 +11,4 @@ export const Home = (props) => {
     );
 };
 
-export default withErrorHandler(Home);
+export default Home;

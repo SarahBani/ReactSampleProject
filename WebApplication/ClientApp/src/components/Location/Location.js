@@ -41,11 +41,12 @@ const Location = props => {
 
     const selectCountryHandler = useCallback((countryId) => {
         onSelectCountry(countryId);
-        //setCities(<Cities countryId={countryId} />);
+        props.changeCountry(countryId);
     }, [onSelectCountry]);
 
     const selectCityHandler = useCallback((cityId) => {
         onSelectCity(cityId);
+        props.changeCity(cityId);
     }, [onSelectCity]);
 
     return (

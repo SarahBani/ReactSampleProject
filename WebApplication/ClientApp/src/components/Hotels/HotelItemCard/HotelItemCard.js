@@ -6,17 +6,9 @@ import classes from './HotelItemCard.module.scss';
 
 const HotelItemCard = props => {
 
-    const { photos } = props.hotel;
+    const { stars, photos } = props.hotel;
     const [imageUrl, setImageUrl] = useState('images/no-image.png');
-
-    let stars = [];
-    for (var i = 0; i < 5; i++) {
-        stars.push(
-            <span key={i} className={['fa', 'fa-star',
-                (props.hotel.stars > i ? 'checked' : '')].join(' ')}>
-            </span>
-        );
-    }
+    const [starsUI, setStarsUI] = useState([]);
 
     useEffect(() => {
         if (photos.length > 0) {
@@ -24,6 +16,17 @@ const HotelItemCard = props => {
         }
     }, [photos]);
 
+    useEffect(() => {
+        const arr = [];
+        for (var i = 0; i < 5; i++) {
+            arr.push(
+                <span key={i} className={['fa', 'fa-star',
+                    (props.hotel.stars > i ? 'checked' : '')].join(' ')}>
+                </span>
+            );
+        }
+        setStarsUI(arr);
+    }, [stars]);
 
     return (
         <div className={["card", classes.HotelItemCard].join(' ')}>
@@ -31,14 +34,14 @@ const HotelItemCard = props => {
                 <img src={imageUrl} alt={props.hotel.name} />
             </Link>
             <div className="card-body text-center">
-                <Link to={'/hotel/' + props.hotel.id}>
+                <Link to={'/hotels/' + props.hotel.id}>
                     <strong className="card-title">{props.hotel.name}</strong>
                 </Link>
                 <p className="card-text">
                     <em>{props.hotel.city.name} - {props.hotel.city.country.name}</em>
                 </p>
                 <div>
-                    {stars}
+                    {starsUI}
                 </div>
             </div>
         </div>

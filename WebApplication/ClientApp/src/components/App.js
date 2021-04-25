@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { Route, Switch } from 'react-router';
 import { connect } from "react-redux";
 
@@ -36,7 +36,8 @@ export const App = (props) => {
     if (props.isLoggedIn) {
         routes = (
             <Switch>
-                <Route path='/hotels' component={Hotels} />
+                <Route path='/hotels' exact component={Hotels} />
+                <Route path='/hotels/:id' component={Hotels} />
                 <Route path='/profile' component={Profile} />
                 <Route path='/about' component={About} />
                 <Route path='/auth' render={(props) => <Auth {...props} />} />
@@ -47,8 +48,9 @@ export const App = (props) => {
     }
     else {
         routes = (
-            <Switch>
-                <Route path='/hotels' component={Hotels} />
+            <Switch>    
+                <Route path='/hotels' exact render={(props) => <Hotels {...props} />} />
+                <Route path='/hotels/:id' render={(props) => <Hotels {...props} />} />
                 <Route path='/about' component={About} />
                 <Route path='/auth' render={(props) => <Auth {...props} />} />
                 <Route path='/' exact component={Home} />

@@ -8,6 +8,7 @@ const SideDrawer = props => {
 
     const { show } = props;
     const [attachedClasses, setAttachedClasses] = useState('');
+
     useEffect(() => {
         setAttachedClasses(
             [

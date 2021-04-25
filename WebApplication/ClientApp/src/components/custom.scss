@@ -71,3 +71,7 @@ main {
     flex: initial;
     margin: 10px;
 }
+
+.btn-group .btn-primary {
+    @include border(#628DBC);
+}
