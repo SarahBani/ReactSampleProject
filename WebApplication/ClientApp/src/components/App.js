@@ -37,6 +37,7 @@ export const App = (props) => {
         routes = (
             <Switch>
                 <Route path='/hotels' exact component={Hotels} />
+                <Route path='/hotels/:id/edit' component={Hotels} />
                 <Route path='/hotels/:id' component={Hotels} />
                 <Route path='/profile' component={Profile} />
                 <Route path='/about' component={About} />
@@ -49,8 +50,9 @@ export const App = (props) => {
     else {
         routes = (
             <Switch>    
-                <Route path='/hotels' exact render={(props) => <Hotels {...props} />} />
-                <Route path='/hotels/:id' render={(props) => <Hotels {...props} />} />
+                <Route path='/hotels' exact component={Hotels} />
+                <Route path='/hotels/:id' exact component={Hotels} />
+                <Route path='/hotels/:id/:action' component={Hotels} />
                 <Route path='/about' component={About} />
                 <Route path='/auth' render={(props) => <Auth {...props} />} />
                 <Route path='/' exact component={Home} />

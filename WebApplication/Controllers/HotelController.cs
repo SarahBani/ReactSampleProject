@@ -34,12 +34,6 @@ namespace WebApplication.Controllers
 
         #region Actions   
 
-        [HttpGet("GetRandomList")]
-        public Task<IList<Hotel>> GetSummaryListAsync()
-        {
-            return this._hotelService.GetListAsync(null, null, new Page(1, 6));
-        }
-
         [HttpGet("GetList")]
         //public Task<IList<Hotel>> GetListAsync([FromQuery] long? cityId, [FromQuery] short? countryId,
         //   [FromQuery] short? pageNo, [FromQuery] short? pageCount)
@@ -68,7 +62,13 @@ namespace WebApplication.Controllers
             return this._hotelService.GetCountAsync(cityId, countryId);
         }
 
-        [HttpGet("GetHotelPhotos/{hotelId}")]
+        [HttpGet("GetById/{id}")]
+        public Task<Hotel> GetByIdAsync(long id)
+        {
+            return this._hotelService.GetByIdAsync(id);
+        }
+
+        [HttpGet("GetPhotos/{hotelId}")]
         public Task<IList<HotelPhoto>> GetPhotosAsync(int hotelId)
         {
             return this._hotelPhotoService.GetListByHotelIdAsync(hotelId);

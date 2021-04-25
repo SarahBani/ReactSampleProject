@@ -2,10 +2,10 @@
 
 import { autoSignInSaga, checkAuthTimeoutSaga, signInSaga, signOutSaga } from './auth';
 import { fetchCountriesSaga, selectCountrySaga, selectCitySaga } from './location';
-import { fetchHotelsSaga } from './hotel';
+import { fetchHotelsSaga, fetchHotelSaga, fetchHotelPhotosSaga } from './hotel';
 import * as authActionTypes from '../actions/authActionTypes';
 import * as locationActionTypes from '../actions/locationActionTypes';
-import * as hotelActionTypes  from '../actions/hotelActionTypes';
+import * as hotelActionTypes from '../actions/hotelActionTypes';
 
 export function* watchAuth() {
     yield all([
@@ -27,6 +27,7 @@ export function* watchLocation() {
 export function* watchHotel() {
     yield all([
         takeLatest(hotelActionTypes.FETCH_HOTELS, fetchHotelsSaga),
-        //takeLatest(hotelActionTypes.SELECT_HOTEL, selectHotelSaga)
+        takeLatest(hotelActionTypes.FETCH_HOTEL, fetchHotelSaga),
+        takeLatest(hotelActionTypes.FETCH_HOTEL_PHOTOS, fetchHotelPhotosSaga)
     ]);
 }

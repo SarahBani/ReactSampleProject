@@ -17,6 +17,20 @@ export const setHotels = (hotels) => {
     };
 };
 
+export const fetchHotel = (id) => {
+    return {
+        type: actionTypes.FETCH_HOTEL,
+        id: id
+    };
+};
+
+export const setHotel = (hotel) => {
+    return {
+        type: actionTypes.SET_HOTEL,
+        hotel: hotel
+    };
+};
+
 export const fetchHotelPhotos = (hotelId) => {
     return {
         type: actionTypes.FETCH_HOTEL_PHOTOS,

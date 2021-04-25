@@ -29,7 +29,9 @@ namespace Core.ApplicationService.Implementation
         #region Methods
 
         public override Task<Hotel> GetByIdAsync(long id) =>
-           base.GetQueryable().Include(q => q.City).Include(q => q.City.Country).Include(q => q.Photos)
+           base.GetQueryable()
+            .Include(q => q.City)
+            .Include(q => q.City.Country)
             .SingleAsync(q => q.Id == id);
 
         //public override Task<IList<Hotel>> GetAllAsync() =>

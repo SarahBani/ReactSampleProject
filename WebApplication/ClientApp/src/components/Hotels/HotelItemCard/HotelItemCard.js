@@ -30,7 +30,7 @@ const HotelItemCard = props => {
 
     return (
         <div className={["card", classes.HotelItemCard].join(' ')}>
-            <Link to={'/hotel/' + props.hotel.id}>
+            <Link to={'/hotels/' + props.hotel.id}>
                 <img src={imageUrl} alt={props.hotel.name} />
             </Link>
             <div className="card-body text-center">

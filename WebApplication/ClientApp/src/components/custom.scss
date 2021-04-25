@@ -32,7 +32,7 @@ main {
 /* Handle */
 ::-webkit-scrollbar-thumb {
     background: $light-blue;
-    @include border(#000) ;
+    @include border(#000);
     border-radius: 5px;
     /* Handle on hover */
     &:hover {
@@ -74,4 +74,14 @@ main {
 
 .btn-group .btn-primary {
     @include border(#628DBC);
+}
+
+.dropdown-menu {
+    .dropdown-item {
+        cursor: pointer;
+    }
+
+    .dropdown-divider {
+        border-top: 1px solid #ccc;
+    }
 }

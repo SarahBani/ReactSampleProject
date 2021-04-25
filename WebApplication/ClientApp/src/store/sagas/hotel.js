@@ -33,6 +33,21 @@ export function* fetchHotelsSaga(action) {
     }
 }
 
+export function* fetchHotelSaga(action) {
+    yield put(commonActions.showLoader());
+    const headers = {
+        'Content-Type': 'application/json; charset=utf-8',
+        //'auth_token': action.token
+    };
+    try {
+        const response = yield axiosInstance.get('/Hotel/GetById/' + action.id, headers);
+        yield put(actions.setHotel(response.data));
+        yield put(commonActions.hideLoader());
+    } catch (error) {
+        yield put(commonActions.raiseError(error));
+    }
+}
+
 export function* fetchHotelPhotosSaga(action) {
     yield put(commonActions.showLoader());
     const headers = {
@@ -40,16 +55,10 @@ export function* fetchHotelPhotosSaga(action) {
         //'auth_token': action.token
     };
     try {
-        const response = yield axiosInstance.get('/Hotel/GetPhotoList/' + action.hotelId, headers);
+        const response = yield axiosInstance.get('/Hotel/GetPhotos/' + action.hotelId, headers);
         yield put(actions.setHotelPhotos(response.data));
         yield put(commonActions.hideLoader());
     } catch (error) {
         yield put(commonActions.raiseError(error));
     }
 }
-
-//export function* selectHotelSaga(action) {
-//    yield put(commonActions.showLoader());
-//    yield put(commonActions.hideLoader());
-
-//}

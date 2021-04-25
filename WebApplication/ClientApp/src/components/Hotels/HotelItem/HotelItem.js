@@ -29,7 +29,7 @@ const HotelItem = props => {
 
     return (
         <Link className={["list-group-item", "clearfix", classes.HotelItem].join(' ')}
-            to={`/hotels/${props.hotel.id}`} >
+            to={`/hotels/${props.hotel.id}`}>
             <img src={imageUrl} className="img-response" />
             <strong className="list-group-item-heading">{props.hotel.name}</strong>
             <em> {props.hotel.city.name} - {props.hotel.city.country.name}</em>

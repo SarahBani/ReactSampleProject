@@ -2,22 +2,21 @@
 import { Redirect } from 'react-router';
 
 import classes from './HotelDetail.module.scss';
+import * as actions from '../../../store/actions/hotelActions';
+import { connect } from 'react-redux';
 
 const HotelDetail = props => {
 
-    const { stars, photos } = props.hotel;
+    const { id, photos, onFetchHotel, onFetchHotelPhotos } = props;
+    const { stars } = props.hotel || {}; // { ...props.hotel };
     const [imageUrl, setImageUrl] = useState('images/no-image.png');
     const [starsUI, setStarsUI] = useState([]);
     const [redirect, setRedirect] = useState();
 
     useEffect(() => {
-        if (photos.length > 0) {
-            setImageUrl(`Resources/Images/hotels/${photos[0].photoUrl}`);
-        }
-        else {
-            setImageUrl('images/no-image.png');
-        }
-    }, [photos, setImageUrl]);
+        onFetchHotel(id);
+        onFetchHotelPhotos(id);
+    }, [id, onFetchHotel, onFetchHotelPhotos]);
 
     useEffect(() => {
         const arr = [];
@@ -31,9 +30,30 @@ const HotelDetail = props => {
         setStarsUI(arr);
     }, [stars]);
 
+    useEffect(() => {
+        if (photos.length > 0) {
+            setImageUrl(`Resources/Images/hotels/${photos[0].photoUrl}`);
+        }
+        else {
+            setImageUrl('images/no-image.png');
+        }
+    }, [photos, setImageUrl]);
+
     const cancelHandler = useCallback(() => {
         setRedirect(<Redirect to="/hotels" />);
     }, [setRedirect]);
+
+    const showPhotosHandler = useCallback(() => {
+        setRedirect(<Redirect to={`/hotels/${props.id}/photos`} />);
+    }, [setRedirect]);
+
+    const editHandler = useCallback(() => {
+        setRedirect(<Redirect to={`/hotels/${props.id}/edit`} />);
+    }, [setRedirect]);
+
+    const deleteHandler = useCallback(() => {
+      
+    }, []);
 
     return (
         <div className={classes.HotelDetail}>
@@ -46,19 +66,19 @@ const HotelDetail = props => {
 
             <div className="row">
                 <div className="col-12">
-                    <h4>{props.hotel.name}</h4>
+                    <h4>{props.hotel?.name}</h4>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-12">
+            <div className="row">
+                <div className="col-12">
                     {starsUI}
                 </div>
             </div>
 
             <div className="row">
                 <div className="col-12">
-                    <span>{props.hotel.city.country.name} - {props.hotel.city.name}</span>
+                    <span>{props.hotel?.city.country.name} - {props.hotel?.city.name}</span>
                 </div>
             </div>
 
@@ -71,17 +91,32 @@ const HotelDetail = props => {
                         <button className="btn btn-primary dropdown-toggle" data-toggle="dropdown" >
                             Manage<span className="caret"></span>
                         </button>
-                        <div className=" dropdown-menu">
-                            <a className="dropdown-item" onClick={cancelHandler}>Photos</a>
+                        <div className="dropdown-menu">
+                            <a className="dropdown-item" onClick={showPhotosHandler}>Photos</a>
                             <div className="dropdown-divider"></div>
-                            <a className="dropdown-item" onClick={cancelHandler}>Edit</a>
-                            <a className="dropdown-item" onClick={cancelHandler}>Delete</a>
+                            <a className="dropdown-item" onClick={editHandler}>Edit</a>
+                            <a className="dropdown-item" onClick={deleteHandler}>Delete</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     );
 };
 
-export default HotelDetail;
+const mapStateToProps = state => {
+    return {
+        hotel: state.hotel.selectedHotel,
+        photos: state.hotel.photos
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onFetchHotel: (id) => dispatch(actions.fetchHotel(id)),
+        onFetchHotelPhotos: (id) => dispatch(actions.fetchHotelPhotos(id))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HotelDetail);

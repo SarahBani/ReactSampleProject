@@ -2,8 +2,8 @@
 
 const initialState = {
     hotels: [],
-    photots: [],
-    selectedHotel: null
+    selectedHotel: null,
+    photos: [],
 };
 
 const hotelReducer = (state = initialState, action) => {
@@ -13,15 +13,15 @@ const hotelReducer = (state = initialState, action) => {
                 ...state,
                 hotels: action.hotels
             };
+        case actionTypes.SET_HOTEL:
+            return {
+                ...state,
+                selectedHotel: action.hotel
+            };
         case actionTypes.SET_HOTEL_PHOTOS:
             return {
                 ...state,
                 photos: action.photos
-            };
-        case actionTypes.SELECT_HOTEL:
-            return {
-                ...state,
-                selectedHotel: action.hotel
             };
         default:
             return state;

@@ -1,7 +1,9 @@
-﻿import { React, useState, useEffect, useCallback } f
+﻿import { React, useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 
 import classes from './HotelList.module.scss';
-import { connect } from 'react-redux';
+import HotelItem from '../HotelItem/HotelItem';
+import * as actions from '../../../store/actions/hotelActions';
 
 const HotelList = props => {
     const { hotels, onFetchHotels } = props;
@@ -12,19 +14,20 @@ const HotelList = props => {
     }, [onFetchHotels]);
 
     useEffect(() => {
-        const list = hotels.map(hotel => <HotelItem key={hotel.id} hotel={hotel} />);
+        const list = hotels.map(hotel =>
+            <HotelItem key={hotel.id} hotel={hotel} />
+        );
         setHotelItems(list);
     }, [hotels, setHotelItems]);
 
+    //const selectHotelHandler = useCallback((hotel) => {
+    //    onSelectHotel(hotel);
+    //    setRedirect(<Redirect to={`/hotels/${hotel.id}`} />);
+    //}, [onSelectHotel]);
+
     return (
-        <div className={ classes.HotelList}>
-            <div className="row">
-                <div className="col-7">
-                    <div className={classes.HotelItems}>
-                        {hotelItems}
-                    </div>
-                </div>
-            </div>
+        <div className={classes.HotelList}>
+            {hotelItems}
         </div>
     );
 };
@@ -37,7 +40,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchHotels: (selectedCountryId, selectedCityId) => dispatch(actions.fetchHotels(selectedCountryId, selectedCityId))
+        onFetchHotels: (selectedCountryId, selectedCityId) => dispatch(actions.fetchHotels(selectedCountryId, selectedCityId)),
     };
 };
 
