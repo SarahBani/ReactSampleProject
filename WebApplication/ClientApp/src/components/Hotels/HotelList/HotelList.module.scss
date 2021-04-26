@@ -1,1 +1,12 @@
-﻿.HotelList{}
+﻿@import '../../colors';
+@import '../../_globals';
+
+.HotelList {
+    .Counter {
+        color: $dark-green;
+        padding: 10px;
+        @include bottom-border(#ccc);
+        margin-bottom: 5px;
+        background-color: $light-yellow;
+    }
+}

@@ -4,11 +4,10 @@ import DropDown from '../../UI/DropDown/DropDown';
 
 const HotelEdit = props => {
 
-    const { id, countries, cities, onFetchCountries, onSelectCountry, onSelectCity  } = props;
+    const { id, countries, cities, onFetchCountries, onSelectCountry, onSelectCity } = props;
     const [countryDropDownData, setCountryDropDownData] = useState([]);
     const [cityDropDownData, setCityDropDownData] = useState([]);
     const [redirect, setRedirect] = useState();
-
 
     const selectCountryHandler = useCallback((countryId) => {
         onSelectCountry(countryId);
@@ -21,7 +20,12 @@ const HotelEdit = props => {
     }, [onSelectCity]);
 
     const cancelHandler = useCallback(() => {
-        setRedirect(<Redirect to={`/hotels/${id}`} />);
+        if (id) {
+            setRedirect(<Redirect to={`/hotels/${id}`} />);
+        }
+        else {
+            setRedirect(<Redirect to="/hotels/" />);
+        }
     }, [id, setRedirect]);
 
     return (
@@ -29,8 +33,8 @@ const HotelEdit = props => {
             {redirect}
             <form>
                 <div className="form-group">
-                    <label for="name">Name: </label>
-                    <input type="text" id="name" name="name" class="form-control" ngModel required />
+                    {/*<label for="name">Name: </label>*/}
+                    <input type="text" id="name" name="name" className="form-control" required />
                 </div>
 
                 <div className="form-group">
@@ -42,20 +46,22 @@ const HotelEdit = props => {
                 </div>
 
                 <div className="form-group">
-                    <label for="stars">Stars: </label>
+                    {/* <label for="stars">Stars: </label>*/}
                     <br />
-                    <div id="stars" class='starrr'></div>
+                    <div id="stars" className='starrr'></div>
                 </div>
 
                 <div className="row">
-                    <button className="btn btn-primary" type="reset" >Clear</button>
-                    <button className="btn btn-success" type="submit" >Save</button>
-                    <button className="btn btn-info" type="button">Photos</button>
-                    <button className="btn btn-danger" type="button" > Delete</button >
-                    <button className="btn btn-warning" type="button" onClick={cancelHandler} > Cancel</button >
-                </div >
-            </form >
-        </div >
+                    <div className="col-12 text-center">
+                        <button className="btn btn-primary" type="reset" >Clear</button>
+                        <button className="btn btn-success" type="submit" >Save</button>
+                        <button className="btn btn-info" type="button">Photos</button>
+                        <button className="btn btn-danger" type="button" > Delete</button >
+                        <button className="btn btn-warning" type="button" onClick={cancelHandler} > Cancel</button >
+                    </div>
+                </div>
+            </form>
+        </div>
     );
 };
 

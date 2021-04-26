@@ -5,12 +5,18 @@ import classes from './HotelList.module.scss';
 import HotelItem from '../HotelItem/HotelItem';
 import NoHotel from '../NoHotel/NoHotel';
 import * as actions from '../../../store/actions/hotelActions';
+import { useCallback } from 'react';
+import { Link } from 'react-router-dom';
 
 const HotelList = props => {
 
-    const { hotels, onFetchHotels, onFetchHotelsCount } = props;
+    const { hotels, selectedCountryId, selectedCityId, onFetchHotels, onFetchHotelsCount } = props;
 
     useEffect(() => {
+        refreshHandler();
+    }, [selectedCountryId, selectedCityId, onFetchHotels, onFetchHotelsCount]);
+
+    const refreshHandler = useCallback(() => {
         onFetchHotels(props.selectedCountryId, props.selectedCityId);
         onFetchHotelsCount(props.selectedCountryId, props.selectedCityId);
     }, [onFetchHotels, onFetchHotelsCount]);
@@ -25,7 +31,7 @@ const HotelList = props => {
         return hotels.length > 0 ?
             <div className="list-group">
                 {hotelItems}
-                <div className="rows-count text-center">
+                <div className={["text-center", classes.Counter].join(' ')}>
                     <b>Total: </b><span>{props.hotelsCount}</span>
                 </div>
             </div>
@@ -41,8 +47,8 @@ const HotelList = props => {
         <div className={classes.HotelList}>
             {content}
             <div>
-                <button className="btn btn-primary" onClick={props.onAdd}>Add</button>
-                <button className="btn btn-success" onClick={props.onRefresh}>Refresh</button>
+                <Link className="btn btn-primary" to="/hotels/add">Add</Link>
+                <button className="btn btn-success" onClick={refreshHandler}>Refresh</button>
             </div>
         </div>
     );

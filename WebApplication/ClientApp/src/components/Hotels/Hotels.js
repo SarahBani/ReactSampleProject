@@ -17,21 +17,25 @@ const Hotels = props => {
     const [selectedCityId, setSelectedCityId] = useState(null);
 
     const detailContent = useMemo(() => {
+        console.log(props.location.pathname);
         if (!id) {
-            return <SelectHotel />;
+            if (props.add) {
+            //if (props.location.pathname.toLowerCase().startsWith("/hotels/add")) {
+                return <HotelEdit />;
+            }
+            else {
+                return <SelectHotel />;
+            }
         }
         else {
             if (!action) {
                 return <HotelDetail id={id} />;
             }
-            else if (action === 'edit') {
+            else if (action.toLowerCase() === 'edit') {
                 return <HotelEdit id={id} />;
             }
-            else if (action === 'new') {
-                return <HotelEdit />;
-            }
         }
-    }, [id, action]);
+    }, [id, action, props.add]);
 
     const changeCountryHandler = useCallback((countryId) => {
         setSelectedCountryId(countryId);
