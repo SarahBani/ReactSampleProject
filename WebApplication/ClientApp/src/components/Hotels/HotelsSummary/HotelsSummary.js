@@ -1,25 +1,22 @@
-﻿import { React, useState } from 'react';
+﻿import { React, useMemo, useEffect } from 'react';
 import { connect } from 'react-redux';
 
 import classes from './HotelsSummary.module.scss';
-import * as actions from '../../../store/actions/hotelActions';
-import { useEffect } from 'react';
 import HotelItemCard from '../HotelItemCard/HotelItemCard';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
+import * as actions from '../../../store/actions/hotelActions';
 
 const HotelsSummary = props => {
 
     const { hotels, onFetchHotels } = props;
-    const [hotelItemCards, setHotelItemCards] = useState([]);
 
     useEffect(() => {
         onFetchHotels();
     }, [onFetchHotels]);
 
-    useEffect(() => {
-        const list = hotels.map(hotel => <HotelItemCard key={hotel.id} hotel={hotel} />);
-        setHotelItemCards(list);
-    }, [hotels]);
+    const hotelItemCards = useMemo(() => hotels.map(hotel =>
+        <HotelItemCard key={hotel.id} hotel={hotel} />)
+        , [hotels]);
 
     return (
         <div className={["card-deck", classes.HotelsSummary].join(' ')}>

@@ -1,5 +1,7 @@
 ﻿export const FETCH_HOTELS = 'FETCH_HOTELS';
 export const SET_HOTELS = 'SET_HOTELS';
+export const FETCH_HOTELS_COUNT = 'FETCH_HOTELS_COUNT';
+export const SET_HOTELS_COUNT = 'SET_HOTELS_COUNT';
 export const FETCH_HOTEL = 'FETCH_HOTEL';
 export const SET_HOTEL = 'SET_HOTEL';
 export const FETCH_HOTEL_PHOTOS = 'FETCH_HOTEL_PHOTOS';

@@ -1,16 +1,15 @@
-﻿import { React, useState, useEffect, useCallback } from 'react';
+﻿import { React, useState, useEffect, useCallback, useMemo } from 'react';
 import { Redirect } from 'react-router';
+import { connect } from 'react-redux';
 
 import classes from './HotelDetail.module.scss';
 import * as actions from '../../../store/actions/hotelActions';
-import { connect } from 'react-redux';
 
 const HotelDetail = props => {
 
     const { id, photos, onFetchHotel, onFetchHotelPhotos } = props;
     const { stars } = props.hotel || {}; // { ...props.hotel };
     const [imageUrl, setImageUrl] = useState('images/no-image.png');
-    const [starsUI, setStarsUI] = useState([]);
     const [redirect, setRedirect] = useState();
 
     useEffect(() => {
@@ -18,7 +17,7 @@ const HotelDetail = props => {
         onFetchHotelPhotos(id);
     }, [id, onFetchHotel, onFetchHotelPhotos]);
 
-    useEffect(() => {
+    const starsContent = useMemo(() => {
         const arr = [];
         for (var i = 0; i < 5; i++) {
             arr.push(
@@ -27,7 +26,7 @@ const HotelDetail = props => {
                 </span>
             );
         }
-        setStarsUI(arr);
+        return arr;
     }, [stars]);
 
     useEffect(() => {
@@ -52,7 +51,7 @@ const HotelDetail = props => {
     }, [setRedirect]);
 
     const deleteHandler = useCallback(() => {
-      
+
     }, []);
 
     return (
@@ -72,7 +71,7 @@ const HotelDetail = props => {
 
             <div className="row">
                 <div className="col-12">
-                    {starsUI}
+                    {starsContent}
                 </div>
             </div>
 

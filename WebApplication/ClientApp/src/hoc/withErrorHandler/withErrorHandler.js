@@ -8,7 +8,7 @@ const withErrorHandler = (WrappedComponent) => {
 
     return props => {
 
-        const { error, errorConfirmHandler } = useHttpErrorHandler(axiosInstance);
+        const [ error, errorConfirmHandler ] = useHttpErrorHandler(axiosInstance);
 
         return (
             <Fragment>

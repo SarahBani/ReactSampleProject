@@ -28,6 +28,5 @@ export default httpErrorHandler => {
         setError(null);
     }
 
-    //return [error, clearError]; //or
-    return { error, clearError };
+    return [ error, clearError ];
 }

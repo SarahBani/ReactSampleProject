@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback } from 'react';
+﻿import React, { useState, useMemo, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 
 import classes from './Hotels.module.scss';
@@ -15,21 +15,23 @@ const Hotels = props => {
     const { id, action } = useParams();
     const [selectedCountryId, setSelectedCountryId] = useState(null);
     const [selectedCityId, setSelectedCityId] = useState(null);
-    const [hotelDetail, setHotelDetail] = useState();
 
-    useEffect(() => {
+    const detailContent = useMemo(() => {
         if (!id) {
-            setHotelDetail(<SelectHotel />);
+            return <SelectHotel />;
         }
         else {
             if (!action) {
-                setHotelDetail(<HotelDetail id={id} />);
+                return <HotelDetail id={id} />;
             }
             else if (action === 'edit') {
-                setHotelDetail(<HotelEdit id={id} />);
+                return <HotelEdit id={id} />;
+            }
+            else if (action === 'new') {
+                return <HotelEdit />;
             }
         }
-    }, [id, action, setHotelDetail]);
+    }, [id, action]);
 
     const changeCountryHandler = useCallback((countryId) => {
         setSelectedCountryId(countryId);
@@ -49,7 +51,7 @@ const Hotels = props => {
                     <HotelList />
                 </div>
                 <div className="col-5">
-                    {hotelDetail}
+                    {detailContent}
                 </div>
             </div>
         </div>

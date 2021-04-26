@@ -1,4 +1,4 @@
-﻿import { React, useState, useEffect } from 'react';
+﻿import { React, useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import classes from './HotelItem.module.scss';
@@ -7,7 +7,6 @@ const HotelItem = props => {
 
     const { stars, photos } = props.hotel;
     const [imageUrl, setImageUrl] = useState('images/no-image.png');
-    const [starsUI, setStarsUI] = useState([]);
 
     useEffect(() => {
         if (photos.length > 0) {
@@ -15,7 +14,7 @@ const HotelItem = props => {
         }
     }, [photos]);
 
-    useEffect(() => {
+    const starsContent = useMemo(() => {
         const arr = [];
         for (var i = 0; i < 5; i++) {
             arr.push(
@@ -24,7 +23,7 @@ const HotelItem = props => {
                 </span>
             );
         }
-        setStarsUI(arr);
+        return arr;
     }, [stars]);
 
     return (
@@ -34,7 +33,7 @@ const HotelItem = props => {
             <strong className="list-group-item-heading">{props.hotel.name}</strong>
             <em> {props.hotel.city.name} - {props.hotel.city.country.name}</em>
             <div className='float-right'>
-                {starsUI}
+                {starsContent}
             </div>
         </Link>
     );

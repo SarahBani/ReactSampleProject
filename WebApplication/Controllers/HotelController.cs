@@ -35,16 +35,6 @@ namespace WebApplication.Controllers
         #region Actions   
 
         [HttpGet("GetList")]
-        //public Task<IList<Hotel>> GetListAsync([FromQuery] long? cityId, [FromQuery] short? countryId,
-        //   [FromQuery] short? pageNo, [FromQuery] short? pageCount)
-        //      {
-        //        Page page = null;
-        //        if (pageNo.HasValue && pageCount.HasValue)
-        //        {
-        //            page = new Page(pageNo.Value, pageCount.Value);
-        //}
-        //        return this._hotelService.GetListAsync(cityId, countryId, page);
-        //    }
         public Task<IList<Hotel>> GetListAsync([FromQuery] GetHotelListQueryModel model)
         {
             Page page = null;
@@ -57,7 +47,7 @@ namespace WebApplication.Controllers
 
         [HttpGet("GetCount")]
         [HttpGet("GetCount/{cityId}/{countryId}")]
-        public Task<int> GetCountAsync(long? cityId, short? countryId)
+        public Task<int> GetCountAsync([FromQuery] long? cityId, [FromQuery] short? countryId)
         {
             return this._hotelService.GetCountAsync(cityId, countryId);
         }

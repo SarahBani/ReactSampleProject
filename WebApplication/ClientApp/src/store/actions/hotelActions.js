@@ -17,6 +17,22 @@ export const setHotels = (hotels) => {
     };
 };
 
+export const fetchHotelsCount = (cityId, countryId) => {
+    return {
+        type: actionTypes.FETCH_HOTELS_COUNT,
+        cityId: cityId,
+        countryId: countryId
+    };
+};
+
+export const setHotelsCount = (count) => {
+    return {
+        type: actionTypes.SET_HOTELS_COUNT,
+        count: count
+    };
+};
+
+
 export const fetchHotel = (id) => {
     return {
         type: actionTypes.FETCH_HOTEL,

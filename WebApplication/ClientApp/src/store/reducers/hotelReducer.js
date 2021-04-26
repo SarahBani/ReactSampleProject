@@ -2,6 +2,7 @@
 
 const initialState = {
     hotels: [],
+    count: 0,
     selectedHotel: null,
     photos: [],
 };
@@ -12,6 +13,11 @@ const hotelReducer = (state = initialState, action) => {
             return {
                 ...state,
                 hotels: action.hotels
+            };
+        case actionTypes.SET_HOTELS_COUNT:
+            return {
+                ...state,
+                count: action.count
             };
         case actionTypes.SET_HOTEL:
             return {
