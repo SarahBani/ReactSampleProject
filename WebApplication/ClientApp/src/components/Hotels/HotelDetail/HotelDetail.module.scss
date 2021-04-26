@@ -7,7 +7,6 @@
     img {
         max-width: 400px;
         max-height: 400px;
-        border: 1px solid #000;
-        border-radius: 2px;
+        @include border(#000, 2px);
     }
 }

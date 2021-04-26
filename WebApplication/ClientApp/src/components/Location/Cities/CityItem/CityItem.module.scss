@@ -1,11 +1,12 @@
 ﻿@import "../../../_globals";
+@import "../../../colors";
 
 .CityItem {
     width: 150px;
     padding: 16px;
     text-align: center;
     @include border(#eee);
-    box-shadow: 0 2px 3px #ccc;
+    box-shadow: 0 2px 3px $light-gray;
     margin: 10px;
     box-sizing: border-box;
     cursor: pointer;

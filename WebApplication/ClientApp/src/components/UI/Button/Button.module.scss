@@ -1,29 +1,32 @@
+@import '../../colors';
+@import '../../_globals';
+
 .Button {
-    background-color: transparent;
-    border: none;
-    color: white;
-    outline: none;
+    color: #FFF;
     cursor: pointer;
-    font: inherit;
     padding: 10px;
     margin: 10px;
-    font-weight: bold;
+    @include border($light-gray, 5px);
 
-    &:first-of-type {
-        margin-left: 0;
-        padding-left: 0;
+    &.Success {
+        background-color: $medium-green;
+
+        &:hover {
+            background-color: $light-green;
+        }
+    }
+
+    &.Danger {
+        background-color: #944317;
     }
 
     &:disabled {
-        color: #ccc;
+        color: #AFAFAF;
+        background-color: $light-gray;
         cursor: not-allowed;
-    }
 
-    .Success {
-        color: #5C9210;
-    }
-
-    .Danger {
-        color: #944317;
+        &:hover {
+            background-color: $light-gray;
+        }
     }
 }

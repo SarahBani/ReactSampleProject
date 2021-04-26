@@ -14,7 +14,6 @@
         max-width: 50px;
         max-height: 50px;
         margin-right: 5px;
-        border: 1px solid #000;
-        border-radius: 2px;
+        @include border(#000, 2px);
     }
 }

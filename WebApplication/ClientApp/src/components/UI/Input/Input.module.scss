@@ -1,4 +1,5 @@
 ﻿@import "../../_globals";
+@import "../../colors";
 
 .Input {
     width: 100%;
@@ -24,7 +25,7 @@
 
     &:focus {
         outline: none;
-        background-color: #ccc;
+        background-color: $light-gray;
     }
 }
 

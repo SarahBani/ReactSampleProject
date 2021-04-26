@@ -32,8 +32,7 @@ main {
 /* Handle */
 ::-webkit-scrollbar-thumb {
     background: $light-blue;
-    @include border(#000);
-    border-radius: 5px;
+    @include border(#000, 5px);
     /* Handle on hover */
     &:hover {
         background: $light-blue-highlight;
@@ -72,6 +71,10 @@ main {
     margin: 10px;
 }
 
+.btn {
+    margin: .5px;
+}
+
 .btn-group .btn-primary {
     @include border(#628DBC);
 }
@@ -82,6 +85,6 @@ main {
     }
 
     .dropdown-divider {
-        border-top: 1px solid #ccc;
+        border-top: 1px solid $light-gray;
     }
 }

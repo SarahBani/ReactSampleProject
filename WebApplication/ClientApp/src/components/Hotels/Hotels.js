@@ -21,7 +21,7 @@ const Hotels = props => {
         if (!id) {
             if (add) {
                 //console.log(props.match.params);            
-                //if (props.location.pathname.toLowerCase().startsWith("/hotels/add")) {
+                //if (props.location.pathname.toLowerCase().startsWith("/hotels/new")) {
                 return <HotelEdit />;
             }
             else {

@@ -1,9 +1,11 @@
-﻿.BreadCrumb {
+﻿@import "../../colors";
+
+.BreadCrumb {
     background-color: #FCFFC9;
 
     border: {
-        top: 1px solid #ccc;
-        bottom: 1px solid #ccc;
+        top: 1px solid $light-gray;
+        bottom: 1px solid $light-gray;
     }
 
     ol {

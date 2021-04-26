@@ -1,12 +1,15 @@
-﻿.CountryItem {
+﻿@import "../../_globals";
+@import "../../colors";
+
+.CountryItem {
     width: 150px;
     padding: 16px;
     text-align: center;
-    border: 1px solid #eee;
-    box-shadow: 0 2px 3px #ccc;
+    box-shadow: 0 2px 3px $light-gray;
     margin: 10px;
     box-sizing: border-box;
     cursor: pointer;
+    @include border($light-gray);
 
     &:hover, &:active {
         background-color: #C0DDF5;

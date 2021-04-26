@@ -48,7 +48,7 @@ const HotelList = props => {
         <div className={classes.HotelList}>
             {content}
             <div>
-                <Link className="btn btn-primary" to="/hotels/add">Add</Link>
+                <Link className="btn btn-primary" to="/hotels/new">Add</Link>
                 <button className="btn btn-success" onClick={refreshHandler}>Refresh</button>
             </div>
         </div>

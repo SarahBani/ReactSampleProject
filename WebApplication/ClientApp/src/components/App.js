@@ -36,7 +36,7 @@ export const App = (props) => {
     if (props.isLoggedIn) {
         routes = (
             <Switch>
-                <Route path='/hotels/add' render={(props) => <Hotels {...props} add />} />
+                <Route path='/hotels/new' render={(props) => <Hotels {...props} add />} />
                 <Route path='/hotels/:id?/:action?' exact component={Hotels} />
                 <Route path='/profile' component={Profile} />
                 <Route path='/about' component={About} />
@@ -49,7 +49,7 @@ export const App = (props) => {
     else {
         routes = (
             <Switch>
-                <Route path='/hotels/add' render={(props) => <Hotels {...props} add />} />
+                <Route path='/hotels/new' render={(props) => <Hotels {...props} add />} />
                 <Route path='/hotels/:id?/:action?' exact component={Hotels} />
                 <Route path='/about' component={About} />
                 <Route path='/auth' render={(props) => <Auth {...props} />} />
