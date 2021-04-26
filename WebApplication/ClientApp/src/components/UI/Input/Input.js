@@ -24,7 +24,8 @@ const Input = props => {
                 value={props.value}
                 className={inputClasses.join(' ')}
                 onChange={props.changed}
-                onBlur={props.lostFocus} />;
+                onBlur={props.lostFocus}
+                disabled={props.disabled} />;
             break;
         case 'select':
             inputElement =
@@ -33,7 +34,8 @@ const Input = props => {
                     className={inputClasses.join(' ')}
                     text={props.value}
                     onChange={props.changed}
-                    onBlur={props.lostFocus}>
+                    onBlur={props.lostFocus}
+                    disabled={props.disabled}>
                     {props.elementConfig.options.map(option => (
                         <option key={option.value} value={option.value}>{option.text}</option>
                     ))}
@@ -47,7 +49,8 @@ const Input = props => {
                 value={props.value}
                 className={inputClasses.join(' ')}
                 onChange={props.changed}
-                onBlur={props.lostFocus} />;
+                onBlur={props.lostFocus}
+                disabled={props.disabled} />;
     }
 
     return (

@@ -1,11 +1,5 @@
 ﻿import * as actionTypes from './authActionTypes';
 
-export const showLoader = () => {
-    return {
-        type: actionTypes.SHOW_LOADER1
-    };
-};
-
 export const autoSignIn = () => {
     return {
         type: actionTypes.AUTO_SIGN_IN
@@ -56,12 +50,5 @@ export const setAuthRedirectPath = (url) => {
     return {
         type: actionTypes.SET_AUTH_REDIRECT_PATH,
         url: url
-    };
-};
-
-export const raiseError = (error) => {
-    return {
-        type: actionTypes.RAISE_ERROR1,
-        error: error
     };
 };

@@ -1,7 +1,8 @@
 ﻿import { put, delay, call, all } from 'redux-saga/effects';
 
-import * as actions from '../actions/authActions';
 import axiosInstance from '../../axios-instance';
+import * as actions from '../actions/authActions';
+import * as commonActions from '../actions/commonActions';
 
 const authStorageKeyName = 'auth_token';
 let tokenExpirationTimer = null;
@@ -25,13 +26,13 @@ export function* checkAuthTimeoutSaga(action) {
 }
 
 export function* signInSaga(action) {
-    yield put(actions.showLoader());
+    yield put(commonActions.showLoader());
     const data = {
         email: action.email,
         password: action.password
     };
     try {
-        const response = yield axiosInstance.post('auth/login', data);
+        const response = yield axiosInstance.post('auth/SignIn', data);
         if (response.status === 200) {
             //yield localStorage.setItem(authStorageKeyName, JSON.stringify(response.data));
             yield call([localStorage, 'setItem'], authStorageKeyName, JSON.stringify(response.data));
@@ -41,8 +42,9 @@ export function* signInSaga(action) {
         else {
             yield put(actions.signInFailed());
         }
+        yield put(commonActions.hideLoader());
     } catch (error) {
-        yield put(actions.raiseError(error));
+        yield put(commonActions.raiseError(error));
     }
 }
 

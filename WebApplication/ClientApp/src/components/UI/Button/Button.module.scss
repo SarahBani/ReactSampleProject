@@ -6,7 +6,8 @@
     cursor: pointer;
     padding: 10px;
     margin: 10px;
-    @include border($light-gray, 5px);
+    box-shadow: 0 2px 3px $medium-gray;
+    @include border($medium-gray, 5px);
 
     &.Success {
         background-color: $medium-green;
@@ -24,6 +25,8 @@
         color: #AFAFAF;
         background-color: $light-gray;
         cursor: not-allowed;
+        box-shadow: none;
+        @include border($light-gray);
 
         &:hover {
             background-color: $light-gray;

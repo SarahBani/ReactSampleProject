@@ -23,7 +23,7 @@ export const getUpdatedForm = (event, formControls, id) => {
         [id]: {
             ...formControls[id],
             value: event.target.value,
-            valid: isInputValid,
+            valid: isInputValid
             //touched: true
         }
     };
@@ -84,4 +84,12 @@ const checkValidity = (value, rules) => {
     }
 
     return true;
+};
+
+export const disableForm = (formControls, isDisabled) => {
+    const updatedForm = { ...formControls };
+    for (const inputId in updatedForm) {
+        formControls[inputId].disabled = isDisabled;
+    }
+    return updatedForm;
 };

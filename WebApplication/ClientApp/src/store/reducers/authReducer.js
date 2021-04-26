@@ -3,30 +3,16 @@
 const initialState = {
     loggedIn: false,
     token: null,
-    authRedirectPath: '/',
-    loading: false,
-    error: false
+    authRedirectPath: '/'
 };
 
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.SHOW_LOADER1:
-            return {
-                ...state,
-                loading: true,
-                error: null
-            };
         case actionTypes.SIGN_IN_SUCCEEDED:
             return {
                 ...state,
                 loggedIn: true,
-                token: action.token,
-                loading: false,
-            };
-        case actionTypes.SIGN_IN_FAILED:
-            return {
-                ...state,
-                loading: false,
+                token: action.token
             };
         case actionTypes.SIGN_OUT:
             return {
@@ -39,12 +25,6 @@ const authReducer = (state = initialState, action) => {
                 ...state,
                 authRedirectPath: action.url
             }
-        case actionTypes.RAISE_ERROR1:
-            return {
-                ...state,
-                loading: false,
-                error: action.error
-            };
         default:
             return state;
     }

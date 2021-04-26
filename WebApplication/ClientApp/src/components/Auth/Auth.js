@@ -1,15 +1,14 @@
-﻿import React, { useContext, useReducer, useState } from "react";
+﻿import React, { useContext, useReducer, useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router";
 
 import classes from './Auth.module.scss';
 import FormElement from '../UI/FormElement/FormElement';
 import Button from '../UI/Button/Button';
-import Spinner from "../UI/Spinner/Spinner";
-import * as actions from '../../store/actions/authActions';
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-import { updateObject, getFormElements, getUpdatedForm, isFormValid } from '../../shared/utility';
+import { getFormElements, getUpdatedForm, isFormValid, disableForm } from '../../shared/utility';
 //import AuthContext from "../../context/AuthContext";
+import * as actions from '../../store/actions/authActions';
 
 const initialFormState = {
     email: {
@@ -42,9 +41,15 @@ const initialFormState = {
 
 export const Auth = props => {
 
+    const { loading } = props;
     const [formControls, setFormControls] = useState(initialFormState);
     const [formIsValid, setFormIsValid] = useState(false);
     //const authContext = useContext(AuthContext);
+
+    useEffect(() => {
+        const updatedForm = disableForm(formControls, loading);
+        setFormControls(updatedForm);
+    }, [loading, setFormControls]);
 
     const inputChangedHandler = (event, id) => {
         const updatedForm = getUpdatedForm(event, formControls, id);
@@ -61,9 +66,7 @@ export const Auth = props => {
         props.onSignIn(formControls.email.value, formControls.password.value);
     };
 
-    let form = (props.loading ?
-        <Spinner />
-        :
+    const form = (
         <form onSubmit={signInHandler}>
             {
                 getFormElements(formControls).map(formElement => (
@@ -74,7 +77,7 @@ export const Auth = props => {
                     />
                 ))
             }
-            <Button type='Success' disabled={!formIsValid}>Sign In</Button>
+            <Button type='Success' disabled={!formIsValid || loading}>Sign In</Button>
         </form>
     );
     //const loggedInRedirect = (props.loggedIn &&
@@ -92,7 +95,7 @@ export const Auth = props => {
 const mapStateToProps = state => {
     return {
         loggedIn: state.auth.loggedIn,
-        loading: state.auth.loading,
+        loading: state.common.isLoading,
         //viewingHotel: state.location.viewingHotel,
         authRedirectPath: state.auth.authRedirectPath
     };

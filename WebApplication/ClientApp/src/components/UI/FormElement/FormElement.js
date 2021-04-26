@@ -12,6 +12,7 @@ const FormElement = props => {
             valid={props.formElement.content.valid}
             changed={(event) => props.changed(event, props.formElement.id)}
             lostFocus={(event) => props.lostFocus(event, props.formElement.id)}
+            disabled={props.formElement.content.disabled}
         />
     );
 };
