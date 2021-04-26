@@ -13,14 +13,15 @@ import HotelEdit from './HotelEdit/HotelEdit';
 const Hotels = props => {
 
     const { id, action } = useParams();
+    const { add } = props;
     const [selectedCountryId, setSelectedCountryId] = useState(null);
     const [selectedCityId, setSelectedCityId] = useState(null);
 
     const detailContent = useMemo(() => {
-        console.log(props.location.pathname);
         if (!id) {
-            if (props.add) {
-            //if (props.location.pathname.toLowerCase().startsWith("/hotels/add")) {
+            if (add) {
+                //console.log(props.match.params);            
+                //if (props.location.pathname.toLowerCase().startsWith("/hotels/add")) {
                 return <HotelEdit />;
             }
             else {
@@ -35,7 +36,7 @@ const Hotels = props => {
                 return <HotelEdit id={id} />;
             }
         }
-    }, [id, action, props.add]);
+    }, [id, action, add]);
 
     const changeCountryHandler = useCallback((countryId) => {
         setSelectedCountryId(countryId);

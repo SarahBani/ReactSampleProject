@@ -10,7 +10,8 @@ import { Link } from 'react-router-dom';
 
 const HotelList = props => {
 
-    const { hotels, selectedCountryId, selectedCityId, onFetchHotels, onFetchHotelsCount } = props;
+    const { hotels, hotelsCount, selectedCountryId, selectedCityId,
+        onFetchHotels, onFetchHotelsCount } = props;
 
     useEffect(() => {
         refreshHandler();
@@ -28,15 +29,15 @@ const HotelList = props => {
     }, [hotels]);
 
     const content = useMemo(() => {
-        return hotels.length > 0 ?
+        return (hotels.length > 0 && hotelsCount > 0) ?
             <div className="list-group">
                 {hotelItems}
                 <div className={["text-center", classes.Counter].join(' ')}>
-                    <b>Total: </b><span>{props.hotelsCount}</span>
+                    <b>Total: </b><span>{hotelsCount}</span>
                 </div>
             </div>
             : <NoHotel />;
-    }, [hotelItems]);
+    }, [hotelItems, hotelsCount]);
 
     //const selectHotelHandler = useCallback((hotel) => {
     //    onSelectHotel(hotel);

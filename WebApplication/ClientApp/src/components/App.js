@@ -36,10 +36,8 @@ export const App = (props) => {
     if (props.isLoggedIn) {
         routes = (
             <Switch>
-                <Route path='/hotels' exact component={Hotels} />
                 <Route path='/hotels/add' render={(props) => <Hotels {...props} add />} />
-                <Route path='/hotels/:id' exact component={Hotels} />
-                <Route path='/hotels/:id/:action' component={Hotels} />
+                <Route path='/hotels/:id?/:action?' exact component={Hotels} />
                 <Route path='/profile' component={Profile} />
                 <Route path='/about' component={About} />
                 <Route path='/auth' render={(props) => <Auth {...props} />} />
@@ -51,10 +49,8 @@ export const App = (props) => {
     else {
         routes = (
             <Switch>
-                <Route path='/hotels' exact component={Hotels} />
                 <Route path='/hotels/add' render={(props) => <Hotels {...props} add />} />
-                <Route path='/hotels/:id' exact component={Hotels} />
-                <Route path='/hotels/:id/:action' component={Hotels} />
+                <Route path='/hotels/:id?/:action?' exact component={Hotels} />
                 <Route path='/about' component={About} />
                 <Route path='/auth' render={(props) => <Auth {...props} />} />
                 <Route path='/' exact component={Home} />
