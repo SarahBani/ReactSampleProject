@@ -35,11 +35,11 @@ namespace Core.ApplicationService.Implementation
         {
             try
             {
-                await Task.Delay(3000);
+                await Task.Delay(3000); // for a delay to simulate real database fetch
                 if (email.Equals("sarah@yahoo.com", StringComparison.OrdinalIgnoreCase) &&
                     password.Equals("123456"))
                 {
-                    var authenticationToken = GetAuthenticationToken(email);
+                    var authenticationToken = GetAuthenticationResponse(email);
                     return new TransactionResult(authenticationToken);
                 }
                 else
@@ -53,19 +53,11 @@ namespace Core.ApplicationService.Implementation
             }
         }
 
-        private TransactionResult GetAuthenticationToken(string email)
+        private AuthenticationResponse GetAuthenticationResponse(string email)
         {
-            try
-            {
-                DateTime expirationTime = DateTime.UtcNow.AddMinutes(double.Parse(this._appSettings.AccessExpiration));
-                string token = GenerateJwtToken(expirationTime);
-                var response = new AuthenticateResponse(email, token, expirationTime);
-                return new TransactionResult(response);
-            }
-            catch (Exception ex)
-            {
-                return GetTransactionException(ex);
-            }
+            DateTime expirationTime = DateTime.UtcNow.AddMinutes(double.Parse(this._appSettings.AccessExpiration));
+            string token = GenerateJwtToken(expirationTime);
+            return new AuthenticationResponse(email, token, expirationTime);
         }
 
         private string GenerateJwtToken(DateTime expirationTime)

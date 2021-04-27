@@ -43,12 +43,12 @@ const HotelDetail = props => {
     }, [setRedirect]);
 
     const showPhotosHandler = useCallback(() => {
-        setRedirect(<Redirect to={`/hotels/${props.id}/photos`} />);
-    }, [setRedirect]);
+        setRedirect(<Redirect to={`/hotels/${id}/photos`} />);
+    }, [id, setRedirect]);
 
     const editHandler = useCallback(() => {
-        setRedirect(<Redirect to={`/hotels/${props.id}/edit`} />);
-    }, [setRedirect]);
+        setRedirect(<Redirect to={`/hotels/${id}/edit`} />);
+    }, [id, setRedirect]);
 
     const deleteHandler = useCallback(() => {
 

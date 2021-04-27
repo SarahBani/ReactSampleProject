@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 
-import classes from './About.module.css';
+//import classes from './About.module.css';
 import PageTitle from '../UI/PageTitle/PageTitle';
 
 export const About = () => (
@@ -8,11 +8,10 @@ export const About = () => (
     <div className="container">
         <PageTitle title="About" />
 
-        <p className="row">
-            <h2>
-                This project is under Construction...
-            </h2>
-        </p>
+        <h2 className="row">
+            This project is under Construction...
+        </h2>
+        <br />
 
         <p className="row">
             <b>

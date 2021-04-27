@@ -2,7 +2,7 @@
 
 namespace Core.DomainModel
 {
-    public class AuthenticateResponse
+    public class AuthenticationResponse
     {
 
         #region Properties
@@ -17,7 +17,7 @@ namespace Core.DomainModel
 
         #region Constructors
 
-        public AuthenticateResponse(string email, string token, DateTime tokenExpiration)
+        public AuthenticationResponse(string email, string token, DateTime tokenExpiration)
         {
             this.Email = email;
             this.Token = token;

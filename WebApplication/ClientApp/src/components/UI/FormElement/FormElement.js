@@ -13,6 +13,7 @@ const FormElement = props => {
             changed={(event) => props.changed(event, props.formElement.id)}
             lostFocus={(event) => props.lostFocus(event, props.formElement.id)}
             disabled={props.formElement.content.disabled}
+            autoComplete={props.formElement.content.autoComplete}
         />
     );
 };

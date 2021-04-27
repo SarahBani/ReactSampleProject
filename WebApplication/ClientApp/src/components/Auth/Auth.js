@@ -31,6 +31,7 @@ const initialFormState = {
             placeholder: 'Password',
         },
         value: '',
+        autoComplete: 'on',
         validation: {
             required: true,
             minLength: 6

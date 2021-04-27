@@ -1,0 +1,1 @@
+﻿export const UNKNOWN_ERROR_MESSAGE = "An error has occured!";

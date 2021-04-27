@@ -13,7 +13,9 @@ export function* fetchCountriesSaga(action) {
     };
     try {
         const response = yield axiosInstance.get('/Location/GetCountries', headers);
-        yield put(actions.setCountries(response.data));
+        if (response?.status === 200) {
+            yield put(actions.setCountries(response.data));
+        }
         yield put(commonActions.hideLoader());
     } catch (error) {
         yield put(commonActions.raiseError(error));
@@ -28,7 +30,9 @@ export function* selectCountrySaga(action) {
     };
     try {
         const response = yield axiosInstance.get('/Location/GetCities/' + action.countryId, headers);
-        yield put(actions.setCities(response.data));
+        if (response?.status === 200) {
+            yield put(actions.setCities(response.data));
+        }
         yield put(commonActions.hideLoader());
     } catch (error) {
         yield put(commonActions.raiseError(error));

@@ -6,7 +6,7 @@ export default httpErrorHandler => {
 
     const reqInterceptor = httpErrorHandler.interceptors.request.use(
         req => {
-            setError(null);
+            setError();
             return req;
         });
 
@@ -25,7 +25,7 @@ export default httpErrorHandler => {
     }, [reqInterceptor, resInterceptor]);
 
     const clearError = () => {
-        setError(null);
+        setError();
     }
 
     return [ error, clearError ];

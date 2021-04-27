@@ -1,4 +1,9 @@
 ﻿import * as actionTypes from './commonActionTypes';
+import { UNKNOWN_ERROR_MESSAGE } from '../../shared/constant';
+
+const unknownError = {
+    message: UNKNOWN_ERROR_MESSAGE
+};
 
 export const showLoader = () => {
     return {
@@ -12,14 +17,14 @@ export const hideLoader = () => {
     };
 };
 
-export const raiseError = (error) => {
+export const raiseError = (error = unknownError) => {
     return {
         type: actionTypes.RAISE_ERROR,
         error: error
     };
 };
 
-export const clearError = (error) => {
+export const clearError = () => {
     return {
         type: actionTypes.CLEAR_ERROR
     };

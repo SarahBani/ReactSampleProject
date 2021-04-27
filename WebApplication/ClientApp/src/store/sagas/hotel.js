@@ -26,7 +26,9 @@ export function* fetchHotelsSaga(action) {
         }
         const queryString = yield (filters.length > 0 ? '?' + filters.join('&') : '');
         const response = yield axiosInstance.get('/Hotel/GetList' + queryString, headers);
-        yield put(actions.setHotels(response.data));
+        if (response?.status === 200) {
+            yield put(actions.setHotels(response.data));
+        }
         yield put(commonActions.hideLoader());
     } catch (error) {
         yield put(commonActions.raiseError(error));
@@ -49,7 +51,9 @@ export function* fetchHotelsCountSaga(action) {
         }
         const queryString = yield (filters.length > 0 ? '?' + filters.join('&') : '');
         const response = yield axiosInstance.get('/Hotel/GetCount' + queryString, headers);
-        yield put(actions.setHotelsCount(response.data));
+        if (response?.status === 200) {
+            yield put(actions.setHotelsCount(response.data));
+        }
         yield put(commonActions.hideLoader());
     } catch (error) {
         yield put(commonActions.raiseError(error));
@@ -64,7 +68,9 @@ export function* fetchHotelSaga(action) {
     };
     try {
         const response = yield axiosInstance.get('/Hotel/GetById/' + action.id, headers);
-        yield put(actions.setHotel(response.data));
+        if (response?.status === 200) {
+            yield put(actions.setHotel(response.data));
+        }
         yield put(commonActions.hideLoader());
     } catch (error) {
         yield put(commonActions.raiseError(error));
@@ -79,7 +85,9 @@ export function* fetchHotelPhotosSaga(action) {
     };
     try {
         const response = yield axiosInstance.get('/Hotel/GetPhotos/' + action.hotelId, headers);
-        yield put(actions.setHotelPhotos(response.data));
+        if (response?.status === 200) {
+            yield put(actions.setHotelPhotos(response.data));
+        }
         yield put(commonActions.hideLoader());
     } catch (error) {
         yield put(commonActions.raiseError(error));

@@ -50,7 +50,8 @@ const Input = props => {
                 className={inputClasses.join(' ')}
                 onChange={props.changed}
                 onBlur={props.lostFocus}
-                disabled={props.disabled} />;
+                disabled={props.disabled}
+                autoComplete={props.autoComplete}  />;
     }
 
     return (

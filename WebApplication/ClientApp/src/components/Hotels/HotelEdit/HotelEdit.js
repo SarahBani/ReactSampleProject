@@ -1,5 +1,5 @@
 ﻿import { React, useState, useCallback } from 'react';
-import { useHistory, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import DropDown from '../../UI/DropDown/DropDown';
 
 const HotelEdit = props => {
