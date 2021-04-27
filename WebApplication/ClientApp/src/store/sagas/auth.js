@@ -1,4 +1,4 @@
-﻿import { put, call, all, cancel, race } from 'redux-saga/effects';
+﻿import { put, call, all } from 'redux-saga/effects';
 
 import axiosInstance from '../../axios-instance';
 import * as actions from '../actions/authActions';
@@ -46,7 +46,8 @@ export function* signOutSaga() {
 }
 
 export function* checkAuthTimeoutSaga(action) {
-    const duration = yield (new Date(action.tokenExpiration).getTime() - new Date().getTime());
+    const duration1 = yield (new Date(action.tokenExpiration).getTime() - new Date().getTime());
+    const duration = 5000;
     //delay(duration);
     yield call(delay, duration);
     yield put(actions.signOut());

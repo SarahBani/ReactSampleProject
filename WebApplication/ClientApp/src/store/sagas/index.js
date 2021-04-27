@@ -15,9 +15,16 @@ export function* watchAuth() {
         //takeLatest(authActionTypes.CHECK_AUTH_TIMEOUT, checkAuthTimeoutSaga);
     ]);
 
-    while (yield take(authActionTypes.CHECK_AUTH_TIMEOUT)) {
+    //while (true) {
+    //    const payload = yield take(authActionTypes.CHECK_AUTH_TIMEOUT);
+    //    const bgSyncTask = yield fork(checkAuthTimeoutSaga, payload);
+    //    yield takeLatest(authActionTypes.STOP_AUTH_TIMER, cancelWorkerSaga, bgSyncTask);
+    //}
+    // Or
+    let payload;
+    while (payload = yield take(authActionTypes.CHECK_AUTH_TIMEOUT)) {
         // starts the task in the background
-        const bgSyncTask = yield fork(checkAuthTimeoutSaga);
+        const bgSyncTask = yield fork(checkAuthTimeoutSaga, payload);
 
         //// wait for the user to sign out
         //yield take(authActionTypes.STOP_AUTH_TIMER);
@@ -27,6 +34,10 @@ export function* watchAuth() {
         // Or
         yield takeLatest(authActionTypes.STOP_AUTH_TIMER, cancelWorkerSaga, bgSyncTask);
     }
+}
+
+function* watchCheckAuthTimeout() {
+    yield takeLatest(authActionTypes.CHECK_AUTH_TIMEOUT, checkAuthTimeoutSaga);
 }
 
 function* cancelWorkerSaga(task) {
