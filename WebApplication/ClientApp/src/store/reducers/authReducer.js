@@ -3,7 +3,8 @@
 const initialState = {
     loggedIn: false,
     token: null,
-    authRedirectPath: '/'
+    authRedirectPath: '/',
+    user: null
 };
 
 const authReducer = (state = initialState, action) => {
@@ -12,13 +13,15 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loggedIn: true,
-                token: action.token
+                token: action.token,
+                user: action.user
             };
         case actionTypes.SIGN_OUT:
             return {
                 ...state,
                 loggedIn: false,
-                token: null
+                token: null,
+                user: null
             };
         case actionTypes.SET_AUTH_REDIRECT_PATH:
             return {

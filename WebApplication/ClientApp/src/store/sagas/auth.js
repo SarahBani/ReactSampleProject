@@ -20,8 +20,11 @@ export function* signInSaga(action) {
             if (response.data.isSuccessful) {
                 //yield localStorage.setItem(authStorageKeyName, JSON.stringify(response.data));
                 const authResponse = response.data.content;
+                const user = {
+                    email: authResponse.email
+                };
                 yield call([localStorage, 'setItem'], authStorageKeyName, JSON.stringify(authResponse));
-                yield put(actions.signInSucceeded(authResponse.token));
+                yield put(actions.signInSucceeded(authResponse.token, user));
                 yield put(actions.checkAuthTimeout(authResponse.tokenExpiration));
             }
             else {
@@ -46,21 +49,23 @@ export function* signOutSaga() {
 }
 
 export function* checkAuthTimeoutSaga(action) {
-    const duration1 = yield (new Date(action.tokenExpiration).getTime() - new Date().getTime());
-    const duration = 5000;
+    const duration = yield (new Date(action.tokenExpiration).getTime() - new Date().getTime());
     //delay(duration);
     yield call(delay, duration);
     yield put(actions.signOut());
 }
 
-export function* autoSignInSaga(action) {
+export function* autoSignInSaga() {
     //const authToken = yield JSON.parse(localStorage.getItem(authStorageKeyName));
     const authToken = JSON.parse(yield call([localStorage, 'getItem'], authStorageKeyName));
-    if (!!authToken) {
-        const expirationDateTime = new Date(authToken.expiration);
+    if (authToken) {
+        const expirationDateTime = new Date(authToken.tokenExpiration);
         if (expirationDateTime > new Date()) {
-            yield put(actions.signInSucceeded(authToken.token));
-            yield put(actions.checkAuthTimeout(authToken.expiration));
+            const user = {
+                email: authToken.email
+            };
+            yield put(actions.signInSucceeded(authToken.token, user));
+            yield put(actions.checkAuthTimeout(authToken.tokenExpiration));
         }
         else {
             yield put(actions.signOut());

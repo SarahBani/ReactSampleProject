@@ -12,9 +12,14 @@
     top: 30%;
     box-sizing: border-box;
     transition: all 0.3s ease-out;
+    @include border(#ccc, 3px);
 
     h3 {
         text-transform: uppercase;
+    }
+
+    &.error {
+        padding: 40px;
     }
 }
 

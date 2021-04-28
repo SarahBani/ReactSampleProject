@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { Route, Switch } from 'react-router';
 import { connect } from "react-redux";
 
@@ -11,6 +11,7 @@ import { Home } from './Home/Home';
 import About from './About/About';
 import NotFound from './NotFound/NotFound';
 import * as authActions from '../store/actions/authActions';
+import AccessDenied from './AccessDenied/AccessDenied';
 
 const Auth = React.lazy(() => {
     return import('./Auth/Auth');
@@ -26,11 +27,11 @@ const Hotels = React.lazy(() => {
 
 export const App = (props) => {
 
-    //const { onAutoSignIn } = props;
+    const { onAutoSignIn } = props;
 
-    //useEffect(() => {
-    //    onAutoSignIn();
-    //}, [onAutoSignIn]);
+    useEffect(() => {
+        onAutoSignIn();
+    }, [onAutoSignIn]);
 
     let routes = null;
     if (props.isLoggedIn) {
@@ -51,6 +52,7 @@ export const App = (props) => {
             <Switch>
                 <Route path='/hotels/new' render={(props) => <Hotels {...props} add />} />
                 <Route path='/hotels/:id?/:action?' exact component={Hotels} />
+                <Route path='/profile' component={AccessDenied} />
                 <Route path='/about' component={About} />
                 <Route path='/auth' render={(props) => <Auth {...props} />} />
                 <Route path='/' exact component={Home} />

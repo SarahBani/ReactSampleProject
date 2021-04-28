@@ -1,4 +1,4 @@
-﻿import { takeEvery, all, takeLatest, cancel, take, race, call, fork } from 'redux-saga/effects';
+﻿import { takeEvery, all, takeLatest, cancel, take, fork } from 'redux-saga/effects';
 
 import { autoSignInSaga, checkAuthTimeoutSaga, signInSaga, signOutSaga } from './auth';
 import { fetchCountriesSaga, selectCountrySaga, selectCitySaga } from './location';

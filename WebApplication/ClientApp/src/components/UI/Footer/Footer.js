@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import classes from './Footer.module.scss';
 import Logo from '../Logo/Logo';
+import { connect } from 'react-redux';
 
 const Footer = props => (
     <footer className={classes.Footer}>
@@ -17,9 +18,12 @@ const Footer = props => (
                             <li>
                                 <Link to={{ pathname: "/" }}>Home</Link>
                             </li>
-                            <li>
-                                <Link to={{ pathname: "/profile" }}>Profile</Link>
-                            </li>
+                            {
+                                props.isLoggedIn &&
+                                <li>
+                                    <Link to={{ pathname: "/profile" }}>Profile</Link>
+                                </li>
+                            }
                             <li>
                                 <Link to={{ pathname: "/hotels" }}>Hotels</Link>
                             </li>
@@ -39,4 +43,10 @@ const Footer = props => (
     </footer>
 );
 
-export default Footer;
+const mapStateToProps = state => {
+    return {
+        isLoggedIn: state.auth.loggedIn
+    };
+};
+
+export default connect(mapStateToProps)(Footer);

@@ -8,10 +8,11 @@ export const signIn = (email, password) => {
     };
 };
 
-export const signInSucceeded = (token) => {
+export const signInSucceeded = (token, user) => {
     return {
         type: actionTypes.SIGN_IN_SUCCEEDED,
-        token: token
+        token: token,
+        user: user
     };
 };
 
