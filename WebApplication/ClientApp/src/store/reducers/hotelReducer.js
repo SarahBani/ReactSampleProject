@@ -29,6 +29,10 @@ const hotelReducer = (state = initialState, action) => {
                 ...state,
                 photos: action.photos
             };
+        case actionTypes.OPERATION_SUCCEEDED:
+            return {
+                ...state,
+            };
         default:
             return state;
     }

@@ -32,7 +32,6 @@ export const setHotelsCount = (count) => {
     };
 };
 
-
 export const fetchHotel = (id) => {
     return {
         type: actionTypes.FETCH_HOTEL,
@@ -58,5 +57,26 @@ export const setHotelPhotos = (photos) => {
     return {
         type: actionTypes.SET_HOTEL_PHOTOS,
         photos: photos
+    };
+};
+
+export const saveHotel = (id, hotel) => {
+    return {
+        type: actionTypes.SAVE_HOTEL,
+        id: id,
+        hotel: hotel
+    };
+};
+
+export const deleteHotel = (id) => {
+    return {
+        type: actionTypes.DELETE_HOTEL,
+        id: id
+    };
+};
+
+export const operationSucceeded = () => {
+    return {
+        type: actionTypes.OPERATION_SUCCEEDED
     };
 };

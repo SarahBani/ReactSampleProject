@@ -6,3 +6,6 @@ export const FETCH_HOTEL = 'FETCH_HOTEL';
 export const SET_HOTEL = 'SET_HOTEL';
 export const FETCH_HOTEL_PHOTOS = 'FETCH_HOTEL_PHOTOS';
 export const SET_HOTEL_PHOTOS = 'SET_HOTEL_PHOTOS';
+export const SAVE_HOTEL = 'SAVE_HOTEL';
+export const DELETE_HOTEL = 'DELETE_HOTEL';
+export const OPERATION_SUCCEEDED = 'OPERATION_SUCCEEDED';

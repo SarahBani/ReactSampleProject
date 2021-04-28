@@ -93,3 +93,37 @@ export function* fetchHotelPhotosSaga(action) {
         yield put(commonActions.raiseError(error));
     }
 }
+
+export function* saveHotelSaga(action) {
+    yield put(commonActions.showLoader());
+    const headers = {
+        'Content-Type': 'application/json; charset=utf-8',
+        'auth_token': action.token
+    };
+    try {
+        const response = yield axiosInstance.post('/Hotel/Save/' + action.id, action.hotel, headers);
+        if (response?.status === 200) {
+            yield put(actions.operationSucceeded());
+        }
+        yield put(commonActions.hideLoader());
+    } catch (error) {
+        yield put(commonActions.raiseError(error));
+    }
+}
+
+export function* deleteHotelSaga(action) {
+    yield put(commonActions.showLoader());
+    const headers = {
+        'Content-Type': 'application/json; charset=utf-8',
+        'auth_token': action.token
+    };
+    try {
+        const response = yield axiosInstance.delete('/Hotel/Save/' + action.id, headers);
+        if (response?.status === 200) {
+            yield put(actions.operationSucceeded());
+        }
+        yield put(commonActions.hideLoader());
+    } catch (error) {
+        yield put(commonActions.raiseError(error));
+    }
+}

@@ -4,13 +4,16 @@ import { connect } from 'react-redux';
 
 import classes from './HotelDetail.module.scss';
 import * as actions from '../../../store/actions/hotelActions';
+import Modal from '../../UI/Modal/Modal';
+import ConfirmDelete from '../../UI/ConfirmDelete/ConfirmDelete';
 
 const HotelDetail = props => {
 
-    const { id, photos, onFetchHotel, onFetchHotelPhotos } = props;
+    const { id, photos, onFetchHotel, onFetchHotelPhotos, onDeleteHotel } = props;
     const { stars } = props.hotel || {}; // { ...props.hotel };
     const [imageUrl, setImageUrl] = useState('images/no-image.png');
     const [redirect, setRedirect] = useState();
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     useEffect(() => {
         onFetchHotel(id);
@@ -50,13 +53,31 @@ const HotelDetail = props => {
         setRedirect(<Redirect to={`/hotels/${id}/edit`} />);
     }, [id, setRedirect]);
 
-    const deleteHandler = useCallback(() => {
+    const deleteConfirmContent = useMemo(() => {
+        return (
+            <Modal show={showDeleteConfirm}>
+                <ConfirmDelete onOK={() => confirmDeleteHandler(true)}
+                    onCancel={() => confirmDeleteHandler(false)} />
+            </Modal>
+        );
+    }, [showDeleteConfirm]);
 
-    }, []);
+    const deleteHandler = useCallback(() => {
+        setShowDeleteConfirm(true);
+    }, [setShowDeleteConfirm]);
+
+    const confirmDeleteHandler = useCallback((isConfirmed) => {
+        if (isConfirmed) {
+            //onDeleteHotel(id);
+        }
+        setShowDeleteConfirm(false);
+    }, [id, setShowDeleteConfirm, onDeleteHotel]);
 
     return (
         <div className={classes.HotelDetail}>
             {redirect}
+            {deleteConfirmContent}
+
             <div className="row">
                 <div className="col-12">
                     <img className="img-response selected-photo" src={imageUrl} />
@@ -114,7 +135,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onFetchHotel: (id) => dispatch(actions.fetchHotel(id)),
-        onFetchHotelPhotos: (id) => dispatch(actions.fetchHotelPhotos(id))
+        onFetchHotelPhotos: (id) => dispatch(actions.fetchHotelPhotos(id)),
+        onSaveHotel: (id, hotel) => dispatch(actions.saveHotel(id, hotel)),
+        onDeleteHotel: (id) => dispatch(actions.deleteHotel(id))
     };
 };
 

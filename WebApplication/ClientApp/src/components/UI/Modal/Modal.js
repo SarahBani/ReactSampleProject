@@ -10,7 +10,6 @@ const initModalType = {
 };
 
 const modalTypeReducer = (currentModalType = initModalType, action) => {
-    console.log(action);
     switch (action.type) {
         case 'INFO':
             return {
