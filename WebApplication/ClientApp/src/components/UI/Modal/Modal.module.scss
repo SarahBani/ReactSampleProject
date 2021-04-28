@@ -1,11 +1,12 @@
 ﻿@import "../../_globals";
+@import "../../colors";
 
 .Modal {
     position: fixed;
     z-index: 500;
-    background-color: white;
+    background-color: $light-background;
     width: 70%;
-    @include border(#ccc);
+    @include border($light-gray);
     box-shadow: 1px 1px 1px black;
     padding: 16px;
     left: 15%;
@@ -18,8 +19,36 @@
         text-transform: uppercase;
     }
 
-    &.error {
-        padding: 40px;
+    &.Info {
+        padding: 20px;
+
+        > span {
+            font-size: 25px;
+            color: $medium-blue;
+            margin-right: 20px;
+        }
+    }
+
+    &.Warning {
+        padding: 30px;
+        font-weight: bold;
+
+        > span {
+            font-size: 25px;
+            color: $dark-yellow;
+            margin-right: 20px;
+        }
+    }
+
+    &.Error {
+        padding: 30px;
+        font-weight: bold;
+
+        > span {
+            font-size: 25px;
+            color: red;
+            margin-right: 20px;
+        }
     }
 }
 
@@ -29,5 +58,4 @@
         width: 500px;
         left: calc(50% - 250px);
     }
-
 }

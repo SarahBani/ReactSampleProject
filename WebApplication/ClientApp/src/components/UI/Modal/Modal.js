@@ -1,24 +1,72 @@
-﻿import React, { Fragment, useEffect } from 'react';
+﻿import React, { Fragment, useEffect, useReducer } from 'react';
 
-import Backdrop from '../Backdrop/Backdrop';
 import classes from './Modal.module.scss';
+import Backdrop from '../Backdrop/Backdrop';
 
-const modal = props => {
-    return (<Fragment>
-        <Backdrop show={props.show} clicked={props.hide}>
-        </Backdrop>
-        <div className={[classes.Modal, props.type].join(' ')}
-            style=
-            {{
-                transform: props.show ? 'translateY(0)' : 'translateY(-100vh)',
-                opacity: props.show ? '1' : '0'
-            }}>
-            {props.children}
-        </div>
-    </Fragment>);
+const initModalType = {
+    typeClass: null,
+    title: null,
+    icon: null
 };
 
-export default React.memo(modal, (prevProps, nextProps) =>
+const modalTypeReducer = (currentModalType = initModalType, action) => {
+    console.log(action);
+    switch (action.type) {
+        case 'INFO':
+            return {
+                ...currentModalType,
+                typeClass: classes.Info,
+                title: null,
+                icon: <span className="fa fa-info" ></span>
+            };
+        case 'WARNING':
+            return {
+                ...currentModalType,
+                typeClass: classes.Warning,
+                title: 'Warning',
+                icon: <span className="fa fa-warning" ></span>
+            };
+        case 'ERROR':
+            return {
+                ...currentModalType,
+                typeClass: classes.Error,
+                title: 'Error',
+                icon: <span className="fa fa-warning" ></span>
+            };
+        default:
+            return {
+                ...currentModalType
+            };
+    }
+};
+
+const Modal = props => {
+
+    const { type } = props;
+    const [modalType, dispatch] = useReducer(modalTypeReducer, initModalType);
+
+    useEffect(() => {
+        dispatch({ type: type?.toUpperCase() });
+    }, [type]);
+
+    return (
+        <Fragment>
+            <Backdrop show={props.show} clicked={props.hide}>
+            </Backdrop>
+            <div className={[classes.Modal, modalType.typeClass].join(' ')}
+                style=
+                {{
+                    transform: props.show ? 'translateY(0)' : 'translateY(-100vh)',
+                    opacity: props.show ? '1' : '0'
+                }}>
+                {modalType.icon}
+                {props.children}
+            </div>
+        </Fragment>
+    );
+};
+
+export default React.memo(Modal, (prevProps, nextProps) =>
     (prevProps.show === nextProps.show &&
-     prevProps.children === nextProps.children)
+        prevProps.children === nextProps.children)
 );

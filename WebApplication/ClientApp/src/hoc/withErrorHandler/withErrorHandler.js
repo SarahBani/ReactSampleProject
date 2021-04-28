@@ -11,15 +11,21 @@ const withErrorHandler = (WrappedComponent) => {
     return props => {
 
         const [error, setError] = useState();
+        const [errorType, setErrorType] = useState();
         const { customError } = props;
         const [axiosError, axiosErrorConfirmHandler] = useHttpErrorHandler(axiosInstance);
 
         useEffect(() => {
             if (axiosError) {
-                setError(axiosError);
+                setError({
+                    ...axiosError,
+                    message: axiosError.message + '!'
+                });
+                setErrorType('error');
             }
             else if (customError) {
                 setError(customError);
+                setErrorType('warning');
             }
             else {
                 setError();
@@ -39,7 +45,7 @@ const withErrorHandler = (WrappedComponent) => {
 
         return (
             <Fragment>
-                <Modal show={error} hide={hideErrorHandler}>
+                <Modal type={errorType} show={error} hide={hideErrorHandler} >
                     {error ? error.message : null}
                 </Modal>
                 <WrappedComponent {...props} />
