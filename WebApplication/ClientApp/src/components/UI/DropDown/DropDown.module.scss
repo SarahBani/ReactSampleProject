@@ -6,7 +6,7 @@
     > button {
         width: 100%;
         text-align: right;
-        background-color: $medium-green;
+        background-color: $light-background;//$medium-green;
         @include border(#5AB690);
 
         &:focus {

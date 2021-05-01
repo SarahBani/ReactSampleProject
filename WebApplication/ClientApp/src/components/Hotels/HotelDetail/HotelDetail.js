@@ -3,9 +3,9 @@ import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 
 import classes from './HotelDetail.module.scss';
-import * as actions from '../../../store/actions/hotelActions';
 import Modal from '../../UI/Modal/Modal';
 import ConfirmDelete from '../../UI/ConfirmDelete/ConfirmDelete';
+import * as actions from '../../../store/actions/hotelActions';
 
 const HotelDetail = props => {
 
@@ -55,7 +55,7 @@ const HotelDetail = props => {
 
     const deleteConfirmContent = useMemo(() => {
         return (
-            <Modal show={showDeleteConfirm}>
+            <Modal show={showDeleteConfirm} type="confirm">
                 <ConfirmDelete onOK={() => confirmDeleteHandler(true)}
                     onCancel={() => confirmDeleteHandler(false)} />
             </Modal>
@@ -99,6 +99,12 @@ const HotelDetail = props => {
             <div className="row">
                 <div className="col-12">
                     <span>{props.hotel?.city.country.name} - {props.hotel?.city.name}</span>
+                </div>
+            </div>
+
+            <div className="row">
+                <div className="col-12">
+                    <address>{props.hotel?.address}</address>
                 </div>
             </div>
 

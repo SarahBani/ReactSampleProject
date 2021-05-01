@@ -39,12 +39,12 @@ const Location = props => {
         setCityDropDownData(dropDownData);
     }, [cities]);
 
-    const selectCountryHandler = useCallback((countryId) => {
+    const selectCountryHandler = useCallback((event, countryId) => {
         onSelectCountry(countryId);
         props.changeCountry(countryId);
     }, [onSelectCountry]);
 
-    const selectCityHandler = useCallback((cityId) => {
+    const selectCityHandler = useCallback((event, cityId) => {
         onSelectCity(cityId);
         props.changeCity(cityId);
     }, [onSelectCity]);

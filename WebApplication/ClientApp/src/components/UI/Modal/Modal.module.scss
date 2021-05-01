@@ -29,6 +29,14 @@
         }
     }
 
+    &.Question {
+        > span {
+            font-size: 25px;
+            color: $medium-blue;
+            margin-right: 20px;
+        }
+    }
+
     &.Warning {
         padding: 30px;
         font-weight: bold;
@@ -49,6 +57,10 @@
             color: red;
             margin-right: 20px;
         }
+    }
+
+    &.Confirm {
+        background-color: $light-green-background;
     }
 }
 

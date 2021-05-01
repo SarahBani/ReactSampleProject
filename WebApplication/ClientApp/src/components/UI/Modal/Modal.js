@@ -18,6 +18,13 @@ const modalTypeReducer = (currentModalType = initModalType, action) => {
                 title: null,
                 icon: <span className="fa fa-info" ></span>
             };
+        case 'QUESTION':
+            return {
+                ...currentModalType,
+                typeClass: classes.Question,
+                title: null,
+                icon: <span className="fa fa-question" ></span>
+            };
         case 'WARNING':
             return {
                 ...currentModalType,
@@ -31,6 +38,13 @@ const modalTypeReducer = (currentModalType = initModalType, action) => {
                 typeClass: classes.Error,
                 title: 'Error',
                 icon: <span className="fa fa-warning" ></span>
+            };
+        case 'CONFIRM':
+            return {
+                ...currentModalType,
+                typeClass: classes.Confirm,
+                title: null,
+                icon: null,
             };
         default:
             return {

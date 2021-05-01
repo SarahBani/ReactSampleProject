@@ -1,4 +1,4 @@
-﻿import React, { useContext, useReducer, useState, useEffect } from "react";
+﻿import React, { useContext, useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router";
 
@@ -6,7 +6,7 @@ import classes from './Auth.module.scss';
 import FormElement from '../UI/FormElement/FormElement';
 import Button from '../UI/Button/Button';
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
-import { getFormElements, getUpdatedForm, isFormValid, disableForm } from '../../shared/utility';
+import { getFormElements, getUpdatedForm, disableForm, ValidateForm } from '../../shared/utility';
 //import AuthContext from "../../context/AuthContext";
 import * as actions from '../../store/actions/authActions';
 
@@ -44,7 +44,7 @@ export const Auth = props => {
 
     const { loading } = props;
     const [formControls, setFormControls] = useState(initialFormState);
-    const [formIsValid, setFormIsValid] = useState(false);
+    const [isFormValid, setIsFormValid] = useState(false);
     //const authContext = useContext(AuthContext);
 
     useEffect(() => {
@@ -52,14 +52,14 @@ export const Auth = props => {
         setFormControls(updatedForm);
     }, [loading, setFormControls]);
 
-    const inputChangedHandler = (event, id) => {
-        const updatedForm = getUpdatedForm(event, formControls, id);
+    const elementChangedHandler = (event, id) => {
+        const updatedForm = getUpdatedForm(event.target.value, formControls, id);
         setFormControls(updatedForm);
-        setFormIsValid(isFormValid(updatedForm));
+        setIsFormValid(ValidateForm(updatedForm));
     };
 
-    const inputLostFocusHandler = (event, id) => {
-        setFormControls(getUpdatedForm(event, formControls, id));
+    const elementLostFocusHandler = (event, id) => {
+        setFormControls(getUpdatedForm(event.target.value, formControls, id));
     };
 
     const signInHandler = (event) => {
@@ -73,12 +73,12 @@ export const Auth = props => {
                 getFormElements(formControls).map(formElement => (
                     <FormElement formElement={formElement}
                         key={formElement.id}
-                        changed={(event) => inputChangedHandler(event, formElement.id)}
-                        lostFocus={(event) => inputLostFocusHandler(event, formElement.id)}
+                        changed={(event) => elementChangedHandler(event, formElement.id)}
+                        lostFocus={(event) => elementLostFocusHandler(event, formElement.id)}
                     />
                 ))
             }
-            <Button type='Success' disabled={!formIsValid || loading}>Sign In</Button>
+            <Button type='Success' disabled={!isFormValid || loading}>Sign In</Button>
         </form>
     );
     //const loggedInRedirect = (props.loggedIn &&

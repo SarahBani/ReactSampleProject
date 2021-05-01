@@ -16,30 +16,50 @@ export const getFormElements = (formControls) => {
     return formElements;
 };
 
-export const getUpdatedForm = (event, formControls, id) => {
-    const isInputValid = checkValidity(event.target.value, formControls[id].validation);
+export const getUpdatedForm = (value, formControls, controlId) => {
+    const control = formControls[controlId];
+
+    console.log(formControls);
+    //if (control.elementType === 'select') {
+    //    return;
+    //}
+    const isControlValid = checkValidity(value, formControls[controlId].validation);
     const updatedForm = {
         ...formControls,
-        [id]: {
-            ...formControls[id],
-            value: event.target.value,
-            valid: isInputValid
+        [controlId]: {
+            ...formControls[controlId],
+            value: value,
+            valid: isControlValid
             //touched: true
         }
     };
     return updatedForm;
 };
 
-export const isFormValid = (formControls) => {
+export const ValidateForm = (formControls) => {
     let isValid = true;
-    for (const inputId in formControls) {
-        if (!formControls[inputId].valid) {
+    for (const controlId in formControls) {
+        if (!formControls[controlId].valid) {
             isValid = false;
             break;
         }
     }
     return isValid;
 };
+
+//export const fillDropDownElementData = (formControls, controlId, options) => {    
+//    const updatedForm = {
+//        ...formControls,
+//        [controlId]: {
+//            ...formControls[controlId],
+//            options: options
+//        }
+//    };
+//    //console.log(options);
+//    //console.log(controlId);
+//    //console.log(updatedForm);
+//    return updatedForm;
+//};
 
 const checkValidity = (value, rules) => {
     if (!rules) {
