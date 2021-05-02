@@ -2,7 +2,7 @@
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { getUpdatedForm, getFormElements, ValidateForm } from '../../../shared/utility';
+import { getUpdatedForm, getFormElements, ValidateForm, getUpdatedControl } from '../../../shared/utility';
 import FormElement from '../../UI/FormElement/FormElement';
 import ConfirmDelete from '../../UI/ConfirmDelete/ConfirmDelete';
 import Modal from '../../UI/Modal/Modal';
@@ -68,6 +68,105 @@ const initialFormState = {
     //},
 };
 
+const formControlsReducer = (currentFormControls, action) => {
+    let dropDownData;
+    switch (action.type) {
+        case 'FILL_COUNTRIES':
+            dropDownData = action.countries.map(country => {
+                const flagUrl = '/images/' + (country.flagUrl ? 'countries/' + country.flagUrl : 'no-image.png');
+                return {
+                    id: country.id,
+                    text: country.name,
+                    imageUrl: flagUrl
+                };
+            });
+            return {
+                ...currentFormControls,
+                ['countryId']: {
+                    ...currentFormControls['countryId'],
+                    options: dropDownData
+                },
+                ['cityId']: {
+                    ...currentFormControls['cityId'],
+                    options: []
+                }
+            };
+        case 'FILL_CITIES':
+            dropDownData = action.cities.map(city => ({
+                id: city.id,
+                text: city.name
+            }));
+            return {
+                ...currentFormControls,
+                ['cityId']: {
+                    ...currentFormControls['cityId'],
+                    options: dropDownData
+                }
+            };
+        case 'SELECT_DROP_DOWN':
+            return {
+                ...currentFormControls,
+                [action.controlId]: {
+                    ...currentFormControls[action.controlId],
+                    options: currentFormControls[action.controlId].options
+                }
+            };
+        //case 'UPDATE_CONTROL':
+        //    console.log(currentFormControls);
+        //    return {
+        //        ...currentFormControls,
+        //        [action.controlId]: action.updatedControl,
+        //    };
+        //case 'VALIDATE':
+        //    return {
+        //        ...currentFormControls,
+        //        [action.controlId]: action.updatedControl,
+        //    };
+        default:
+            return {
+                ...currentFormControls
+            };
+    }
+};
+
+const initialDropDownData = {
+    countries: [],
+    cities: []
+};
+
+const dropDownDataReducer = (currentDropDownData, action) => {
+    let data;
+    switch (action.type) {
+        case 'FILL_COUNTRIES':
+            data = action.countries.map(country => {
+                const flagUrl = '/images/' + (country.flagUrl ? 'countries/' + country.flagUrl : 'no-image.png');
+                return {
+                    id: country.id,
+                    text: country.name,
+                    imageUrl: flagUrl
+                };
+            });
+            return {
+                ...currentDropDownData,
+                countries: data,
+                cities: []
+            };
+        case 'FILL_CITIES':
+            data = action.cities.map(city => ({
+                id: city.id,
+                text: city.name
+            }));
+            return {
+                ...currentDropDownData,
+                cities: data
+            };
+        default:
+            return {
+                ...currentDropDownData,
+            };
+    }
+};
+
 const HotelEdit = props => {
 
     const {
@@ -77,6 +176,9 @@ const HotelEdit = props => {
     const [isFormValid, setIsFormValid] = useState(false);
     const [redirect, setRedirect] = useState();
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    //const [countriesData, setCountriesData] = useState([]);
+    //const [formControls, dispatchFormControls] = useReducer(formControlsReducer, initialFormState);
+    const [dropDownData, dispatchDropDownData] = useReducer(dropDownDataReducer, initialDropDownData);
 
     useEffect(() => {
         onFetchCountries();
@@ -84,53 +186,109 @@ const HotelEdit = props => {
 
     useEffect(() => {
         if (countries?.length > 0) {
-            const dropDownData = countries.map(country => {
-                const flagUrl = '/images/' + (country.flagUrl ? 'countries/' + country.flagUrl : 'no-image.png');
-                return {
-                    id: country.id,
-                    text: country.name,
-                    imageUrl: flagUrl
-                };
+            dispatchDropDownData({
+                type: 'FILL_COUNTRIES',
+                countries: countries
             });
-            const updatedForm = {
-                ...formControls,
-                ['countryId']: {
-                    ...formControls['countryId'],
-                    options: dropDownData
-                },
-                ['cityId']: {
-                    ...formControls['cityId'],
-                    options: []
-                }
-            };
-            setFormControls(updatedForm);
+            //dispatchFormControls({
+            //    type: 'FILL_COUNTRIES',
+            //    countries: countries
+            //});
+            //const dropDownData = countries.map(country => {
+            //    const flagUrl = '/images/' + (country.flagUrl ? 'countries/' + country.flagUrl : 'no-image.png');
+            //    return {
+            //        id: country.id,
+            //        text: country.name,
+            //        imageUrl: flagUrl
+            //    };
+            //});
+            //setCountriesData(dropDownData);
+            //const updatedForm = {
+            //    ...formControls,
+            //    ['countryId']: {
+            //        ...formControls['countryId'],
+            //        options: dropDownData
+            //    },
+            //    ['cityId']: {
+            //        ...formControls['cityId'],
+            //        options: []
+            //    }
+            //};
+            //setFormControls(updatedForm);
         }
-    }, [countries, setFormControls]);
+    }, [countries]);
+
+    //useEffect(() => {
+    //    const updatedForm = {
+    //        ...formControls,
+    //        ['countryId']: {
+    //            ...formControls['countryId'],
+    //            options: countriesData
+    //        },
+    //        ['cityId']: {
+    //            ...formControls['cityId'],
+    //            options: []
+    //        }
+    //    };
+    //    setFormControls(updatedForm);
+    //}, [countriesData]);
 
     useEffect(() => {
-        if (cities?.length > 0) {
-            const dropDownData = cities.map(city => ({
-                id: city.id,
-                text: city.name
-            }));
-            const updatedForm = {
-                ...formControls,
-                ['cityId']: {
-                    ...formControls['cityId'],
-                    options: dropDownData
-                }
-            };
-            console.log(updatedForm);
-            setFormControls(updatedForm);
-        }
-    }, [cities, setFormControls]);
+        console.log(33333333);
+        console.log(dropDownData);
+        const updatedForm = {
+            ...formControls,
+            ['countryId']: {
+                ...formControls['countryId'],
+                options: dropDownData.countries
+            },
+            ['cityId']: {
+                ...formControls['cityId'],
+                options: dropDownData.cities
+            }
+        };
+        setFormControls(updatedForm);
+    }, [dropDownData]);
+
+    useEffect(() => {
+        //dispatchFormControls({
+        //    type: 'FILL_CITIES',
+        //    cities: cities
+        //});
+        dispatchDropDownData({
+            type: 'FILL_CITIES',
+            cities: cities
+        });
+        //        const dropDownData = cities.map(city => ({
+        //            id: city.id,
+        //            text: city.name
+        //        }));
+        //        const updatedForm = {
+        //            ...formControls,
+        //            ['cityId']: {
+        //                ...formControls['cityId'],
+        //                options: dropDownData
+        //            }
+        //        };
+        //        console.log(updatedForm);
+        //        setFormControls(updatedForm);
+
+    }, [cities]);
 
     const selectCountryHandler = useCallback((countryId, id) => {
         const updatedForm = getUpdatedForm(countryId.toString(), formControls, id);
-        //setFormControls(updatedForm);
+        //console.log(updatedForm);
+        //const updatedControl = getUpdatedControl(countryId.toString(), formControls[id]);
+        //dispatchFormControls({
+        //    type: 'SELECT_DROP_DOWN',
+        //    controlId: id,
+        //    updatedControl: updatedControl
+        //});
+        setFormControls(updatedForm);
         //setIsFormValid(ValidateForm(updatedForm));
+        setIsFormValid(ValidateForm(formControls));
 
-        //onSelectCountry(countryId);
+        onSelectCountry(countryId);
     }, [getUpdatedForm, onSelectCountry]);
 
     //const selectCityHandler = useCallback((cityId) => {
@@ -144,13 +302,13 @@ const HotelEdit = props => {
     };
 
     const elementChangedHandler = (event, id) => {
-        const updatedForm = getUpdatedForm(event.target.value, formControls, id);
-        setFormControls(updatedForm);
-        setIsFormValid(ValidateForm(updatedForm));
+        //const updatedForm = getUpdatedForm(event.target.value, formControls, id);
+        //setFormControls(updatedForm);
+        //setIsFormValid(ValidateForm(updatedForm));
     };
 
     const elementLostFocusHandler = (event, id) => {
-        setFormControls(getUpdatedForm(event.target.value, formControls, id));
+        //setFormControls(getUpdatedForm(event.target.value, formControls, id));
     };
 
     const cancelHandler = useCallback(() => {

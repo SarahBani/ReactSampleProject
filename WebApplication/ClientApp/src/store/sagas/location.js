@@ -23,19 +23,24 @@ export function* fetchCountriesSaga(action) {
 }
 
 export function* selectCountrySaga(action) {
-    yield put(commonActions.showLoader());
-    const headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        //'auth_token': action.token
-    };
-    try {
-        const response = yield axiosInstance.get('/Location/GetCities/' + action.countryId, headers);
-        if (response?.status === 200) {
-            yield put(actions.setCities(response.data));
+    if (action.countryId === '') {
+        yield put(actions.setCities([]));
+    }
+    else {
+        yield put(commonActions.showLoader());
+        const headers = {
+            'Content-Type': 'application/json; charset=utf-8',
+            //'auth_token': action.token
+        };
+        try {
+            const response = yield axiosInstance.get('/Location/GetCities/' + action.countryId, headers);
+            if (response?.status === 200) {
+                yield put(actions.setCities(response.data));
+            }
+            yield put(commonActions.hideLoader());
+        } catch (error) {
+            yield put(commonActions.raiseError(error));
         }
-        yield put(commonActions.hideLoader());
-    } catch (error) {
-        yield put(commonActions.raiseError(error));
     }
 }
 

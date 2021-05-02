@@ -9,7 +9,7 @@ const initModalType = {
     icon: null
 };
 
-const modalTypeReducer = (currentModalType = initModalType, action) => {
+const modalTypeReducer = (currentModalType, action) => {
     switch (action.type) {
         case 'INFO':
             return {
