@@ -53,13 +53,13 @@ export const Auth = props => {
     }, [loading, setFormControls]);
 
     const elementChangedHandler = (event, id) => {
-        const updatedForm = getUpdatedForm(event.target.value, formControls, id);
+        const updatedForm = getUpdatedForm(event, formControls, id);
         setFormControls(updatedForm);
         setIsFormValid(ValidateForm(updatedForm));
     };
 
     const elementLostFocusHandler = (event, id) => {
-        setFormControls(getUpdatedForm(event.target.value, formControls, id));
+        setFormControls(getUpdatedForm(event, formControls, id));
     };
 
     const signInHandler = (event) => {

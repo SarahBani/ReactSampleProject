@@ -1,8 +1,8 @@
-﻿import { React, useState, useEffect, useCallback, useMemo, memo } from 'react';
+﻿import { React, useState, useEffect, useCallback, useMemo } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { getUpdatedForm, getFormElements, ValidateForm, getUpdatedControl, checkValidity } from '../../../shared/utility';
+import { getUpdatedForm, getFormElements, ValidateForm, checkValidity } from '../../../shared/utility';
 import FormElement from '../../UI/FormElement/FormElement';
 import ConfirmDelete from '../../UI/ConfirmDelete/ConfirmDelete';
 import Modal from '../../UI/Modal/Modal';
@@ -66,15 +66,6 @@ const initialFormState = {
     },
 };
 
-const initialDropDownData = {
-    countries: [],
-    cities: [],
-    selectedCountryId: '',
-    selectedCityId: '',
-    selectedDropDown: '',
-    selectedValue: ''
-};
-
 const initialDropDowns = {
     countryId: {
         options: [],
@@ -85,8 +76,7 @@ const initialDropDowns = {
         options: [],
         value: '',
         valid: true
-    },
-    selectedDropDown: null
+    }
 };
 
 const dropDownsReducer = (currentDropDowns, action) => {
@@ -103,8 +93,7 @@ const dropDownsReducer = (currentDropDowns, action) => {
                     options: [],
                     value: '',
                     valid: true
-                },
-                selectedDropDown: null
+                }
             };
         case 'FILL_CITIES':
             return {
@@ -113,15 +102,14 @@ const dropDownsReducer = (currentDropDowns, action) => {
                     options: getDropDownCitiesData(action.cities),
                     value: '',
                     valid: true
-                },
-                selectedDropDown: null
+                }
             };
         case 'SELECT':
             if (action.id === 'countryId') {
                 return {
                     ...currentDropDowns,
                     ['countryId']: {
-                        ...currentDropDown,
+                        ...currentDropDowns['countryId'],
                         value: action.value,
                         valid: checkValidity(action.value.toString(), initialFormState['countryId'].validation)
                     },
@@ -129,19 +117,17 @@ const dropDownsReducer = (currentDropDowns, action) => {
                         options: [],
                         value: '',
                         valid: true
-                    },
-                    selectedDropDown: 'countryId'
+                    }
                 };
             }
             else {
                 return {
                     ...currentDropDowns,
                     ['cityId']: {
-                        ...currentDropDown,
+                        ...currentDropDowns['cityId'],
                         value: action.value,
                         valid: checkValidity(action.value.toString(), initialFormState['cityId'].validation)
-                    },
-                    selectedDropDown: 'cityId'
+                    }
                 };
             }
         default:
@@ -167,64 +153,6 @@ const getDropDownCitiesData = (cities) => {
     }));
 };
 
-const dropDownDataReducer = (currentDropDownData, action) => {
-    let data;
-    switch (action.type) {
-        case 'FILL_COUNTRIES':
-            data = action.countries.map(country => {
-                const flagUrl = '/images/' + (country.flagUrl ? 'countries/' + country.flagUrl : 'no-image.png');
-                return {
-                    id: country.id,
-                    text: country.name,
-                    imageUrl: flagUrl,
-                };
-            });
-            return {
-                ...currentDropDownData,
-                countries: data,
-                cities: [],
-                selectedCountryId: '',
-                selectedCityId: '',
-                selectedDropDown: '',
-                selectedValue: ''
-            };
-        case 'FILL_CITIES':
-            data = action.cities.map(city => ({
-                id: city.id,
-                text: city.name
-            }));
-            return {
-                ...currentDropDownData,
-                cities: data,
-                selectedCityId: '',
-                selectedDropDown: '',
-                selectedValue: ''
-            };
-        //case 'SELECT_COUNTRY':
-        case 'SELECT':
-            if (action.id === 'countryId') {
-                return {
-                    ...currentDropDownData,
-                    cities: [],
-                    selectedCountryId: action.value,
-                    selectedCityId: '',
-                    selectedDropDown: 'countryId',
-                    selectedValue: action.value
-                };
-            }
-            else {
-                return {
-                    ...currentDropDownData,
-                    selectedCityId: action.value,
-                    selectedDropDown: 'cityId',
-                    selectedValue: action.value
-                };
-            }
-        default:
-            return currentDropDownData;
-    }
-};
-
 const HotelEdit = props => {
 
     const {
@@ -234,8 +162,12 @@ const HotelEdit = props => {
     const [isFormValid, setIsFormValid] = useState(false);
     const [redirect, setRedirect] = useState();
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-   // const [dropDownData, dispatchDropDownData] = useReducer(dropDownDataReducer, initialDropDownData);
     const [dropDowns, dispatchDropDowns] = useReducer(dropDownsReducer, initialDropDowns);
+
+    const dropDownsHandler = {
+        'countryId': onSelectCountry,
+        //'cityId': () => { }
+    };
 
     useEffect(() => {
         onFetchCountries();
@@ -243,7 +175,7 @@ const HotelEdit = props => {
 
     useEffect(() => {
         if (countries?.length > 0) {
-            dispatchDropDown({
+            dispatchDropDowns({
                 type: 'FILL_COUNTRIES',
                 countries: countries
             });
@@ -251,118 +183,53 @@ const HotelEdit = props => {
     }, [countries]);
 
     useEffect(() => {
-        dispatchDropDown({
+        dispatchDropDowns({
             type: 'FILL_CITIES',
             cities: cities
         });
     }, [cities]);
 
-    //useEffect(() => {
-    //    let updatedForm = {
-    //        ...formControls,
-    //        ['countryId']: {
-    //            ...formControls['countryId'],
-    //            options: dropDownData.countries,
-    //            value: dropDownData.selectedCountryId,
-    //        },
-    //        ['cityId']: {
-    //            ...formControls['cityId'],
-    //            options: dropDownData.cities,
-    //            value: dropDownData.selectedCityId
-    //        }
-    //    };
-    //    if (dropDownData.selectedDropDown) {
-    //        const selectedControlId = dropDownData.selectedDropDown;
-    //        const isControlValid = checkValidity(dropDownData.selectedValue.toString(),
-    //            updatedForm[selectedControlId].validation)
-    //        updatedForm = {
-    //            ...updatedForm,
-    //            [selectedControlId]: {
-    //                ...formControls[selectedControlId],
-    //                valid: isControlValid
-    //            }
-    //        };
-    //    }
-    //    setFormControls(updatedForm);
-    //    setIsFormValid(ValidateForm(formControls));
+    const selectDropDownHandler = useCallback((controlId, value) => {
+        dispatchDropDowns({
+            type: 'SELECT',
+            id: controlId,
+            value: value
+        });
 
-    //    if (dropDownData.selectedDropDown &&
-    //        dropDownHandlers[dropDownData.selectedDropDown]) {
-    //        dropDownHandlers[dropDownData.selectedDropDown](dropDownData.selectedValue);
-    //    }
-    //}, [dropDownData]);
+        if (dropDownsHandler[controlId]) {
+            dropDownsHandler[controlId](value);
+        }
+    }, [dispatchDropDowns, dropDownsHandler]);
 
     useEffect(() => {
         const updatedForm = {
             ...formControls,
             ['countryId']: {
                 ...formControls['countryId'],
-                ...dropDown.countryId
+                ...dropDowns.countryId
             },
             ['cityId']: {
                 ...formControls['cityId'],
-                ...dropDown.cityId
+                ...dropDowns.cityId
             }
         };
         setFormControls(updatedForm);
         setIsFormValid(ValidateForm(formControls));
 
-        if (dropDown.selectedDropDown &&
-            dropDownHandlers[dropDown.selectedDropDown]) {
-            dropDownHandlers[dropDown.selectedDropDown](dropDown[dropDown.selectedDropDown].value);
-        }
-    }, [dropDown]);
-
-    const dropDownHandlers = {
-        'countryId': onSelectCountry,
-        //'cityId': () => { }
-    };
-
-    const dropDowns = {
-        'countryId': {
-            selectHandler: onSelectCountry,
-            selectedValue: ''
-        },
-        'cityId': {
-            //selectHandler: () => { },
-            selectedValue: ''
-        },
-    };
-
-    const selectDropDownHandler = (controlId, value) => {
-        //dispatchDropDownData({
-        //    type: 'SELECT',
-        //    id: controlId,
-        //    value: value
-        //});
-        dispatchDropDown({
-            type: 'SELECT',
-            id: controlId,
-            value: value
-        });
-    };
-
-    //useEffect(() => {
-    //    if (dropDownSelected) {
-    //        const updatedForm = getUpdatedForm(dropDownSelected.value.toString(),
-    //            formControls, dropDownSelected.controlId);
-    //        setFormControls(updatedForm);
-    //        setIsFormValid(ValidateForm(formControls));
-
-    //        if (dropDowns[dropDownSelected.controlId].selectHandler) {
-    //            dropDowns[dropDownSelected.controlId].selectHandler(dropDownSelected.value);
-    //        }
-    //    }
-    //}, [dropDownSelected]);
+        //if (dropDowns.selectedDropDown &&
+        //    dropDownsHandler[dropDowns.selectedDropDown]) {
+        //    dropDownsHandler[dropDowns.selectedDropDown](dropDowns[dropDowns.selectedDropDown].value);
+        //}
+    }, [dropDowns, setFormControls, setIsFormValid, ValidateForm]);
 
     const elementChangedHandler = (event, id) => {
-        const updatedForm = getUpdatedForm(event.target.value, formControls, id);
+        const updatedForm = getUpdatedForm(event, formControls, id);
         setFormControls(updatedForm);
         setIsFormValid(ValidateForm(updatedForm));
     };
 
     const elementLostFocusHandler = (event, id) => {
-        setFormControls(getUpdatedForm(event.target.value, formControls, id));
+        setFormControls(getUpdatedForm(event, formControls, id));
     };
 
     const cancelHandler = useCallback(() => {
@@ -405,7 +272,6 @@ const HotelEdit = props => {
                 key={formElement.id}
                 changed={(event) => elementChangedHandler(event, formElement.id)}
                 lostFocus={(event) => elementLostFocusHandler(event, formElement.id)}
-                //selected={(value) => setDropDownSelected({ controlId: formElement.id, value: value })}
                 selected={(value) => selectDropDownHandler(formElement.id, value)}
             />
         )
