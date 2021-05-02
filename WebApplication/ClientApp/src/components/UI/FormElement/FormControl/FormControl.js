@@ -30,26 +30,31 @@ const FormControl = props => {
             break;
         case 'select':
             formElement =
-                //<select
-                //    name={props.id}
-                //    className={controlClasses.join(' ')}
-                //    text={props.value}
-                //    onChange={props.changed}
-                //    onBlur={props.lostFocus}
-                //    disabled={props.disabled}>
-                //    {props.elementConfig?.options.map(option => (
-                //        <option key={option.value} value={option.value}>{option.text}</option>
-                //    ))}
-                //</select>;
-                <DropDown
-                    {...props.elementConfig}
+                <select
                     name={props.id}
                     className={controlClasses.join(' ')}
-                    data={props.options}
-                    title={props.title}
-                    disabled={props.disabled}
-                    onSelect={props.selected}
-                    onBlur={props.lostFocus} />;
+                    text={props.value}
+                    onChange={props.changed}
+                    onBlur={props.lostFocus}
+                    disabled={props.disabled}>
+                    {props.elementConfig?.options.map(option => (
+                        <option key={option.value} value={option.value}>
+                            {option.text}
+                        </option>
+                    ))}
+                </select>;
+            break;
+        case 'dropdown':
+            formElement =
+            <DropDown
+                {...props.elementConfig}
+                name={props.id}
+                className={controlClasses.join(' ')}
+                data={props.options}
+                title={props.title}
+                disabled={props.disabled}
+                onSelect={props.selected}
+                onBlur={props.lostFocus} />;
             break;
         case 'input':
         default:

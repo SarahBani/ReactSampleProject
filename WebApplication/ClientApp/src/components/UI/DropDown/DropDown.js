@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 
 const DropDown = props => {
 
-    const { data, title } = props;
+    const { data, title, onSelect } = props;
     const initialItem = {
         id: '',
         text: props.placeholder ? '--- Select ' + props.placeholder + ' ---' : '------'
@@ -32,6 +32,12 @@ const DropDown = props => {
     }, [data]);
 
     useEffect(() => {
+        if (data?.length === 0) {
+            setSelectedItem();
+        }
+    }, [data]);
+
+    useEffect(() => {
         if (title) {
             setLabel(<label htmlFor={title}>{title}: </label>);
             setIdAttribute(` id="{title}" `);
@@ -40,8 +46,8 @@ const DropDown = props => {
 
     const selectHandler = useCallback((item) => {
         setSelectedItem(item);
-        props.onSelect(item?.id);
-    }, [setSelectedItem]);
+        onSelect(item?.id);
+    }, [onSelect, setSelectedItem]);
 
     const filterHandler = useCallback((event) => {
         const key = event.key.toLowerCase();

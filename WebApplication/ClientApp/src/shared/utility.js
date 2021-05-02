@@ -16,8 +16,8 @@ export const getFormElements = (formControls) => {
     return formElements;
 };
 
-export const getUpdatedForm = (value, formControls, controlId, options) => {
-    const control = formControls[controlId];
+export const getUpdatedForm = (value, formControls, controlId) => {
+    //const control = formControls[controlId];
     //if (control.elementType === 'select') {
     //    return;
     //}
@@ -27,8 +27,7 @@ export const getUpdatedForm = (value, formControls, controlId, options) => {
         [controlId]: {
             ...formControls[controlId],
             value: value,
-            valid: isControlValid,
-            options: options
+            valid: isControlValid
             //touched: true
         }
     };
@@ -70,7 +69,7 @@ export const ValidateForm = (formControls) => {
 //    return updatedForm;
 //};
 
-const checkValidity = (value, rules) => {
+export const checkValidity = (value, rules) => {
     if (!rules) {
         return true;
     }

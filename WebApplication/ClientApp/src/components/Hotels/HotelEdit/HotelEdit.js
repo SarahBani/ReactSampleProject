@@ -1,8 +1,8 @@
-﻿import { React, useState, useEffect, useCallback, useMemo } from 'react';
+﻿import { React, useState, useEffect, useCallback, useMemo, memo } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { getUpdatedForm, getFormElements, ValidateForm, getUpdatedControl } from '../../../shared/utility';
+import { getUpdatedForm, getFormElements, ValidateForm, getUpdatedControl, checkValidity } from '../../../shared/utility';
 import FormElement from '../../UI/FormElement/FormElement';
 import ConfirmDelete from '../../UI/ConfirmDelete/ConfirmDelete';
 import Modal from '../../UI/Modal/Modal';
@@ -24,12 +24,11 @@ const initialFormState = {
         valid: true
     },
     countryId: {
-        elementType: 'select',
+        elementType: 'dropdown',
         elementConfig: {
             title: 'Country',
-            placeholder: 'Country',
+            placeholder: 'Country'
         },
-        //options: [],
         value: '',
         validation: {
             required: true
@@ -37,12 +36,11 @@ const initialFormState = {
         valid: true
     },
     cityId: {
-        elementType: 'select',
+        elementType: 'dropdown',
         elementConfig: {
             title: 'City',
-            placeholder: 'City',
+            placeholder: 'City'
         },
-        options: [],
         value: '',
         validation: {
             required: true
@@ -56,82 +54,117 @@ const initialFormState = {
     //    },
     //    valid: true
     //},
-    //address: {
-    //    elementType: 'textarea',
-    //    elementConfig: {
-    //        placeholder: 'Address',
-    //    },
-    //    value: '',
-    //    validation: {
-    //    },
-    //    valid: true
-    //},
-};
-
-const formControlsReducer = (currentFormControls, action) => {
-    let dropDownData;
-    switch (action.type) {
-        case 'FILL_COUNTRIES':
-            dropDownData = action.countries.map(country => {
-                const flagUrl = '/images/' + (country.flagUrl ? 'countries/' + country.flagUrl : 'no-image.png');
-                return {
-                    id: country.id,
-                    text: country.name,
-                    imageUrl: flagUrl
-                };
-            });
-            return {
-                ...currentFormControls,
-                ['countryId']: {
-                    ...currentFormControls['countryId'],
-                    options: dropDownData
-                },
-                ['cityId']: {
-                    ...currentFormControls['cityId'],
-                    options: []
-                }
-            };
-        case 'FILL_CITIES':
-            dropDownData = action.cities.map(city => ({
-                id: city.id,
-                text: city.name
-            }));
-            return {
-                ...currentFormControls,
-                ['cityId']: {
-                    ...currentFormControls['cityId'],
-                    options: dropDownData
-                }
-            };
-        case 'SELECT_DROP_DOWN':
-            return {
-                ...currentFormControls,
-                [action.controlId]: {
-                    ...currentFormControls[action.controlId],
-                    options: currentFormControls[action.controlId].options
-                }
-            };
-        //case 'UPDATE_CONTROL':
-        //    console.log(currentFormControls);
-        //    return {
-        //        ...currentFormControls,
-        //        [action.controlId]: action.updatedControl,
-        //    };
-        //case 'VALIDATE':
-        //    return {
-        //        ...currentFormControls,
-        //        [action.controlId]: action.updatedControl,
-        //    };
-        default:
-            return {
-                ...currentFormControls
-            };
-    }
+    address: {
+        elementType: 'textarea',
+        elementConfig: {
+            placeholder: 'Address',
+        },
+        value: '',
+        validation: {
+        },
+        valid: true
+    },
 };
 
 const initialDropDownData = {
     countries: [],
-    cities: []
+    cities: [],
+    selectedCountryId: '',
+    selectedCityId: '',
+    selectedDropDown: '',
+    selectedValue: ''
+};
+
+const initialDropDowns = {
+    countryId: {
+        options: [],
+        value: '',
+        valid: true
+    },
+    cityId: {
+        options: [],
+        value: '',
+        valid: true
+    },
+    selectedDropDown: null
+};
+
+const dropDownsReducer = (currentDropDowns, action) => {
+    switch (action.type) {
+        case 'FILL_COUNTRIES':
+            return {
+                ...currentDropDowns,
+                ['countryId']: {
+                    options: getDropDownCountriesData(action.countries),
+                    value: '',
+                    valid: true
+                },
+                ['cityId']: {
+                    options: [],
+                    value: '',
+                    valid: true
+                },
+                selectedDropDown: null
+            };
+        case 'FILL_CITIES':
+            return {
+                ...currentDropDowns,
+                ['cityId']: {
+                    options: getDropDownCitiesData(action.cities),
+                    value: '',
+                    valid: true
+                },
+                selectedDropDown: null
+            };
+        case 'SELECT':
+            if (action.id === 'countryId') {
+                return {
+                    ...currentDropDowns,
+                    ['countryId']: {
+                        ...currentDropDown,
+                        value: action.value,
+                        valid: checkValidity(action.value.toString(), initialFormState['countryId'].validation)
+                    },
+                    ['cityId']: {
+                        options: [],
+                        value: '',
+                        valid: true
+                    },
+                    selectedDropDown: 'countryId'
+                };
+            }
+            else {
+                return {
+                    ...currentDropDowns,
+                    ['cityId']: {
+                        ...currentDropDown,
+                        value: action.value,
+                        valid: checkValidity(action.value.toString(), initialFormState['cityId'].validation)
+                    },
+                    selectedDropDown: 'cityId'
+                };
+            }
+        default:
+            return currentDropDowns;
+    }
+};
+
+const getDropDownCountriesData = (countries) => {
+    return countries.map(country => {
+        const flagUrl = '/images/' + (country.flagUrl ? 'countries/' + country.flagUrl : 'no-image.png');
+        return {
+            id: country.id,
+            text: country.name,
+            imageUrl: flagUrl,
+        };
+    });
+};
+
+const getDropDownCitiesData = (cities) => {
+    return cities.map(city => ({
+        id: city.id,
+        text: city.name
+    }));
 };
 
 const dropDownDataReducer = (currentDropDownData, action) => {
@@ -143,13 +176,17 @@ const dropDownDataReducer = (currentDropDownData, action) => {
                 return {
                     id: country.id,
                     text: country.name,
-                    imageUrl: flagUrl
+                    imageUrl: flagUrl,
                 };
             });
             return {
                 ...currentDropDownData,
                 countries: data,
-                cities: []
+                cities: [],
+                selectedCountryId: '',
+                selectedCityId: '',
+                selectedDropDown: '',
+                selectedValue: ''
             };
         case 'FILL_CITIES':
             data = action.cities.map(city => ({
@@ -158,12 +195,33 @@ const dropDownDataReducer = (currentDropDownData, action) => {
             }));
             return {
                 ...currentDropDownData,
-                cities: data
+                cities: data,
+                selectedCityId: '',
+                selectedDropDown: '',
+                selectedValue: ''
             };
+        //case 'SELECT_COUNTRY':
+        case 'SELECT':
+            if (action.id === 'countryId') {
+                return {
+                    ...currentDropDownData,
+                    cities: [],
+                    selectedCountryId: action.value,
+                    selectedCityId: '',
+                    selectedDropDown: 'countryId',
+                    selectedValue: action.value
+                };
+            }
+            else {
+                return {
+                    ...currentDropDownData,
+                    selectedCityId: action.value,
+                    selectedDropDown: 'cityId',
+                    selectedValue: action.value
+                };
+            }
         default:
-            return {
-                ...currentDropDownData,
-            };
+            return currentDropDownData;
     }
 };
 
@@ -176,9 +234,8 @@ const HotelEdit = props => {
     const [isFormValid, setIsFormValid] = useState(false);
     const [redirect, setRedirect] = useState();
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    //const [countriesData, setCountriesData] = useState([]);
-    //const [formControls, dispatchFormControls] = useReducer(formControlsReducer, initialFormState);
-    const [dropDownData, dispatchDropDownData] = useReducer(dropDownDataReducer, initialDropDownData);
+   // const [dropDownData, dispatchDropDownData] = useReducer(dropDownDataReducer, initialDropDownData);
+    const [dropDowns, dispatchDropDowns] = useReducer(dropDownsReducer, initialDropDowns);
 
     useEffect(() => {
         onFetchCountries();
@@ -186,129 +243,126 @@ const HotelEdit = props => {
 
     useEffect(() => {
         if (countries?.length > 0) {
-            dispatchDropDownData({
+            dispatchDropDown({
                 type: 'FILL_COUNTRIES',
                 countries: countries
             });
-            //dispatchFormControls({
-            //    type: 'FILL_COUNTRIES',
-            //    countries: countries
-            //});
-            //const dropDownData = countries.map(country => {
-            //    const flagUrl = '/images/' + (country.flagUrl ? 'countries/' + country.flagUrl : 'no-image.png');
-            //    return {
-            //        id: country.id,
-            //        text: country.name,
-            //        imageUrl: flagUrl
-            //    };
-            //});
-            //setCountriesData(dropDownData);
-            //const updatedForm = {
-            //    ...formControls,
-            //    ['countryId']: {
-            //        ...formControls['countryId'],
-            //        options: dropDownData
-            //    },
-            //    ['cityId']: {
-            //        ...formControls['cityId'],
-            //        options: []
-            //    }
-            //};
-            //setFormControls(updatedForm);
         }
     }, [countries]);
 
+    useEffect(() => {
+        dispatchDropDown({
+            type: 'FILL_CITIES',
+            cities: cities
+        });
+    }, [cities]);
+
     //useEffect(() => {
-    //    const updatedForm = {
+    //    let updatedForm = {
     //        ...formControls,
     //        ['countryId']: {
     //            ...formControls['countryId'],
-    //            options: countriesData
+    //            options: dropDownData.countries,
+    //            value: dropDownData.selectedCountryId,
     //        },
     //        ['cityId']: {
     //            ...formControls['cityId'],
-    //            options: []
+    //            options: dropDownData.cities,
+    //            value: dropDownData.selectedCityId
     //        }
     //    };
+    //    if (dropDownData.selectedDropDown) {
+    //        const selectedControlId = dropDownData.selectedDropDown;
+    //        const isControlValid = checkValidity(dropDownData.selectedValue.toString(),
+    //            updatedForm[selectedControlId].validation)
+    //        updatedForm = {
+    //            ...updatedForm,
+    //            [selectedControlId]: {
+    //                ...formControls[selectedControlId],
+    //                valid: isControlValid
+    //            }
+    //        };
+    //    }
     //    setFormControls(updatedForm);
-    //}, [countriesData]);
+    //    setIsFormValid(ValidateForm(formControls));
+
+    //    if (dropDownData.selectedDropDown &&
+    //        dropDownHandlers[dropDownData.selectedDropDown]) {
+    //        dropDownHandlers[dropDownData.selectedDropDown](dropDownData.selectedValue);
+    //    }
+    //}, [dropDownData]);
 
     useEffect(() => {
-        console.log(33333333);
-        console.log(dropDownData);
         const updatedForm = {
             ...formControls,
             ['countryId']: {
                 ...formControls['countryId'],
-                options: dropDownData.countries
+                ...dropDown.countryId
             },
             ['cityId']: {
                 ...formControls['cityId'],
-                options: dropDownData.cities
+                ...dropDown.cityId
             }
         };
         setFormControls(updatedForm);
-    }, [dropDownData]);
-
-    useEffect(() => {
-        //dispatchFormControls({
-        //    type: 'FILL_CITIES',
-        //    cities: cities
-        //});
-        dispatchDropDownData({
-            type: 'FILL_CITIES',
-            cities: cities
-        });
-        //        const dropDownData = cities.map(city => ({
-        //            id: city.id,
-        //            text: city.name
-        //        }));
-        //        const updatedForm = {
-        //            ...formControls,
-        //            ['cityId']: {
-        //                ...formControls['cityId'],
-        //                options: dropDownData
-        //            }
-        //        };
-        //        console.log(updatedForm);
-        //        setFormControls(updatedForm);
-
-    }, [cities]);
-
-    const selectCountryHandler = useCallback((countryId, id) => {
-        const updatedForm = getUpdatedForm(countryId.toString(), formControls, id);
-        //console.log(updatedForm);
-        //const updatedControl = getUpdatedControl(countryId.toString(), formControls[id]);
-        //dispatchFormControls({
-        //    type: 'SELECT_DROP_DOWN',
-        //    controlId: id,
-        //    updatedControl: updatedControl
-        //});
-        setFormControls(updatedForm);
-        //setIsFormValid(ValidateForm(updatedForm));
         setIsFormValid(ValidateForm(formControls));
 
-        onSelectCountry(countryId);
-    }, [getUpdatedForm, onSelectCountry]);
+        if (dropDown.selectedDropDown &&
+            dropDownHandlers[dropDown.selectedDropDown]) {
+            dropDownHandlers[dropDown.selectedDropDown](dropDown[dropDown.selectedDropDown].value);
+        }
+    }, [dropDown]);
 
-    //const selectCityHandler = useCallback((cityId) => {
-    //    onSelectCity(cityId);
-    //    props.changeCity(cityId);
-    //}, [onSelectCity]);
-
-    const selectDropDownHandler = {
-        'countryId': selectCountryHandler,
-        'cityId': () => { }
+    const dropDownHandlers = {
+        'countryId': onSelectCountry,
+        //'cityId': () => { }
     };
 
+    const dropDowns = {
+        'countryId': {
+            selectHandler: onSelectCountry,
+            selectedValue: ''
+        },
+        'cityId': {
+            //selectHandler: () => { },
+            selectedValue: ''
+        },
+    };
+
+    const selectDropDownHandler = (controlId, value) => {
+        //dispatchDropDownData({
+        //    type: 'SELECT',
+        //    id: controlId,
+        //    value: value
+        //});
+        dispatchDropDown({
+            type: 'SELECT',
+            id: controlId,
+            value: value
+        });
+    };
+
+    //useEffect(() => {
+    //    if (dropDownSelected) {
+    //        const updatedForm = getUpdatedForm(dropDownSelected.value.toString(),
+    //            formControls, dropDownSelected.controlId);
+    //        setFormControls(updatedForm);
+    //        setIsFormValid(ValidateForm(formControls));
+
+    //        if (dropDowns[dropDownSelected.controlId].selectHandler) {
+    //            dropDowns[dropDownSelected.controlId].selectHandler(dropDownSelected.value);
+    //        }
+    //    }
+    //}, [dropDownSelected]);
+
     const elementChangedHandler = (event, id) => {
-        //const updatedForm = getUpdatedForm(event.target.value, formControls, id);
-        //setFormControls(updatedForm);
-        //setIsFormValid(ValidateForm(updatedForm));
+        const updatedForm = getUpdatedForm(event.target.value, formControls, id);
+        setFormControls(updatedForm);
+        setIsFormValid(ValidateForm(updatedForm));
     };
 
     const elementLostFocusHandler = (event, id) => {
-        //setFormControls(getUpdatedForm(event.target.value, formControls, id));
+        setFormControls(getUpdatedForm(event.target.value, formControls, id));
     };
 
     const cancelHandler = useCallback(() => {
@@ -351,7 +405,8 @@ const HotelEdit = props => {
                 key={formElement.id}
                 changed={(event) => elementChangedHandler(event, formElement.id)}
                 lostFocus={(event) => elementLostFocusHandler(event, formElement.id)}
-                selected={(value) => selectDropDownHandler[formElement.id](value, formElement.id)}
+                //selected={(value) => setDropDownSelected({ controlId: formElement.id, value: value })}
+                selected={(value) => selectDropDownHandler(formElement.id, value)}
             />
         )
     });
