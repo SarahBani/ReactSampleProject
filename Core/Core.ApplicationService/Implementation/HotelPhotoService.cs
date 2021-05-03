@@ -3,6 +3,7 @@ using Core.DomainModel.Entities;
 using Core.DomainService;
 using Core.DomainService.Repositoy;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,6 +36,23 @@ namespace Core.ApplicationService.Implementation
 
         public Task<int> GetCountByHotelIdAsync(long hotelId) =>
              base.GetQueryable().CountAsync(q => q.HotelId.Equals(hotelId));
+
+        public async Task<TransactionResult> DeleteByHotelIdAsync(long hotelId)
+        {
+            try
+            {
+                base.BeginTransaction();
+                foreach (var hotelPhoto in await GetListByHotelIdAsync(hotelId))
+                {
+                    await base.DeleteAsync(hotelPhoto);
+                }
+                return await base.CommitTransactionAsync();
+            }
+            catch (Exception ex)
+            {
+                return GetTransactionException(ex);
+            }
+        }
 
         #endregion /Methods
 

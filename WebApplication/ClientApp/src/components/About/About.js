@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 
 //import classes from './About.module.css';
 import PageTitle from '../UI/PageTitle/PageTitle';

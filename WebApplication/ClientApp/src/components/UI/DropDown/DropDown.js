@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 
 const DropDown = props => {
 
-    const { data, title, onSelect } = props;
+    const { data, title, value, onSelect } = props;
     const initialItem = {
         id: '',
         text: props.placeholder ? '--- Select ' + props.placeholder + ' ---' : '------'
@@ -17,23 +17,33 @@ const DropDown = props => {
 
     const listItems = useMemo(() => {
         const list = data?.map(item =>
-            <li className="dropdown-item" key={item.id} id={item.id}
-                onClick={() => selectHandler(item)}>
+            <li className={['dropdown-item', (selectedItem?.id === item.id ? classes.SelecedItem : '')].join(' ')}
+                key={item.id} id={item.id} onClick={() => selectHandler(item)}>
                 {item.imageUrl && <img src={item.imageUrl} />}
                 {item.text}
             </li>);
         list?.unshift(
-            <li className="dropdown-item" key={initialItem.id} id={initialItem.id}
-                onClick={() => selectHandler(initialItem)}
+            <li className={['dropdown-item', (!selectedItem ? classes.SelecedItem : '')].join(' ')}
+                key={initialItem.id} id={initialItem.id} onClick={() => selectHandler(initialItem)}
             /*style={{ paddingLeft: '30px' }}*/ >
                 {initialItem.text}
             </li>);
         return list;
-    }, [data]);
+    }, [data, selectedItem]);
 
     useEffect(() => {
         if (data?.length === 0) {
             setSelectedItem();
+        }
+        else
+        {
+            if (value != '') {
+                const item = data?.filter(q => q['id'] === value)[0];
+                setSelectedItem(item);
+            }
+            else {
+                setSelectedItem();
+            }
         }
     }, [data]);
 
@@ -65,7 +75,7 @@ const DropDown = props => {
             <div id={title} className={["dropdown", classes.DropDown].join(' ')}
                 onKeyDown={(event) => filterHandler(event)}>
                 <button type="button" className="btn dropdown-toggle"
-                    data-toggle="dropdown">
+                    data-toggle="dropdown" disabled={props.disabled}>
                     <div>{selectedItem?.text ?? initialItem.text}</div>
                 </button>
                 <ul ref={itemListControl} className="dropdown-menu">

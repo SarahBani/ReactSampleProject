@@ -1,4 +1,4 @@
-﻿import { React, useState, useEffect, useCallback, useMemo } from 'react';
+import { React, useState, useEffect, useCallback, useMemo, useReducer } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -8,7 +8,7 @@ import ConfirmDelete from '../../UI/ConfirmDelete/ConfirmDelete';
 import Modal from '../../UI/Modal/Modal';
 import * as actions from '../../../store/actions/hotelActions';
 import * as locationActions from '../../../store/actions/locationActions';
-import { useReducer } from 'react';
+import { OperationsEnum } from '../../../shared/constant';
 
 const initialFormState = {
     name: {
@@ -21,7 +21,7 @@ const initialFormState = {
         validation: {
             required: true
         },
-        valid: true
+        valid: false
     },
     countryId: {
         elementType: 'dropdown',
@@ -33,7 +33,8 @@ const initialFormState = {
         validation: {
             required: true
         },
-        valid: true
+        valid: false,
+        disabled: true
     },
     cityId: {
         elementType: 'dropdown',
@@ -45,7 +46,7 @@ const initialFormState = {
         validation: {
             required: true
         },
-        valid: true
+        valid: false
     },
     //stars: {
     //    elementType: 'stars',
@@ -70,14 +71,17 @@ const initialDropDowns = {
     countryId: {
         options: [],
         value: '',
-        valid: true
+        valid: false
     },
     cityId: {
         options: [],
         value: '',
-        valid: true
+        valid: false
     }
 };
+
+const checkDropDownValidity = (id, value) =>
+    checkValidity(value.toString(), initialFormState[id].validation);
 
 const dropDownsReducer = (currentDropDowns, action) => {
     switch (action.type) {
@@ -86,13 +90,17 @@ const dropDownsReducer = (currentDropDowns, action) => {
                 ...currentDropDowns,
                 ['countryId']: {
                     options: getDropDownCountriesData(action.countries),
-                    value: '',
-                    valid: true
+                    value: (action.value ? action.value : ''),
+                    valid: (action.value ? true : false),
+                    touched: false,
+                    disabled: false
                 },
                 ['cityId']: {
                     options: [],
                     value: '',
-                    valid: true
+                    valid: false,
+                    touched: false,
+                    disabled: false
                 }
             };
         case 'FILL_CITIES':
@@ -100,8 +108,10 @@ const dropDownsReducer = (currentDropDowns, action) => {
                 ...currentDropDowns,
                 ['cityId']: {
                     options: getDropDownCitiesData(action.cities),
-                    value: '',
-                    valid: true
+                    value: (action.value ? action.value : ''),
+                    valid: (action.value ? true : false),
+                    touched: false,
+                    disabled: false
                 }
             };
         case 'SELECT':
@@ -111,12 +121,14 @@ const dropDownsReducer = (currentDropDowns, action) => {
                     ['countryId']: {
                         ...currentDropDowns['countryId'],
                         value: action.value,
-                        valid: checkValidity(action.value.toString(), initialFormState['countryId'].validation)
+                        valid: checkDropDownValidity(action.id, action.value),
+                        touched: true
                     },
                     ['cityId']: {
                         options: [],
                         value: '',
-                        valid: true
+                        valid: false,
+                        touched: false
                     }
                 };
             }
@@ -126,7 +138,8 @@ const dropDownsReducer = (currentDropDowns, action) => {
                     ['cityId']: {
                         ...currentDropDowns['cityId'],
                         value: action.value,
-                        valid: checkValidity(action.value.toString(), initialFormState['cityId'].validation)
+                        valid: checkDropDownValidity(action.id, action.value),
+                        touched: true
                     }
                 };
             }
@@ -156,52 +169,123 @@ const getDropDownCitiesData = (cities) => {
 const HotelEdit = props => {
 
     const {
-        id, loading, countries, cities, onFetchCountries, onSelectCountry, onDeleteHotel
+        id, loading, hotel, countries, cities, successfulOperation,
+        onFetchHotel, onFetchCountries, onSelectCountry, onDeleteHotel, onSave, onClearSelectedHotel
     } = props;
     const [formControls, setFormControls] = useState(initialFormState);
     const [isFormValid, setIsFormValid] = useState(false);
     const [redirect, setRedirect] = useState();
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [dropDowns, dispatchDropDowns] = useReducer(dropDownsReducer, initialDropDowns);
+    const [hasReservedValues, setHasReservedValues] = useState(true);
 
-    const dropDownsHandler = {
+    const dropDownsHandlers = {
         'countryId': onSelectCountry,
         //'cityId': () => { }
     };
 
     useEffect(() => {
-        onFetchCountries();
-    }, [onFetchCountries]);
+        console.log(11111111111);
+        if (id) {
+            if (!hotel) {
+                onFetchHotel(id);
+            }
+            if (countries.length === 0) {
+                onFetchCountries();
+            }
+        }
+        else {
+            if (hotel) {
+                onClearSelectedHotel();
+                if (cities.length > 0) {
+
+                }
+            }
+            if (countries.length === 0) {
+                onFetchCountries();
+            }
+            //else {
+            //    selectDropDownHandler('countryId', null);
+            //}
+            setHasReservedValues(false);
+        }
+    }, [id]);
 
     useEffect(() => {
-        if (countries?.length > 0) {
+        console.log(222222222222);
+        if (id) {
+            if (hotel) {
+                const updatedForm = {
+                    ...formControls,
+                    ['name']: {
+                        ...formControls['name'],
+                        value: hotel.name,
+                        valid: true
+                    },
+                    ['countryId']: {
+                        ...formControls['countryId'],
+                        value: hotel.city.countryId,
+                        valid: true
+                    },
+                    ['cityId']: {
+                        ...formControls['cityId'],
+                        value: hotel.cityId,
+                        valid: true
+                    },
+                    ['address']: {
+                        ...formControls['address'],
+                        value: hotel.address,
+                        valid: true
+                    },
+                };
+                console.log('useEffect - hotel');
+                console.log(updatedForm);
+                setFormControls(updatedForm);
+                setHasReservedValues(true);
+            }
+            //else {
+            //    setRedirect(<Redirect to="/hotels/" />);
+            //}
+        }
+    }, [hotel]);
+
+    useEffect(() => {
+        console.log(33333333);
+        if (id && !hotel) { // wait until hotel is loaded
+            return;
+        }
+        if (countries.length > 0) {
             dispatchDropDowns({
                 type: 'FILL_COUNTRIES',
-                countries: countries
+                countries: countries,
+                value: hotel?.city.countryId
             });
+            if (hasReservedValues && hotel) {
+                selectDropDownHandler('countryId', hotel.city.countryId);
+            }
         }
-    }, [countries]);
+    }, [countries, hotel]);
 
     useEffect(() => {
-        dispatchDropDowns({
-            type: 'FILL_CITIES',
-            cities: cities
-        });
-    }, [cities]);
-
-    const selectDropDownHandler = useCallback((controlId, value) => {
-        dispatchDropDowns({
-            type: 'SELECT',
-            id: controlId,
-            value: value
-        });
-
-        if (dropDownsHandler[controlId]) {
-            dropDownsHandler[controlId](value);
+        console.log(4444444444);
+        if (id && !hotel) { // wait until hotel is loaded
+            return;
         }
-    }, [dispatchDropDowns, dropDownsHandler]);
+        if (countries.length > 0) {
+            dispatchDropDowns({
+                type: 'FILL_CITIES',
+                cities: cities,
+                value: hotel?.cityId
+            });
+            if (hasReservedValues && hotel) {
+                selectDropDownHandler('cityId', hotel.cityId);
+                setHasReservedValues(false);
+            }
+        }
+    }, [cities, hotel]);
 
     useEffect(() => {
+        console.log(55555555555);
         const updatedForm = {
             ...formControls,
             ['countryId']: {
@@ -213,23 +297,48 @@ const HotelEdit = props => {
                 ...dropDowns.cityId
             }
         };
+        console.log('useEffect - dropDowns');
+        console.log(updatedForm);
         setFormControls(updatedForm);
-        setIsFormValid(ValidateForm(formControls));
 
         //if (dropDowns.selectedDropDown &&
-        //    dropDownsHandler[dropDowns.selectedDropDown]) {
-        //    dropDownsHandler[dropDowns.selectedDropDown](dropDowns[dropDowns.selectedDropDown].value);
+        //    dropDownsHandlers[dropDowns.selectedDropDown]) {
+        //    dropDownsHandlers[dropDowns.selectedDropDown](dropDowns[dropDowns.selectedDropDown].value);
         //}
-    }, [dropDowns, setFormControls, setIsFormValid, ValidateForm]);
+    }, [dropDowns]);
 
-    const elementChangedHandler = (event, id) => {
-        const updatedForm = getUpdatedForm(event, formControls, id);
-        setFormControls(updatedForm);
-        setIsFormValid(ValidateForm(updatedForm));
-    };
+    useEffect(() => {
+        setIsFormValid(ValidateForm(formControls));
+    }, [formControls]);
 
-    const elementLostFocusHandler = (event, id) => {
+    useEffect(() => {
+        switch (successfulOperation) {
+            case OperationsEnum.Insert:
+            case OperationsEnum.Update:
+                cancelHandler();
+                break;
+            case OperationsEnum.Delete:
+                setRedirect(<Redirect to="/hotels/" />);
+            default:
+        }
+    }, [successfulOperation]);
+
+    const selectDropDownHandler = useCallback((controlId, value) => {
+        dispatchDropDowns({
+            type: 'SELECT',
+            id: controlId,
+            value: value
+        });
+
+        if (dropDownsHandlers[controlId]) {
+            dropDownsHandlers[controlId](value);
+        }
+    }, [dispatchDropDowns, dropDownsHandlers]);
+
+    const elementHandler = (event, id) => {
         setFormControls(getUpdatedForm(event, formControls, id));
+        console.log('elementHandler');
+        console.log(formControls);
     };
 
     const cancelHandler = useCallback(() => {
@@ -243,7 +352,14 @@ const HotelEdit = props => {
 
     const saveHandler = (event) => {
         event.preventDefault();
-        props.onSignIn(formControls.email.value, formControls.password.value);
+        onSave({
+            id: id,
+            name: formControls.name.value,
+            countryId: formControls.countryId.value,
+            cityId: formControls.cityId.value,
+            stars: 1,
+            address: formControls.address.value
+        });
     };
 
     const deleteConfirmContent = useMemo(() => {
@@ -261,17 +377,17 @@ const HotelEdit = props => {
 
     const confirmDeleteHandler = useCallback((isConfirmed) => {
         if (isConfirmed) {
-            //onDeleteHotel(id);
+            onDeleteHotel(id);
         }
         setShowDeleteConfirm(false);
-    }, [id, setShowDeleteConfirm, onDeleteHotel]);
+    }, [id, onDeleteHotel, setShowDeleteConfirm]);
 
     const formElements = getFormElements(formControls).map(formElement => {
         return (
             <FormElement formElement={formElement}
                 key={formElement.id}
-                changed={(event) => elementChangedHandler(event, formElement.id)}
-                lostFocus={(event) => elementLostFocusHandler(event, formElement.id)}
+                changed={(event) => elementHandler(event, formElement.id)}
+                lostFocus={(event) => elementHandler(event, formElement.id)}
                 selected={(value) => selectDropDownHandler(formElement.id, value)}
             />
         )
@@ -299,10 +415,10 @@ const HotelEdit = props => {
                 <div className="row">
                     <div className="col-12 text-center">
                         <button className="btn btn-primary" type="reset" >Clear</button>
-                        <button className="btn btn-success" type="submit" disabled={!isFormValid || loading} >Save</button>
+                        <button className="btn btn-success" type="submit" disabled={!isFormValid || loading}>Save</button>
                         <button className="btn btn-info" type="button">Photos</button>
-                        <button className="btn btn-danger" type="button" > Delete</button >
-                        <button className="btn btn-warning" type="button" onClick={cancelHandler} > Cancel</button >
+                        <button className="btn btn-danger" type="button" onClick={deleteHandler}> Delete</button >
+                        <button className="btn btn-warning" type="button" onClick={cancelHandler}> Cancel</button >
                     </div>
                 </div>
             </form>
@@ -312,10 +428,12 @@ const HotelEdit = props => {
 
 const mapStateToProps = state => {
     return {
+        hotel: state.hotel.selectedHotel,
         countries: state.location.countries,
         cities: state.location.cities,
         loggedIn: state.auth.loggedIn,
-        loading: state.common.isLoading
+        loading: state.common.isLoading,
+        successfulOperation: state.common.successfulOperation
     };
 };
 
@@ -324,8 +442,9 @@ const mapDispatchToProps = dispatch => {
         onFetchHotel: (id) => dispatch(actions.fetchHotel(id)),
         onFetchCountries: () => dispatch(locationActions.fetchCountries()),
         onSelectCountry: (countryId) => dispatch(locationActions.selectCountry(countryId)),
-        onSave: (id, hotel) => dispatch(actions.saveHotel(id, hotel)),
-        onDeleteHotel: (id) => dispatch(actions.deleteHotel(id))
+        onSave: (hotel) => dispatch(actions.saveHotel(hotel)),
+        onDeleteHotel: (id) => dispatch(actions.deleteHotel(id)),
+        onClearSelectedHotel: () => dispatch(actions.clearSelectedHotel()),
     };
 };
 

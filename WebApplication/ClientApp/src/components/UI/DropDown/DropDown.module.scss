@@ -6,7 +6,7 @@
     > button {
         width: 100%;
         text-align: right;
-        background-color: $light-background;//$medium-green;
+        background-color: $light-background; //$medium-green;
         @include border(#5AB690);
 
         &:focus {
@@ -35,20 +35,18 @@
                 background-color: $light-green-highlight;
             }
 
-            &.selected {
-                background-color: $light-green;
-            }
-
             > img {
                 width: 20px;
                 height: auto;
                 margin-right: 10px;
             }
-
             /*> span {
                 margin: 0 30px;
             }*/
         }
     }
 
+    .SelecedItem {
+        background-color: $light-green;
+    }
 }

@@ -46,6 +46,12 @@ export const setHotel = (hotel) => {
     };
 };
 
+export const clearSelectedHotel = () => {
+    return {
+        type: actionTypes.CLEAR_SELECTED_HOTEL
+    };
+};
+
 export const fetchHotelPhotos = (hotelId) => {
     return {
         type: actionTypes.FETCH_HOTEL_PHOTOS,
@@ -60,10 +66,9 @@ export const setHotelPhotos = (photos) => {
     };
 };
 
-export const saveHotel = (id, hotel) => {
+export const saveHotel = (hotel) => {
     return {
         type: actionTypes.SAVE_HOTEL,
-        id: id,
         hotel: hotel
     };
 };
@@ -72,11 +77,5 @@ export const deleteHotel = (id) => {
     return {
         type: actionTypes.DELETE_HOTEL,
         id: id
-    };
-};
-
-export const operationSucceeded = () => {
-    return {
-        type: actionTypes.OPERATION_SUCCEEDED
     };
 };

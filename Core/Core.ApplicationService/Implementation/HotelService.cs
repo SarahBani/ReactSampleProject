@@ -3,6 +3,7 @@ using Core.DomainModel.Entities;
 using Core.DomainService;
 using Core.DomainService.Repositoy;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -78,6 +79,21 @@ namespace Core.ApplicationService.Implementation
                 list = list.Where(q => q.City.CountryId.Equals(countryId.Value));
             }
             return list.CountAsync();
+        }
+
+        public override async Task<TransactionResult> DeleteAsync(long id)
+        {
+            try
+            {
+                base.BeginTransaction();
+                await this.EntityService.HotelPhotoService.DeleteByHotelIdAsync(id);
+                this.Repository.Delete(id);
+                return await base.CommitTransactionAsync();
+            }
+            catch (Exception ex)
+            {
+                return base.GetTransactionException(ex);
+            }
         }
 
         #endregion /Methods

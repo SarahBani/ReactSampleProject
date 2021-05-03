@@ -1,21 +1,26 @@
-﻿import { React, useEffect, useMemo } from 'react';
+﻿import { React, useEffect, useMemo, useCallback } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import classes from './HotelList.module.scss';
 import HotelItem from '../HotelItem/HotelItem';
 import NoHotel from '../NoHotel/NoHotel';
 import * as actions from '../../../store/actions/hotelActions';
-import { useCallback } from 'react';
-import { Link } from 'react-router-dom';
 
 const HotelList = props => {
 
-    const { hotels, hotelsCount, selectedCountryId, selectedCityId,
-        onFetchHotels, onFetchHotelsCount } = props;
+    const { hotels, hotelsCount, successfulOperation,
+        selectedCountryId, selectedCityId, onFetchHotels, onFetchHotelsCount } = props;
 
     useEffect(() => {
         refreshHandler();
     }, [selectedCountryId, selectedCityId, onFetchHotels, onFetchHotelsCount]);
+
+    useEffect(() => {
+        if (successfulOperation) {
+            refreshHandler();
+        }
+    }, [successfulOperation]);
 
     const refreshHandler = useCallback(() => {
         onFetchHotels(props.selectedCountryId, props.selectedCityId);
@@ -58,7 +63,8 @@ const HotelList = props => {
 const mapStateToProps = state => {
     return {
         hotels: state.hotel.hotels,
-        hotelsCount: state.hotel.count
+        hotelsCount: state.hotel.count,
+        successfulOperation: state.common.successfulOperation
     };
 };
 

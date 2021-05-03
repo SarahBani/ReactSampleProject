@@ -23,8 +23,8 @@ export const getUpdatedForm = (event, formControls, controlId) => {
         [controlId]: {
             ...formControls[controlId],
             value: event.target.value,
-            valid: isControlValid
-            //touched: true
+            valid: isControlValid,
+            touched: true
         }
     };
     return updatedForm;

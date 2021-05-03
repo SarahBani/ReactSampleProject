@@ -9,8 +9,7 @@ const FormControl = props => {
     const controlClasses = [classes.FormElement];
 
     let validationError = null;
-    if (!props.valid) {
-        //if (!props.valid && props.touced) {
+    if (!props.valid && props.touched) {
         controlClasses.push(classes.Invalid);
         validationError = (
             <p className={classes.ValidationError}>
@@ -46,15 +45,16 @@ const FormControl = props => {
             break;
         case 'dropdown':
             formElement =
-            <DropDown
-                {...props.elementConfig}
-                name={props.id}
-                className={controlClasses.join(' ')}
-                data={props.options}
-                title={props.title}
-                disabled={props.disabled}
-                onSelect={props.selected}
-                onBlur={props.lostFocus} />;
+                <DropDown
+                    {...props.elementConfig}
+                    name={props.id}
+                    className={controlClasses.join(' ')}
+                    data={props.options}
+                    value={props.value}
+                    title={props.title}
+                    disabled={props.disabled}
+                    onSelect={props.selected}
+                    onBlur={props.lostFocus} />;
             break;
         case 'input':
         default:

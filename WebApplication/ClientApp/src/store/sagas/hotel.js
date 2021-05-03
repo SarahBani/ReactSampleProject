@@ -1,14 +1,14 @@
 ﻿import { put } from 'redux-saga/effects';
 
 import axiosInstance from '../../axios-instance';
+import { OperationsEnum } from '../../shared/constant';
 import * as actions from '../actions/hotelActions';
 import * as commonActions from '../actions/commonActions';
 
 export function* fetchHotelsSaga(action) {
     yield put(commonActions.showLoader());
     const headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        //'auth_token': action.token
+        'Content-Type': 'application/json; charset=utf-8'
     };
     try {
         const filters = [];
@@ -38,8 +38,7 @@ export function* fetchHotelsSaga(action) {
 export function* fetchHotelsCountSaga(action) {
     yield put(commonActions.showLoader());
     const headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        //'auth_token': action.token
+        'Content-Type': 'application/json; charset=utf-8'
     };
     try {
         const filters = [];
@@ -63,8 +62,7 @@ export function* fetchHotelsCountSaga(action) {
 export function* fetchHotelSaga(action) {
     yield put(commonActions.showLoader());
     const headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        //'auth_token': action.token
+        'Content-Type': 'application/json; charset=utf-8'
     };
     try {
         const response = yield axiosInstance.get('/Hotel/GetById/' + action.id, headers);
@@ -80,8 +78,7 @@ export function* fetchHotelSaga(action) {
 export function* fetchHotelPhotosSaga(action) {
     yield put(commonActions.showLoader());
     const headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        //'auth_token': action.token
+        'Content-Type': 'application/json; charset=utf-8'
     };
     try {
         const response = yield axiosInstance.get('/Hotel/GetPhotos/' + action.hotelId, headers);
@@ -98,12 +95,18 @@ export function* saveHotelSaga(action) {
     yield put(commonActions.showLoader());
     const headers = {
         'Content-Type': 'application/json; charset=utf-8',
-        'auth_token': action.token
+        //'auth_token': action.token
     };
     try {
-        const response = yield axiosInstance.post('/Hotel/Save/' + action.id, action.hotel, headers);
+        let response;
+        if (!action.hotel.id) {
+            response = yield axiosInstance.post('/Hotel/Insert', action.hotel, headers);
+        }
+        else {
+            response = yield axiosInstance.put('/Hotel/Update/' + action.hotel.id, action.hotel, headers);
+        }
         if (response?.status === 200) {
-            yield put(actions.operationSucceeded());
+            yield put(commonActions.operationSucceeded(OperationsEnum.Insert));
         }
         yield put(commonActions.hideLoader());
     } catch (error) {
@@ -115,12 +118,12 @@ export function* deleteHotelSaga(action) {
     yield put(commonActions.showLoader());
     const headers = {
         'Content-Type': 'application/json; charset=utf-8',
-        'auth_token': action.token
+        //'auth_token': action.token
     };
     try {
-        const response = yield axiosInstance.delete('/Hotel/Save/' + action.id, headers);
+        const response = yield axiosInstance.delete('/Hotel/Delete/' + action.id, headers);
         if (response?.status === 200) {
-            yield put(actions.operationSucceeded());
+            yield put(commonActions.operationSucceeded(OperationsEnum.Delete));
         }
         yield put(commonActions.hideLoader());
     } catch (error) {

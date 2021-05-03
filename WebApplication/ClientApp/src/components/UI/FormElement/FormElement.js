@@ -8,7 +8,7 @@ const FormElement = props => {
             type={props.formElement.content.elementType}
             elementConfig={props.formElement.content.elementConfig}
             value={props.formElement.content.value}
-            //touched={formElement.content.touched}
+            touched={props.formElement.content.touched}
             valid={props.formElement.content.valid}
             changed={(event) => props.changed(event, props.formElement.id)}
             selected={(value) => props.selected(value)}

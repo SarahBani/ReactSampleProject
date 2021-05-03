@@ -5,6 +5,7 @@ using Core.ApplicationService.Contracts;
 using Core.DomainModel;
 using Core.DomainModel.Entities;
 using Core.DomainService;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Models;
 
@@ -62,6 +63,53 @@ namespace WebApplication.Controllers
         public Task<IList<HotelPhoto>> GetPhotosAsync(int hotelId)
         {
             return this._hotelPhotoService.GetListByHotelIdAsync(hotelId);
+        }
+
+        [HttpPost("Insert")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> InsertAsync([FromBody] Hotel hotel)
+        {
+            var result = await this._hotelService.InsertAsync(hotel);
+            if (result.IsSuccessful)
+            {               
+                return base.GetOKResult();
+            }
+            return base.GetErrorResult(result);
+        }
+
+        [HttpPut("Update/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateAsync([FromRoute] long id, [FromBody] Hotel hotel)
+        {
+            if (id <= 0)
+            {
+                return base.GetInvalidRequestResult();
+            }
+            var result = await this._hotelService.UpdateAsync(hotel);
+            if (result.IsSuccessful)
+            {
+                return base.GetOKResult();
+            }
+            return base.GetErrorResult(result);
+        }
+
+        [HttpDelete("Delete/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeleteAsync([FromRoute] long id)
+        {
+            if (id <= 0)
+            {
+                return base.GetInvalidRequestResult();
+            }
+            var result = await this._hotelService.DeleteAsync(id);
+            if (result.IsSuccessful)
+            {
+                return base.GetOKResult();
+            }
+            return base.GetErrorResult(result);
         }
 
         [HttpPost("UploadPhoto/{hotelId}"), DisableRequestSizeLimit]

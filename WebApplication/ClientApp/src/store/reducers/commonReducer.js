@@ -2,16 +2,18 @@
 
 const initialState = {
     isLoading: false,
-    error: null
+    error: null,
+    successfulOperation: null
 };
 
 const commonReducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.SHOW_LOADER:
+        case actionTypes.SHOW_LOADER:      
             return {
                 ...state,
                 isLoading: true,
-                error: null
+                error: null,
+                successfulOperation: null
             };
         case actionTypes.HIDE_LOADER:
             return {
@@ -29,6 +31,11 @@ const commonReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 error: null
+            };
+        case actionTypes.OPERATION_SUCCEEDED: 
+            return {
+                ...state,
+                successfulOperation: action.operation
             };
         default:
             return state;

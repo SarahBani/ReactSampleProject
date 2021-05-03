@@ -9,7 +9,7 @@ const HotelItemCard = props => {
     const [imageUrl, setImageUrl] = useState('images/no-image.png');
 
     useEffect(() => {
-        if (photos.length > 0) {
+        if (photos?.length > 0) {
             setImageUrl(`Resources/Images/hotels/${photos[0].photoUrl}`);
         }
     }, [photos]);

@@ -22,5 +22,7 @@ namespace Core.ApplicationService.Contracts
 
         Task<TransactionResult> DeleteAsync(long id);
 
+        Task<TransactionResult> DeleteByHotelIdAsync(long hotelId);
+
     }
 }

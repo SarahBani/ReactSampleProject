@@ -9,7 +9,7 @@ const initialState = {
 
 const hotelReducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.SET_HOTELS:
+        case actionTypes.SET_HOTELS: 
             return {
                 ...state,
                 hotels: action.hotels
@@ -24,14 +24,15 @@ const hotelReducer = (state = initialState, action) => {
                 ...state,
                 selectedHotel: action.hotel
             };
+        case actionTypes.CLEAR_SELECTED_HOTEL:
+            return {
+                ...state,
+                selectedHotel: null
+            };
         case actionTypes.SET_HOTEL_PHOTOS:
             return {
                 ...state,
                 photos: action.photos
-            };
-        case actionTypes.OPERATION_SUCCEEDED:
-            return {
-                ...state,
             };
         default:
             return state;

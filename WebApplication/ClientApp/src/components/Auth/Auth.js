@@ -1,4 +1,4 @@
-﻿import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router";
 

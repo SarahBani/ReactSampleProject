@@ -1,4 +1,4 @@
-﻿import { React, useState, useEffect, useCallback, useMemo } from 'react';
+import { React, useState, useEffect, useCallback, useMemo, useReducer } from 'react';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 
@@ -6,10 +6,11 @@ import classes from './HotelDetail.module.scss';
 import Modal from '../../UI/Modal/Modal';
 import ConfirmDelete from '../../UI/ConfirmDelete/ConfirmDelete';
 import * as actions from '../../../store/actions/hotelActions';
+import { OperationsEnum } from '../../../shared/constant';
 
 const HotelDetail = props => {
 
-    const { id, photos, onFetchHotel, onFetchHotelPhotos, onDeleteHotel } = props;
+    const { id, photos, successfulOperation, onFetchHotel, onFetchHotelPhotos, onDeleteHotel } = props;
     const { stars } = props.hotel || {}; // { ...props.hotel };
     const [imageUrl, setImageUrl] = useState('images/no-image.png');
     const [redirect, setRedirect] = useState();
@@ -33,13 +34,20 @@ const HotelDetail = props => {
     }, [stars]);
 
     useEffect(() => {
-        if (photos.length > 0) {
+        if (photos?.length > 0) {
             setImageUrl(`Resources/Images/hotels/${photos[0].photoUrl}`);
         }
         else {
             setImageUrl('images/no-image.png');
         }
     }, [photos, setImageUrl]);
+
+    useEffect(() => {
+        if (successfulOperation === OperationsEnum.Delete) {
+            console.log('useEffect-successfulOperation');
+            cancelHandler();
+        }
+    }, [successfulOperation]);
 
     const cancelHandler = useCallback(() => {
         setRedirect(<Redirect to="/hotels" />);
@@ -68,7 +76,7 @@ const HotelDetail = props => {
 
     const confirmDeleteHandler = useCallback((isConfirmed) => {
         if (isConfirmed) {
-            //onDeleteHotel(id);
+            onDeleteHotel(id);
         }
         setShowDeleteConfirm(false);
     }, [id, setShowDeleteConfirm, onDeleteHotel]);
@@ -134,7 +142,8 @@ const HotelDetail = props => {
 const mapStateToProps = state => {
     return {
         hotel: state.hotel.selectedHotel,
-        photos: state.hotel.photos
+        photos: state.hotel.photos,
+        successfulOperation: state.common.successfulOperation
     };
 };
 

@@ -29,3 +29,10 @@ export const clearError = () => {
         type: actionTypes.CLEAR_ERROR
     };
 };
+
+export const operationSucceeded = (operation) => {
+    return {
+        type: actionTypes.OPERATION_SUCCEEDED,
+        operation: operation
+    };
+};
