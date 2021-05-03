@@ -1,11 +1,9 @@
-import { React, useState, useEffect, useCallback, useMemo, useReducer } from 'react';
+import { React, useState, useEffect, useCallback, useReducer } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { getUpdatedForm, getFormElements, ValidateForm, checkValidity } from '../../../shared/utility';
 import FormElement from '../../UI/FormElement/FormElement';
-import ConfirmDelete from '../../UI/ConfirmDelete/ConfirmDelete';
-import Modal from '../../UI/Modal/Modal';
 import * as actions from '../../../store/actions/hotelActions';
 import * as locationActions from '../../../store/actions/locationActions';
 import { OperationsEnum } from '../../../shared/constant';
@@ -90,8 +88,8 @@ const dropDownsReducer = (currentDropDowns, action) => {
                 ...currentDropDowns,
                 ['countryId']: {
                     options: getDropDownCountriesData(action.countries),
-                    value: (action.value ? action.value : ''),
-                    valid: (action.value ? true : false),
+                    value: '',
+                    valid: false,
                     touched: false,
                     disabled: false
                 },
@@ -108,8 +106,8 @@ const dropDownsReducer = (currentDropDowns, action) => {
                 ...currentDropDowns,
                 ['cityId']: {
                     options: getDropDownCitiesData(action.cities),
-                    value: (action.value ? action.value : ''),
-                    valid: (action.value ? true : false),
+                    value: '',
+                    valid: false,
                     touched: false,
                     disabled: false
                 }
@@ -166,17 +164,16 @@ const getDropDownCitiesData = (cities) => {
     }));
 };
 
-const HotelEdit = props => {
+const HotelNew = props => {
 
     const {
-        id, loading, hotel, countries, cities, successfulOperation,
-        onFetchHotel, onFetchCountries, onSelectCountry, onDeleteHotel, onSave } = props;
+        loading, countries, cities, successfulOperation,
+        onFetchCountries, onSelectCountry, onSave
+    } = props;
     const [formControls, setFormControls] = useState(initialFormState);
     const [isFormValid, setIsFormValid] = useState(false);
     const [redirect, setRedirect] = useState();
-    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [dropDowns, dispatchDropDowns] = useReducer(dropDownsReducer, initialDropDowns);
-    const [hasReservedValues, setHasReservedValues] = useState(true);
 
     const dropDownsHandlers = {
         'countryId': onSelectCountry,
@@ -184,101 +181,42 @@ const HotelEdit = props => {
     };
 
     useEffect(() => {
-        if (!hotel) {
-            onFetchHotel(id);
-        }
         if (countries.length === 0) {
             onFetchCountries();
         }
-    }, [id]);
+    }, []);
 
     useEffect(() => {
-        console.log(222222222222);
-        if (hotel) {
-            console.log('22222 - ppppppppp');
-            const updatedForm = {
-                ...formControls,
-                ['name']: {
-                    ...formControls['name'],
-                    value: hotel.name,
-                    valid: true
-                },
-                ['countryId']: {
-                    ...formControls['countryId'],
-                    value: hotel.city.countryId,
-                    valid: true
-                },
-                ['cityId']: {
-                    ...formControls['cityId'],
-                    value: hotel.cityId,
-                    valid: true
-                },
-                ['address']: {
-                    ...formControls['address'],
-                    value: hotel.address,
-                    valid: true
-                },
-            };
-            console.log('useEffect - hotel');
-            console.log(updatedForm);
-            setFormControls(updatedForm);
-            setHasReservedValues(true);
-        }
-    }, [hotel]);
-
-    useEffect(() => {
-        console.log(33333333);
-        if (hotel && countries.length > 0) {
+        if (countries.length > 0) {
             dispatchDropDowns({
                 type: 'FILL_COUNTRIES',
-                countries: countries,
-                value: hotel.city.countryId
+                countries: countries
             });
-            if (hasReservedValues) {
-                onSelectCountry(hotel.city.countryId);
-            }
         }
-    }, [countries, hotel]);
+    }, [countries]);
 
     useEffect(() => {
-        console.log(4444444444);
-        if (hotel && countries.length > 0) {
+        if (countries.length > 0) {
             dispatchDropDowns({
                 type: 'FILL_CITIES',
-                cities: cities,
-                value: hotel.cityId
+                cities: cities
             });
-            if (hasReservedValues) {
-                selectDropDownHandler('cityId', hotel.cityId);
-                setHasReservedValues(false);
-            }
         }
-    }, [cities, hotel]);
+    }, [cities]);
 
     useEffect(() => {
-        console.log(55555555555);
-        console.log(formControls);
-        if (hotel && countries.length > 0) {
-            const updatedForm = {
-                ...formControls,
-                ['countryId']: {
-                    ...formControls['countryId'],
-                    ...dropDowns.countryId
-                },
-                ['cityId']: {
-                    ...formControls['cityId'],
-                    ...dropDowns.cityId
-                }
-            };
-            console.log('useEffect - dropDowns');
-            console.log(updatedForm);
-            setFormControls(updatedForm);
-
-            //if (dropDowns.selectedDropDown &&
-            //    dropDownsHandlers[dropDowns.selectedDropDown]) {
-            //    dropDownsHandlers[dropDowns.selectedDropDown](dropDowns[dropDowns.selectedDropDown].value);
-            //}
-        }
+        const updatedForm = {
+            ...formControls,
+            ['countryId']: {
+                ...formControls['countryId'],
+                ...dropDowns.countryId
+            },
+            ['cityId']: {
+                ...formControls['cityId'],
+                ...dropDowns.cityId
+            }
+        };
+        setFormControls(updatedForm);
     }, [dropDowns]);
 
     useEffect(() => {
@@ -286,13 +224,8 @@ const HotelEdit = props => {
     }, [formControls]);
 
     useEffect(() => {
-        switch (successfulOperation) {
-            case OperationsEnum.Update:
-                cancelHandler();
-                break;
-            case OperationsEnum.Delete:
-                setRedirect(<Redirect to="/hotels/" />);
-            default:
+        if (successfulOperation === OperationsEnum.Delete) {
+            setRedirect(<Redirect to="/hotels/" />);
         }
     }, [successfulOperation]);
 
@@ -310,18 +243,15 @@ const HotelEdit = props => {
 
     const elementHandler = (event, id) => {
         setFormControls(getUpdatedForm(event, formControls, id));
-        console.log('elementHandler');
-        console.log(formControls);
     };
 
     const cancelHandler = useCallback(() => {
-        setRedirect(<Redirect to={`/hotels/${id}`} />);
-    }, [id, setRedirect]);
+        setRedirect(<Redirect to="/hotels/" />);
+    }, [setRedirect]);
 
     const saveHandler = (event) => {
         event.preventDefault();
         onSave({
-            id: id,
             name: formControls.name.value,
             countryId: formControls.countryId.value,
             cityId: formControls.cityId.value,
@@ -329,26 +259,6 @@ const HotelEdit = props => {
             address: formControls.address.value
         });
     };
-
-    const deleteConfirmContent = useMemo(() => {
-        return (
-            <Modal show={showDeleteConfirm} type="confirm">
-                <ConfirmDelete onOK={() => confirmDeleteHandler(true)}
-                    onCancel={() => confirmDeleteHandler(false)} />
-            </Modal>
-        );
-    }, [showDeleteConfirm]);
-
-    const deleteHandler = useCallback(() => {
-        setShowDeleteConfirm(true);
-    }, [setShowDeleteConfirm]);
-
-    const confirmDeleteHandler = useCallback((isConfirmed) => {
-        if (isConfirmed) {
-            onDeleteHotel(id);
-        }
-        setShowDeleteConfirm(false);
-    }, [id, onDeleteHotel, setShowDeleteConfirm]);
 
     const formElements = getFormElements(formControls).map(formElement => {
         return (
@@ -364,8 +274,6 @@ const HotelEdit = props => {
     return (
         <div>
             {redirect}
-            {deleteConfirmContent}
-
             <form onSubmit={saveHandler}>
                 {formElements}
 
@@ -378,10 +286,9 @@ const HotelEdit = props => {
 
                 <div className="row">
                     <div className="col-12 text-center">
-                        <button className="btn btn-primary" type="reset" >Clear</button>
-                        <button className="btn btn-success" type="submit" disabled={!isFormValid || loading}>Save</button>
-                        <button className="btn btn-info" type="button">Photos</button>
-                        <button className="btn btn-danger" type="button" onClick={deleteHandler}> Delete</button >
+                        <button className="btn btn-primary" type="reset">Clear</button>
+                        <button className="btn btn-success" type="submit"
+                            disabled={!isFormValid || loading}>Save</button>
                         <button className="btn btn-warning" type="button" onClick={cancelHandler}> Cancel</button >
                     </div>
                 </div>
@@ -392,7 +299,6 @@ const HotelEdit = props => {
 
 const mapStateToProps = state => {
     return {
-        hotel: state.hotel.selectedHotel,
         countries: state.location.countries,
         cities: state.location.cities,
         loggedIn: state.auth.loggedIn,
@@ -403,12 +309,10 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchHotel: (id) => dispatch(actions.fetchHotel(id)),
         onFetchCountries: () => dispatch(locationActions.fetchCountries()),
         onSelectCountry: (countryId) => dispatch(locationActions.selectCountry(countryId)),
         onSave: (hotel) => dispatch(actions.saveHotel(hotel)),
-        onDeleteHotel: (id) => dispatch(actions.deleteHotel(id))
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(HotelEdit);
+export default connect(mapStateToProps, mapDispatchToProps)(HotelNew);
