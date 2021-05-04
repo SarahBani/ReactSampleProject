@@ -61,8 +61,12 @@ const FormControl = props => {
         case FormControlTypesEnum.Stars:
             formElement =
                 <StarRatings
-                    rating={props.value}
-                    starRatedColor="#FFD119"
+                rating={props.value}
+                starEmptyColor="#575A60"
+                starRatedColor="#FFD119"
+                starHoverColor="#B58F12"
+                starDimension="20px"
+                starSpacing="0"
                     changeRating={props.changeRating}
                     numberOfStars={5}
                     disabled={props.disabled} />

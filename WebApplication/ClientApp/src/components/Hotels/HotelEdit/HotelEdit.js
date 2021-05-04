@@ -48,13 +48,11 @@ const initialFormState = {
         },
         valid: false
     },
-    //stars: {
-    //    elementType:FormControlTypesEnum.stars,
-    //    value: '0',
-    //    validation: {
-    //    },
-    //    valid: true
-    //},
+    stars: {
+        elementType: FormControlTypesEnum.Stars,
+        value: 0,
+        valid: true
+    },
     address: {
         elementType: FormControlTypesEnum.TextArea,
         elementConfig: {
@@ -228,6 +226,11 @@ const HotelEdit = props => {
                         value: hotel.name,
                         valid: true
                     },
+                    ['stars']: {
+                        ...updatedForm['stars'],
+                        value: hotel.stars,
+                        valid: true
+                    },
                     ['address']: {
                         ...updatedForm['address'],
                         value: hotel.address,
@@ -286,6 +289,17 @@ const HotelEdit = props => {
         console.log(formControls);
     };
 
+    const changeStarsHandler = (value, id) => {
+        const updatedForm = {
+            ...formControls,
+            ['stars']: {
+                ...formControls['stars'],
+                value: value
+            }
+        };
+        setFormControls(updatedForm);
+    };
+
     const cancelHandler = useCallback(() => {
         setRedirect(<Redirect to={`/hotels/${id}`} />);
     }, [id, setRedirect]);
@@ -297,7 +311,7 @@ const HotelEdit = props => {
             name: formControls.name.value,
             countryId: formControls.countryId.value,
             cityId: formControls.cityId.value,
-            stars: 1,
+            stars: formControls.stars.value,
             address: formControls.address.value
         });
     };
@@ -329,6 +343,7 @@ const HotelEdit = props => {
                 changed={(event) => elementHandler(event, formElement.id)}
                 lostFocus={(event) => elementHandler(event, formElement.id)}
                 selected={(value) => selectDropDownHandler(formElement.id, value)}
+                changeRating={changeStarsHandler}
             />
         )
     });

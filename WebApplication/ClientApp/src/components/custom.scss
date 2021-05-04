@@ -90,9 +90,10 @@ main {
 }
 
 .star-container {
-    @include border(red);
-
-    path: {
-        @include border(#628DBC);
+    svg path {
+        stroke: #000;
+        stroke-width: 1px;
+        stroke-linejoin: round;
+        @include border(red);
     }
 }

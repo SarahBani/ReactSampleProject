@@ -47,11 +47,11 @@ const initialFormState = {
         },
         valid: false
     },
-    //stars: {
-    //    elementType: FormControlTypesEnum.Stars,
-    //    value: 0,
-    //    valid: true
-    //},
+    stars: {
+        elementType: FormControlTypesEnum.Stars,
+        value: 0,
+        valid: true
+    },
     address: {
         elementType: FormControlTypesEnum.TextArea,
         elementConfig: {
@@ -247,6 +247,17 @@ const HotelNew = props => {
         setFormControls(getUpdatedForm(event, formControls, id));
     };
 
+    const changeStarsHandler = (value, id) => {
+        const updatedForm = {
+            ...formControls,
+            ['stars']: {
+                ...formControls['stars'],
+                value: value
+            }
+        };
+        setFormControls(updatedForm);
+    };
+
     const cancelHandler = useCallback(() => {
         setRedirect(<Redirect to="/hotels/" />);
     }, [setRedirect]);
@@ -260,17 +271,6 @@ const HotelNew = props => {
             stars: formControls.stars.value,
             address: formControls.address.value
         });
-    };
-
-    const changeStarsHandler = (value, id) => {
-        const updatedForm = {
-            ...formControls,
-            ['stars']: {
-                ...formControls['stars'],
-                value: value
-            }
-        };
-        setFormControls(updatedForm);
     };
 
     const formElements = getFormElements(formControls).map(formElement => {
