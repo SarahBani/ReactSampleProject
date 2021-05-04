@@ -1,16 +1,17 @@
 import { React, useState, useEffect, useCallback, useReducer } from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import StarRatings from 'react-star-ratings';
 
 import { getUpdatedForm, getFormElements, ValidateForm, checkValidity } from '../../../shared/utility';
 import FormElement from '../../UI/FormElement/FormElement';
 import * as actions from '../../../store/actions/hotelActions';
 import * as locationActions from '../../../store/actions/locationActions';
-import { OperationsEnum } from '../../../shared/constant';
+import { OperationsEnum, FormControlTypesEnum } from '../../../shared/constant';
 
 const initialFormState = {
     name: {
-        elementType: 'input',
+        elementType: FormControlTypesEnum.Input,
         elementConfig: {
             type: 'text',
             placeholder: 'Name',
@@ -22,7 +23,7 @@ const initialFormState = {
         valid: false
     },
     countryId: {
-        elementType: 'dropdown',
+        elementType: FormControlTypesEnum.DropDown,
         elementConfig: {
             title: 'Country',
             placeholder: 'Country'
@@ -35,7 +36,7 @@ const initialFormState = {
         disabled: true
     },
     cityId: {
-        elementType: 'dropdown',
+        elementType: FormControlTypesEnum.DropDown,
         elementConfig: {
             title: 'City',
             placeholder: 'City'
@@ -47,14 +48,12 @@ const initialFormState = {
         valid: false
     },
     //stars: {
-    //    elementType: 'stars',
-    //    value: '',
-    //    validation: {
-    //    },
+    //    elementType: FormControlTypesEnum.Stars,
+    //    value: 0,
     //    valid: true
     //},
     address: {
-        elementType: 'textarea',
+        elementType: FormControlTypesEnum.TextArea,
         elementConfig: {
             placeholder: 'Address',
         },
@@ -184,6 +183,9 @@ const HotelNew = props => {
         if (countries.length === 0) {
             onFetchCountries();
         }
+        else {
+            selectDropDownHandler('countryId', '');
+        }
     }, []);
 
     useEffect(() => {
@@ -255,9 +257,20 @@ const HotelNew = props => {
             name: formControls.name.value,
             countryId: formControls.countryId.value,
             cityId: formControls.cityId.value,
-            stars: 1,
+            stars: formControls.stars.value,
             address: formControls.address.value
         });
+    };
+
+    const changeStarsHandler = (value, id) => {
+        const updatedForm = {
+            ...formControls,
+            ['stars']: {
+                ...formControls['stars'],
+                value: value
+            }
+        };
+        setFormControls(updatedForm);
     };
 
     const formElements = getFormElements(formControls).map(formElement => {
@@ -267,6 +280,7 @@ const HotelNew = props => {
                 changed={(event) => elementHandler(event, formElement.id)}
                 lostFocus={(event) => elementHandler(event, formElement.id)}
                 selected={(value) => selectDropDownHandler(formElement.id, value)}
+                changeRating={changeStarsHandler}
             />
         )
     });
@@ -276,14 +290,6 @@ const HotelNew = props => {
             {redirect}
             <form onSubmit={saveHandler}>
                 {formElements}
-
-                {/*  
-                <div className="form-group">
-               <label for="stars">Stars: </label>
-                    <br />
-                    <div id="stars" className='starrr'></div>
-                </div>*/}
-
                 <div className="row">
                     <div className="col-12 text-center">
                         <button className="btn btn-primary" type="reset">Clear</button>

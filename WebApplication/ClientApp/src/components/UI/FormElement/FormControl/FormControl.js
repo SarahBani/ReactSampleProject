@@ -1,7 +1,9 @@
 ﻿import React from 'react';
+import StarRatings from 'react-star-ratings';
 
 import classes from './FormControl.module.scss';
 import DropDown from '../../DropDown/DropDown';
+import { FormControlTypesEnum } from '../../../../shared/constant';
 
 const FormControl = props => {
 
@@ -18,7 +20,7 @@ const FormControl = props => {
     }
 
     switch (props.type) {
-        case 'textarea':
+        case FormControlTypesEnum.TextArea:
             formElement = <textarea
                 {...props.elementConfig}
                 value={props.value}
@@ -27,7 +29,7 @@ const FormControl = props => {
                 onBlur={props.lostFocus}
                 disabled={props.disabled} />;
             break;
-        case 'select':
+        case FormControlTypesEnum.Select:
             formElement =
                 <select
                     name={props.id}
@@ -43,7 +45,7 @@ const FormControl = props => {
                     ))}
                 </select>;
             break;
-        case 'dropdown':
+        case FormControlTypesEnum.DropDown:
             formElement =
                 <DropDown
                     {...props.elementConfig}
@@ -56,7 +58,16 @@ const FormControl = props => {
                     onSelect={props.selected}
                     onBlur={props.lostFocus} />;
             break;
-        case 'input':
+        case FormControlTypesEnum.Stars:
+            formElement =
+                <StarRatings
+                    rating={props.value}
+                    starRatedColor="#FFD119"
+                    changeRating={props.changeRating}
+                    numberOfStars={5}
+                    disabled={props.disabled} />
+            break;
+        case FormControlTypesEnum.Input:
         default:
             formElement = <input
                 {...props.elementConfig}

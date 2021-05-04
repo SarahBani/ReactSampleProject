@@ -8,6 +8,7 @@ const FormElement = props => {
             type={props.formElement.content.elementType}
             elementConfig={props.formElement.content.elementConfig}
             value={props.formElement.content.value}
+            options={props.formElement.content.options}
             touched={props.formElement.content.touched}
             valid={props.formElement.content.valid}
             changed={(event) => props.changed(event, props.formElement.id)}
@@ -15,7 +16,7 @@ const FormElement = props => {
             lostFocus={(event) => props.lostFocus(event, props.formElement.id)}
             disabled={props.formElement.content.disabled}
             autoComplete={props.formElement.content.autoComplete}
-            options={props.formElement.content.options}
+            changeRating={props.changeRating}
         />
     );
 };

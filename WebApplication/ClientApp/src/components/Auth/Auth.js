@@ -9,10 +9,11 @@ import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
 import { getFormElements, getUpdatedForm, disableForm, ValidateForm } from '../../shared/utility';
 //import AuthContext from "../../context/AuthContext";
 import * as actions from '../../store/actions/authActions';
+import { FormControlTypesEnum } from '../../shared/constant';
 
 const initialFormState = {
     email: {
-        elementType: 'input',
+        elementType: FormControlTypesEnum.Input,
         elementConfig: {
             type: 'email',
             placeholder: 'Email',
@@ -25,7 +26,7 @@ const initialFormState = {
         valid: true
     },
     password: {
-        elementType: 'input',
+        elementType: FormControlTypesEnum.Input,
         elementConfig: {
             type: 'password',
             placeholder: 'Password',

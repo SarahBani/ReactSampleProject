@@ -8,11 +8,11 @@ import ConfirmDelete from '../../UI/ConfirmDelete/ConfirmDelete';
 import Modal from '../../UI/Modal/Modal';
 import * as actions from '../../../store/actions/hotelActions';
 import * as locationActions from '../../../store/actions/locationActions';
-import { OperationsEnum } from '../../../shared/constant';
+import { OperationsEnum, FormControlTypesEnum } from '../../../shared/constant';
 
 const initialFormState = {
     name: {
-        elementType: 'input',
+        elementType: FormControlTypesEnum.Input,
         elementConfig: {
             type: 'text',
             placeholder: 'Name',
@@ -24,7 +24,7 @@ const initialFormState = {
         valid: false
     },
     countryId: {
-        elementType: 'dropdown',
+        elementType: FormControlTypesEnum.DropDown,
         elementConfig: {
             title: 'Country',
             placeholder: 'Country'
@@ -37,7 +37,7 @@ const initialFormState = {
         disabled: true
     },
     cityId: {
-        elementType: 'dropdown',
+        elementType: FormControlTypesEnum.DropDown,
         elementConfig: {
             title: 'City',
             placeholder: 'City'
@@ -49,14 +49,14 @@ const initialFormState = {
         valid: false
     },
     //stars: {
-    //    elementType: 'stars',
-    //    value: '',
+    //    elementType:FormControlTypesEnum.stars,
+    //    value: '0',
     //    validation: {
     //    },
     //    valid: true
     //},
     address: {
-        elementType: 'textarea',
+        elementType: FormControlTypesEnum.TextArea,
         elementConfig: {
             placeholder: 'Address',
         },
@@ -84,6 +84,7 @@ const checkDropDownValidity = (id, value) =>
     checkValidity(value.toString(), initialFormState[id].validation);
 
 const dropDownsReducer = (currentDropDowns, action) => {
+    console.log(action.type);
     switch (action.type) {
         case 'FILL_COUNTRIES':
             return {
@@ -176,7 +177,7 @@ const HotelEdit = props => {
     const [redirect, setRedirect] = useState();
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [dropDowns, dispatchDropDowns] = useReducer(dropDownsReducer, initialDropDowns);
-    const [hasReservedValues, setHasReservedValues] = useState(true);
+    const [isInitializing, setIsInitializing] = useState(true);
 
     const dropDownsHandlers = {
         'countryId': onSelectCountry,
@@ -193,73 +194,21 @@ const HotelEdit = props => {
     }, [id]);
 
     useEffect(() => {
-        console.log(222222222222);
-        if (hotel) {
-            console.log('22222 - ppppppppp');
-            const updatedForm = {
-                ...formControls,
-                ['name']: {
-                    ...formControls['name'],
-                    value: hotel.name,
-                    valid: true
-                },
-                ['countryId']: {
-                    ...formControls['countryId'],
-                    value: hotel.city.countryId,
-                    valid: true
-                },
-                ['cityId']: {
-                    ...formControls['cityId'],
-                    value: hotel.cityId,
-                    valid: true
-                },
-                ['address']: {
-                    ...formControls['address'],
-                    value: hotel.address,
-                    valid: true
-                },
-            };
-            console.log('useEffect - hotel');
-            console.log(updatedForm);
-            setFormControls(updatedForm);
-            setHasReservedValues(true);
-        }
-    }, [hotel]);
-
-    useEffect(() => {
-        console.log(33333333);
-        if (hotel && countries.length > 0) {
+        if (countries.length > 0 && hotel) {
             dispatchDropDowns({
                 type: 'FILL_COUNTRIES',
                 countries: countries,
                 value: hotel.city.countryId
             });
-            if (hasReservedValues) {
-                onSelectCountry(hotel.city.countryId);
+            if (isInitializing) {
+                selectDropDownHandler('countryId', hotel.city.countryId);
             }
         }
-    }, [countries, hotel]);
+    }, [hotel, countries]);
 
     useEffect(() => {
-        console.log(4444444444);
-        if (hotel && countries.length > 0) {
-            dispatchDropDowns({
-                type: 'FILL_CITIES',
-                cities: cities,
-                value: hotel.cityId
-            });
-            if (hasReservedValues) {
-                selectDropDownHandler('cityId', hotel.cityId);
-                setHasReservedValues(false);
-            }
-        }
-    }, [cities, hotel]);
-
-    useEffect(() => {
-        console.log(55555555555);
-        console.log(formControls);
-        if (hotel && countries.length > 0) {
-            const updatedForm = {
+        if (countries.length > 0) {
+            let updatedForm = {
                 ...formControls,
                 ['countryId']: {
                     ...formControls['countryId'],
@@ -270,16 +219,39 @@ const HotelEdit = props => {
                     ...dropDowns.cityId
                 }
             };
-            console.log('useEffect - dropDowns');
-            console.log(updatedForm);
-            setFormControls(updatedForm);
 
-            //if (dropDowns.selectedDropDown &&
-            //    dropDownsHandlers[dropDowns.selectedDropDown]) {
-            //    dropDownsHandlers[dropDowns.selectedDropDown](dropDowns[dropDowns.selectedDropDown].value);
-            //}
+            if (updatedForm && isInitializing) {
+                updatedForm = {
+                    ...updatedForm,
+                    ['name']: {
+                        ...updatedForm['name'],
+                        value: hotel.name,
+                        valid: true
+                    },
+                    ['address']: {
+                        ...updatedForm['address'],
+                        value: hotel.address,
+                        valid: true
+                    },
+                };
+                setIsInitializing(false);
+            }
+            setFormControls(updatedForm);
         }
     }, [dropDowns]);
+
+    useEffect(() => {
+        if (countries.length > 0 && hotel) {
+            dispatchDropDowns({
+                type: 'FILL_CITIES',
+                cities: cities,
+                value: hotel.cityId
+            });
+            if (isInitializing) {
+                selectDropDownHandler('cityId', hotel.cityId);
+            }
+        }
+    }, [cities, hotel]);
 
     useEffect(() => {
         setIsFormValid(ValidateForm(formControls));

@@ -5,3 +5,11 @@ export const OperationsEnum = Object.freeze({
     Update: 'Update',
     Delete: 'Delete'
 });
+
+export const FormControlTypesEnum = Object.freeze({
+    Input: 'input',
+    TextArea: 'textarea',
+    Select: 'select',
+    DropDown: 'dropdown',
+    Stars: 'stars'
+});
