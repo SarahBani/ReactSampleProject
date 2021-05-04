@@ -61,12 +61,13 @@ const FormControl = props => {
         case FormControlTypesEnum.Stars:
             formElement =
                 <StarRatings
-                rating={props.value}
-                starEmptyColor="#575A60"
-                starRatedColor="#FFD119"
-                starHoverColor="#B58F12"
-                starDimension="20px"
-                starSpacing="0"
+                className={controlClasses.join(' ')}
+                    rating={props.value}
+                    starEmptyColor="#575A60"
+                    starRatedColor="#FFD119"
+                    starHoverColor="#B58F12"
+                    starDimension="20px"
+                    starSpacing="0"
                     changeRating={props.changeRating}
                     numberOfStars={5}
                     disabled={props.disabled} />
@@ -86,7 +87,7 @@ const FormControl = props => {
 
     return (
         <div className={classes.FormControl}>
-            <label>{props.label}</label>
+            {props.label && <label>{props.label}</label>}
             {formElement}
             {validationError}
         </div>

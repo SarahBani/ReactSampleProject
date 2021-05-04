@@ -89,11 +89,8 @@ main {
     }
 }
 
-.star-container {
-    svg path {
-        stroke: #000;
-        stroke-width: 1px;
-        stroke-linejoin: round;
-        @include border(red);
-    }
+.star-container svg path {
+    stroke: #000;
+    stroke-width: 1px;
+    stroke-linejoin: round;
 }

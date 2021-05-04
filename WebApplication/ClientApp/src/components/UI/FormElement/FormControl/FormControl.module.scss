@@ -14,9 +14,10 @@
 }
 
 .FormElement {
+    background-color: $light-background;
     outline: none;
-    @include border(#ccc);
-    background-color: white;
+    /*@include border(#ccc);*/
+    @include border(#5AB690, 5px);
     font: inherit;
     padding: 6px 10px;
     display: block;
@@ -25,7 +26,9 @@
 
     &:focus {
         outline: none;
-        background-color: $light-gray;
+        background-color: $light-background; // $light-gray
+        color: $dark-green;
+        box-shadow: 0 0 0.2rem rgba(78, 211, 140, 25%);
     }
 }
 
