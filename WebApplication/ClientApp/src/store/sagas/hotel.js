@@ -95,7 +95,7 @@ export function* saveHotelSaga(action) {
     yield put(commonActions.showLoader());
     const headers = {
         'Content-Type': 'application/json; charset=utf-8',
-        //'auth_token': action.token
+        'auth_token': action.token
     };
     try {
         let response;
@@ -118,7 +118,7 @@ export function* deleteHotelSaga(action) {
     yield put(commonActions.showLoader());
     const headers = {
         'Content-Type': 'application/json; charset=utf-8',
-        //'auth_token': action.token
+        'auth_token': action.token
     };
     try {
         const response = yield axiosInstance.delete('/Hotel/Delete/' + action.id, headers);

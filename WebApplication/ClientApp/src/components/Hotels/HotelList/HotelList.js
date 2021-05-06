@@ -9,8 +9,8 @@ import * as actions from '../../../store/actions/hotelActions';
 
 const HotelList = props => {
 
-    const { hotels, hotelsCount, successfulOperation,
-        selectedCountryId, selectedCityId, onFetchHotels, onFetchHotelsCount } = props;
+    const { hotels, hotelsCount, successfulOperation, selectedCountryId, selectedCityId, loggedIn, 
+        onFetchHotels, onFetchHotelsCount } = props;
 
     useEffect(() => {
         refreshHandler();
@@ -44,16 +44,11 @@ const HotelList = props => {
             : <NoHotel />;
     }, [hotelItems, hotelsCount]);
 
-    //const selectHotelHandler = useCallback((hotel) => {
-    //    onSelectHotel(hotel);
-    //    setRedirect(<Redirect to={`/hotels/${hotel.id}`} />);
-    //}, [onSelectHotel]);
-
     return (
         <div className={classes.HotelList}>
             {content}
             <div>
-                <Link className="btn btn-primary" to="/hotels/new">Add</Link>
+                {loggedIn && <Link className="btn btn-primary" to="/hotels/new">Add</Link>}
                 <button className="btn btn-success" onClick={refreshHandler}>Refresh</button>
             </div>
         </div>
@@ -64,7 +59,8 @@ const mapStateToProps = state => {
     return {
         hotels: state.hotel.hotels,
         hotelsCount: state.hotel.count,
-        successfulOperation: state.common.successfulOperation
+        successfulOperation: state.common.successfulOperation,
+        loggedIn: state.auth.loggedIn
     };
 };
 

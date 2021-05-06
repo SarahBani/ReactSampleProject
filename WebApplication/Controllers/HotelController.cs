@@ -5,6 +5,7 @@ using Core.ApplicationService.Contracts;
 using Core.DomainModel;
 using Core.DomainModel.Entities;
 using Core.DomainService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication.Models;
@@ -65,6 +66,7 @@ namespace WebApplication.Controllers
             return this._hotelPhotoService.GetListByHotelIdAsync(hotelId);
         }
 
+        [Authorize]
         [HttpPost("Insert")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -78,6 +80,7 @@ namespace WebApplication.Controllers
             return base.GetErrorResult(result);
         }
 
+        [Authorize]
         [HttpPut("Update/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -95,6 +98,7 @@ namespace WebApplication.Controllers
             return base.GetErrorResult(result);
         }
 
+        [Authorize]
         [HttpDelete("Delete/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -112,12 +116,14 @@ namespace WebApplication.Controllers
             return base.GetErrorResult(result);
         }
 
+        [Authorize]
         [HttpPost("UploadPhoto/{hotelId}"), DisableRequestSizeLimit]
         public IActionResult UploadPhoto(long hotelId)
         {
             return UploadImage(@$"Hotels\{hotelId}");
         }
 
+        [Authorize]
         [HttpDelete("DeletePhoto")]
         public IActionResult DeletePhoto(string filePath)
         {

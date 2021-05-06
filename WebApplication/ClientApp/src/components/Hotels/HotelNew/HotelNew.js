@@ -1,13 +1,13 @@
 import { React, useState, useEffect, useCallback, useReducer } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
-import StarRatings from 'react-star-ratings';
 
 import { getUpdatedForm, getFormElements, ValidateForm, checkValidity } from '../../../shared/utility';
 import FormElement from '../../UI/FormElement/FormElement';
+import { OperationsEnum, FormControlTypesEnum } from '../../../shared/constant';
 import * as actions from '../../../store/actions/hotelActions';
 import * as locationActions from '../../../store/actions/locationActions';
-import { OperationsEnum, FormControlTypesEnum } from '../../../shared/constant';
+import * as authActions from '../../../store/actions/authActions';
 
 const initialFormState = {
     name: {
@@ -166,9 +166,10 @@ const getDropDownCitiesData = (cities) => {
 const HotelNew = props => {
 
     const {
-        loading, countries, cities, successfulOperation,
-        onFetchCountries, onSelectCountry, onSave
+        loading, loggedIn, countries, cities, successfulOperation,
+        onFetchCountries, onSelectCountry, onSave, onSetRedirect
     } = props;
+    const location = useLocation();
     const [formControls, setFormControls] = useState(initialFormState);
     const [isFormValid, setIsFormValid] = useState(false);
     const [redirect, setRedirect] = useState();
@@ -178,6 +179,13 @@ const HotelNew = props => {
         'countryId': onSelectCountry,
         //'cityId': () => { }
     };
+
+    useEffect(() => {
+        if (!loggedIn) {
+            onSetRedirect(location.pathname);
+           setRedirect(<Redirect to="/auth/" />);
+        }
+    }, [loggedIn, onSetRedirect]);
 
     useEffect(() => {
         if (countries.length === 0) {
@@ -318,6 +326,7 @@ const mapDispatchToProps = dispatch => {
         onFetchCountries: () => dispatch(locationActions.fetchCountries()),
         onSelectCountry: (countryId) => dispatch(locationActions.selectCountry(countryId)),
         onSave: (hotel) => dispatch(actions.saveHotel(hotel)),
+        onSetRedirect: (path) => dispatch(authActions.setAuthRedirectPath(path)),
     };
 };
 

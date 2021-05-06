@@ -1,14 +1,15 @@
 import { React, useState, useEffect, useCallback, useMemo, useReducer } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { getUpdatedForm, getFormElements, ValidateForm, checkValidity } from '../../../shared/utility';
 import FormElement from '../../UI/FormElement/FormElement';
 import ConfirmDelete from '../../UI/ConfirmDelete/ConfirmDelete';
 import Modal from '../../UI/Modal/Modal';
+import { OperationsEnum, FormControlTypesEnum } from '../../../shared/constant';
 import * as actions from '../../../store/actions/hotelActions';
 import * as locationActions from '../../../store/actions/locationActions';
-import { OperationsEnum, FormControlTypesEnum } from '../../../shared/constant';
+import * as authActions from '../../../store/actions/authActions';
 
 const initialFormState = {
     name: {
@@ -168,8 +169,10 @@ const getDropDownCitiesData = (cities) => {
 const HotelEdit = props => {
 
     const {
-        id, loading, hotel, countries, cities, successfulOperation,
-        onFetchHotel, onFetchCountries, onSelectCountry, onDeleteHotel, onSave } = props;
+        id, loading, loggedIn, hotel, countries, cities, successfulOperation,
+        onFetchHotel, onFetchCountries, onSelectCountry, onDeleteHotel, onSave, onSetRedirect
+    } = props;
+    const location = useLocation();
     const [formControls, setFormControls] = useState(initialFormState);
     const [isFormValid, setIsFormValid] = useState(false);
     const [redirect, setRedirect] = useState();
@@ -181,6 +184,13 @@ const HotelEdit = props => {
         'countryId': onSelectCountry,
         //'cityId': () => { }
     };
+
+    useEffect(() => {
+        if (!loggedIn) {
+            onSetRedirect(location.pathname);
+            setRedirect(<Redirect to="/auth/" />);
+        }
+    }, [loggedIn, onSetRedirect]);
 
     useEffect(() => {
         if (!hotel) {
@@ -356,13 +366,6 @@ const HotelEdit = props => {
             <form onSubmit={saveHandler}>
                 {formElements}
 
-                {/*  
-                <div className="form-group">
-               <label for="stars">Stars: </label>
-                    <br />
-                    <div id="stars" className='starrr'></div>
-                </div>*/}
-
                 <div className="row">
                     <div className="col-12 text-center">
                         <button className="btn btn-primary" type="reset" >Clear</button>
@@ -394,7 +397,8 @@ const mapDispatchToProps = dispatch => {
         onFetchCountries: () => dispatch(locationActions.fetchCountries()),
         onSelectCountry: (countryId) => dispatch(locationActions.selectCountry(countryId)),
         onSave: (hotel) => dispatch(actions.saveHotel(hotel)),
-        onDeleteHotel: (id) => dispatch(actions.deleteHotel(id))
+        onDeleteHotel: (id) => dispatch(actions.deleteHotel(id)),
+        onSetRedirect: (path) => dispatch(authActions.setAuthRedirectPath(path)),
     };
 };
 

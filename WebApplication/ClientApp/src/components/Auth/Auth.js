@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router";
+import { Redirect, useHistory } from "react-router";
 
 import classes from './Auth.module.scss';
 import FormElement from '../UI/FormElement/FormElement';
@@ -43,10 +43,17 @@ const initialFormState = {
 
 export const Auth = props => {
 
-    const { loading } = props;
+    const history = useHistory();
+    const { loading, loggedIn, authRedirectPath, onResetRedirect } = props;
     const [formControls, setFormControls] = useState(initialFormState);
     const [isFormValid, setIsFormValid] = useState(false);
     //const authContext = useContext(AuthContext);
+
+    useEffect(() => {
+        if (history.action !== 'REPLACE') {
+            onResetRedirect();
+        }
+    }, []);
 
     useEffect(() => {
         const updatedForm = disableForm(formControls, loading);
@@ -68,6 +75,8 @@ export const Auth = props => {
         props.onSignIn(formControls.email.value, formControls.password.value);
     };
 
+    const loggedInRedirect = (loggedIn && <Redirect to={authRedirectPath} />);
+
     const form = (
         <form onSubmit={signInHandler}>
             {
@@ -82,9 +91,6 @@ export const Auth = props => {
             <Button type='Success' disabled={!isFormValid || loading}>Sign In</Button>
         </form>
     );
-    //const loggedInRedirect = (props.loggedIn &&
-    //    <Redirect to={!props.viewingHotel ? '/' : '/checkout'} />);
-    const loggedInRedirect = (props.loggedIn && <Redirect to='/' />);
 
     return (
         <div className={classes.Auth}>
@@ -98,7 +104,6 @@ const mapStateToProps = state => {
     return {
         loggedIn: state.auth.loggedIn,
         loading: state.common.isLoading,
-        //viewingHotel: state.location.viewingHotel,
         authRedirectPath: state.auth.authRedirectPath
     };
 };
@@ -106,7 +111,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         onSignIn: (email, password) => dispatch(actions.signIn(email, password)),
-        onSetRedirect: () => dispatch(actions.setAuthRedirectPath('/')),
+        onResetRedirect: () => dispatch(actions.setAuthRedirectPath('/')),
     };
 };
 

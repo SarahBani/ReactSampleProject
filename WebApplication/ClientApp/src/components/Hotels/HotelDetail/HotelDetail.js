@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useCallback, useMemo, useReducer } from 'react';
+import { React, useState, useEffect, useCallback, useMemo } from 'react';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 
@@ -7,10 +7,12 @@ import Modal from '../../UI/Modal/Modal';
 import ConfirmDelete from '../../UI/ConfirmDelete/ConfirmDelete';
 import * as actions from '../../../store/actions/hotelActions';
 import { OperationsEnum } from '../../../shared/constant';
+import { Fragment } from 'react';
 
 const HotelDetail = props => {
 
-    const { id, photos, successfulOperation, onFetchHotel, onFetchHotelPhotos, onDeleteHotel } = props;
+    const { id, photos, successfulOperation, loggedIn,
+        onFetchHotel, onFetchHotelPhotos, onDeleteHotel } = props;
     const { stars } = props.hotel || {}; // { ...props.hotel };
     const [imageUrl, setImageUrl] = useState('images/no-image.png');
     const [redirect, setRedirect] = useState();
@@ -127,9 +129,14 @@ const HotelDetail = props => {
                         </button>
                         <div className="dropdown-menu">
                             <a className="dropdown-item" onClick={showPhotosHandler}>Photos</a>
-                            <div className="dropdown-divider"></div>
-                            <a className="dropdown-item" onClick={editHandler}>Edit</a>
-                            <a className="dropdown-item" onClick={deleteHandler}>Delete</a>
+                            {
+                                loggedIn && (
+                                    <Fragment>
+                                        <div className="dropdown-divider"></div>
+                                        <a className="dropdown-item" onClick={editHandler}>Edit</a>
+                                        <a className="dropdown-item" onClick={deleteHandler}>Delete</a>
+                                    </Fragment>
+                                )}
                         </div>
                     </div>
                 </div>
@@ -143,7 +150,8 @@ const mapStateToProps = state => {
     return {
         hotel: state.hotel.selectedHotel,
         photos: state.hotel.photos,
-        successfulOperation: state.common.successfulOperation
+        successfulOperation: state.common.successfulOperation,
+        loggedIn: state.auth.loggedIn
     };
 };
 

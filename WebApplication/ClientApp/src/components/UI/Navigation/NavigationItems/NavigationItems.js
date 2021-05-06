@@ -34,7 +34,7 @@ const navigationItems = props => {
                 <NavigationItem link='/hotels'>Hotels</NavigationItem>
                 <NavigationItem link='/about'>About</NavigationItem>
                 <NavigationItem link='/auth'>Sign In</NavigationItem>
-            </Fragment >
+            </Fragment>
         );
     }
 
