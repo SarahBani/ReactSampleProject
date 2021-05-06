@@ -57,6 +57,8 @@ namespace ReactSampleProject
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
 
+            this.ConfigureAuthService(services);
+
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -85,6 +87,10 @@ namespace ReactSampleProject
             });
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseCorsMiddleware();
             app.UseCors("CorsPolicy");
 

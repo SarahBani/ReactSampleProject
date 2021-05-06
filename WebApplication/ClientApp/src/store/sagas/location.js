@@ -5,14 +5,13 @@ import * as actions from '../actions/locationActions';
 import * as commonActions from '../actions/commonActions';
 import * as hotelActions from '../actions/hotelActions';
 
-export function* fetchCountriesSaga(action) {
+export function* fetchCountriesSaga() {
     yield put(commonActions.showLoader());
     const headers = {
-        'Content-Type': 'application/json; charset=utf-8',
-        //'auth_token': action.token
+        'Content-Type': 'application/json; charset=utf-8'
     };
     try {
-        const response = yield axiosInstance.get('/Location/GetCountries', headers);
+        const response = yield axiosInstance.get('/Location/GetCountries', { headers: headers });
         if (response?.status === 200) {
             yield put(actions.setCountries(response.data));
         }
@@ -29,11 +28,10 @@ export function* selectCountrySaga(action) {
     else {
         yield put(commonActions.showLoader());
         const headers = {
-            'Content-Type': 'application/json; charset=utf-8',
-            //'auth_token': action.token
+            'Content-Type': 'application/json; charset=utf-8'
         };
         try {
-            const response = yield axiosInstance.get('/Location/GetCities/' + action.countryId, headers);
+            const response = yield axiosInstance.get('/Location/GetCities/' + action.countryId, { headers: headers });
             if (response?.status === 200) {
                 yield put(actions.setCities(response.data));
             }

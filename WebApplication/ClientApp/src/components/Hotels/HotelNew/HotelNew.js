@@ -166,7 +166,7 @@ const getDropDownCitiesData = (cities) => {
 const HotelNew = props => {
 
     const {
-        loading, loggedIn, countries, cities, successfulOperation,
+        loading, countries, cities, successfulOperation, loggedIn, token,
         onFetchCountries, onSelectCountry, onSave, onSetRedirect
     } = props;
     const location = useLocation();
@@ -183,7 +183,7 @@ const HotelNew = props => {
     useEffect(() => {
         if (!loggedIn) {
             onSetRedirect(location.pathname);
-           setRedirect(<Redirect to="/auth/" />);
+            setRedirect(<Redirect to="/auth/" />);
         }
     }, [loggedIn, onSetRedirect]);
 
@@ -278,7 +278,7 @@ const HotelNew = props => {
             cityId: formControls.cityId.value,
             stars: formControls.stars.value,
             address: formControls.address.value
-        });
+        }, token);
     };
 
     const formElements = getFormElements(formControls).map(formElement => {
@@ -316,6 +316,7 @@ const mapStateToProps = state => {
         countries: state.location.countries,
         cities: state.location.cities,
         loggedIn: state.auth.loggedIn,
+        token: state.auth.token,
         loading: state.common.isLoading,
         successfulOperation: state.common.successfulOperation
     };
@@ -325,7 +326,7 @@ const mapDispatchToProps = dispatch => {
     return {
         onFetchCountries: () => dispatch(locationActions.fetchCountries()),
         onSelectCountry: (countryId) => dispatch(locationActions.selectCountry(countryId)),
-        onSave: (hotel) => dispatch(actions.saveHotel(hotel)),
+        onSave: (hotel, token) => dispatch(actions.saveHotel(hotel, token)),
         onSetRedirect: (path) => dispatch(authActions.setAuthRedirectPath(path)),
     };
 };

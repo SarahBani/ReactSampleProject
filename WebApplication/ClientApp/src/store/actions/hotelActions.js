@@ -66,16 +66,18 @@ export const setHotelPhotos = (photos) => {
     };
 };
 
-export const saveHotel = (hotel) => {
+export const saveHotel = (hotel, token) => {
     return {
         type: actionTypes.SAVE_HOTEL,
-        hotel: hotel
+        hotel: hotel,
+        token: token
     };
 };
 
-export const deleteHotel = (id) => {
+export const deleteHotel = (id, token) => {
     return {
         type: actionTypes.DELETE_HOTEL,
-        id: id
+        id: id,
+        token: token
     };
 };

@@ -83,7 +83,6 @@ const checkDropDownValidity = (id, value) =>
     checkValidity(value.toString(), initialFormState[id].validation);
 
 const dropDownsReducer = (currentDropDowns, action) => {
-    console.log(action.type);
     switch (action.type) {
         case 'FILL_COUNTRIES':
             return {
@@ -169,7 +168,7 @@ const getDropDownCitiesData = (cities) => {
 const HotelEdit = props => {
 
     const {
-        id, loading, loggedIn, hotel, countries, cities, successfulOperation,
+        id, hotel, countries, cities, successfulOperation, loading, loggedIn, token,
         onFetchHotel, onFetchCountries, onSelectCountry, onDeleteHotel, onSave, onSetRedirect
     } = props;
     const location = useLocation();
@@ -295,8 +294,6 @@ const HotelEdit = props => {
 
     const elementHandler = (event, id) => {
         setFormControls(getUpdatedForm(event, formControls, id));
-        console.log('elementHandler');
-        console.log(formControls);
     };
 
     const changeStarsHandler = (value, id) => {
@@ -323,7 +320,7 @@ const HotelEdit = props => {
             cityId: formControls.cityId.value,
             stars: formControls.stars.value,
             address: formControls.address.value
-        });
+        }, token);
     };
 
     const deleteConfirmContent = useMemo(() => {
@@ -341,10 +338,10 @@ const HotelEdit = props => {
 
     const confirmDeleteHandler = useCallback((isConfirmed) => {
         if (isConfirmed) {
-            onDeleteHotel(id);
+            onDeleteHotel(id, token);
         }
         setShowDeleteConfirm(false);
-    }, [id, onDeleteHotel, setShowDeleteConfirm]);
+    }, [id, token, onDeleteHotel, setShowDeleteConfirm]);
 
     const formElements = getFormElements(formControls).map(formElement => {
         return (
@@ -386,6 +383,7 @@ const mapStateToProps = state => {
         countries: state.location.countries,
         cities: state.location.cities,
         loggedIn: state.auth.loggedIn,
+        token: state.auth.token,
         loading: state.common.isLoading,
         successfulOperation: state.common.successfulOperation
     };
@@ -396,8 +394,8 @@ const mapDispatchToProps = dispatch => {
         onFetchHotel: (id) => dispatch(actions.fetchHotel(id)),
         onFetchCountries: () => dispatch(locationActions.fetchCountries()),
         onSelectCountry: (countryId) => dispatch(locationActions.selectCountry(countryId)),
-        onSave: (hotel) => dispatch(actions.saveHotel(hotel)),
-        onDeleteHotel: (id) => dispatch(actions.deleteHotel(id)),
+        onSave: (hotel, token) => dispatch(actions.saveHotel(hotel, token)),
+        onDeleteHotel: (id, token) => dispatch(actions.deleteHotel(id, token)),
         onSetRedirect: (path) => dispatch(authActions.setAuthRedirectPath(path)),
     };
 };

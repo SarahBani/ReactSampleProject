@@ -11,7 +11,7 @@ import { Fragment } from 'react';
 
 const HotelDetail = props => {
 
-    const { id, photos, successfulOperation, loggedIn,
+    const { id, photos, successfulOperation, loggedIn, token,
         onFetchHotel, onFetchHotelPhotos, onDeleteHotel } = props;
     const { stars } = props.hotel || {}; // { ...props.hotel };
     const [imageUrl, setImageUrl] = useState('images/no-image.png');
@@ -78,10 +78,10 @@ const HotelDetail = props => {
 
     const confirmDeleteHandler = useCallback((isConfirmed) => {
         if (isConfirmed) {
-            onDeleteHotel(id);
+            onDeleteHotel(id, token);
         }
         setShowDeleteConfirm(false);
-    }, [id, setShowDeleteConfirm, onDeleteHotel]);
+    }, [id, token, setShowDeleteConfirm, onDeleteHotel]);
 
     return (
         <div className={classes.HotelDetail}>
@@ -151,7 +151,8 @@ const mapStateToProps = state => {
         hotel: state.hotel.selectedHotel,
         photos: state.hotel.photos,
         successfulOperation: state.common.successfulOperation,
-        loggedIn: state.auth.loggedIn
+        loggedIn: state.auth.loggedIn,
+        token: state.auth.token,
     };
 };
 
@@ -159,8 +160,7 @@ const mapDispatchToProps = dispatch => {
     return {
         onFetchHotel: (id) => dispatch(actions.fetchHotel(id)),
         onFetchHotelPhotos: (id) => dispatch(actions.fetchHotelPhotos(id)),
-        onSaveHotel: (id, hotel) => dispatch(actions.saveHotel(id, hotel)),
-        onDeleteHotel: (id) => dispatch(actions.deleteHotel(id))
+        onDeleteHotel: (id, token) => dispatch(actions.deleteHotel(id, token))
     };
 };
 
