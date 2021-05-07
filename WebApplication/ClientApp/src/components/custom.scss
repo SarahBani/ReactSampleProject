@@ -94,3 +94,20 @@ main {
     stroke-width: 1px;
     stroke-linejoin: round;
 }
+
+.carousel {
+
+    .control-dots .dot {
+        background-color: $light-green-highlight !important;
+    }
+
+    .thumb {
+        &:not(.selected ) {
+            border: none;
+        }
+
+        &.selected, &:hover {
+            @include border($light-green, 2px, 3px , true);
+        }
+    }
+}

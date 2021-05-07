@@ -2,6 +2,7 @@
 
 import classes from './Modal.module.scss';
 import Backdrop from '../Backdrop/Backdrop';
+import { ModalType } from '../../../shared/constant';
 
 const initModalType = {
     typeClass: null,
@@ -11,35 +12,42 @@ const initModalType = {
 
 const modalTypeReducer = (currentModalType, action) => {
     switch (action.type) {
-        case 'INFO':
+        case ModalType.INFO:
             return {
                 ...currentModalType,
                 typeClass: classes.Info,
                 title: null,
                 icon: <span className="fa fa-info" ></span>
             };
-        case 'QUESTION':
+        case ModalType.QUESTION:
             return {
                 ...currentModalType,
                 typeClass: classes.Question,
                 title: null,
                 icon: <span className="fa fa-question" ></span>
             };
-        case 'WARNING':
+        case ModalType.WARNING:
             return {
                 ...currentModalType,
                 typeClass: classes.Warning,
                 title: 'Warning',
                 icon: <span className="fa fa-warning" ></span>
             };
-        case 'ERROR':
+        case ModalType.ERROR:
             return {
                 ...currentModalType,
                 typeClass: classes.Error,
                 title: 'Error',
                 icon: <span className="fa fa-warning" ></span>
             };
-        case 'CONFIRM':
+        case ModalType.CONFIRM:
+            return {
+                ...currentModalType,
+                typeClass: classes.Confirm,
+                title: null,
+                icon: null,
+            };
+        case '':
             return {
                 ...currentModalType,
                 typeClass: classes.Confirm,

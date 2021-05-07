@@ -3,7 +3,9 @@
 export const OperationsEnum = Object.freeze({
     Insert: 'Insert',
     Update: 'Update',
-    Delete: 'Delete'
+    Delete: 'Delete',
+    Upload: 'Upload',
+    Remove: 'Remove'
 });
 
 export const FormControlTypesEnum = Object.freeze({
@@ -12,4 +14,12 @@ export const FormControlTypesEnum = Object.freeze({
     Select: 'select',
     DropDown: 'dropdown',
     Stars: 'stars'
+});
+
+export const ModalType = Object.freeze({
+    INFO: 'INFO',
+    QUESTION: 'QUESTION',
+    WARNING: 'WARNING',
+    ERROR: 'ERROR',
+    COMPONENT: 'COMPONENT'
 });

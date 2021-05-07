@@ -3,8 +3,9 @@
 import { autoSignInSaga, checkAuthTimeoutSaga, signInSaga, signOutSaga } from './auth';
 import { fetchCountriesSaga, selectCountrySaga, selectCitySaga } from './location';
 import {
-    fetchHotelsSaga, fetchHotelSaga, fetchHotelPhotosSaga,
-    fetchHotelsCountSaga, deleteHotelSaga, saveHotelSaga
+    fetchHotelsSaga, fetchHotelSaga, fetchHotelPhotosSaga, fetchHotelsCountSaga,
+    deleteHotelSaga, saveHotelSaga, uploadHotelPhotoSaga, deleteHotelPhotoSaga,
+    saveHotelPhotoSaga, removeHotelPhotoSaga
 } from './hotel';
 import * as authActionTypes from '../actions/authActionTypes';
 import * as locationActionTypes from '../actions/locationActionTypes';
@@ -62,6 +63,10 @@ export function* watchHotel() {
         takeLatest(hotelActionTypes.FETCH_HOTEL, fetchHotelSaga),
         takeLatest(hotelActionTypes.FETCH_HOTEL_PHOTOS, fetchHotelPhotosSaga),
         takeLatest(hotelActionTypes.SAVE_HOTEL, saveHotelSaga),
-        takeLatest(hotelActionTypes.DELETE_HOTEL, deleteHotelSaga)
+        takeLatest(hotelActionTypes.DELETE_HOTEL, deleteHotelSaga),
+        takeLatest(hotelActionTypes.UPLOAD_HOTEL_PHOTO, uploadHotelPhotoSaga),
+        takeLatest(hotelActionTypes.REMOVE_HOTEL_PHOTO, removeHotelPhotoSaga),
+        takeLatest(hotelActionTypes.SAVE_HOTEL_PHOTO, saveHotelPhotoSaga),
+        takeLatest(hotelActionTypes.DELETE_HOTEL_PHOTO, deleteHotelPhotoSaga)
     ]);
 }

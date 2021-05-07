@@ -81,3 +81,37 @@ export const deleteHotel = (id, token) => {
         token: token
     };
 };
+
+export const uploadHotelPhoto = (hotelId, file, token) => {
+    return {
+        type: actionTypes.UPLOAD_HOTEL_PHOTO,
+        hotelId: hotelId,
+        file: file,
+        token: token
+    };
+};
+
+export const removeHotelPhoto = (hotelId, file, token) => {
+    return {
+        type: actionTypes.REMOVE_HOTEL_PHOTO,
+        hotelId: hotelId,
+        file: file,
+        token: token
+    };
+};
+
+export const saveHotelPhoto = (hotelPhoto, token) => {
+    return {
+        type: actionTypes.SAVE_HOTEL_PHOTO,
+        hotelPhoto: hotelPhoto,
+        token: token
+    };
+};
+
+export const deleteHotelPhoto = (id, token) => {
+    return {
+        type: actionTypes.DELETE_HOTEL_PHOTO,
+        id: id,
+        token: token
+    };
+};

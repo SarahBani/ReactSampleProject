@@ -20,6 +20,9 @@ const Hotels = props => {
             if (action.toLowerCase() === 'edit') {
                 return <HotelEdit id={id} />;
             }
+            else {
+                return <HotelDetail id={id} />;
+            }
         }
         else if (id) {
             return <HotelDetail id={id} />;

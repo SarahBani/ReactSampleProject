@@ -130,3 +130,83 @@ export function* deleteHotelSaga(action) {
         yield put(commonActions.raiseError(error));
     }
 }
+
+export function* uploadHotelPhotoSaga(action) {
+    yield put(commonActions.showLoader());
+    const headers = {
+        'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${action.token}`,
+
+        reportProgress: true,
+        observe: 'events'
+    };
+    try {
+        console.log(action.file)
+        const formData = yield new FormData();
+        //var imagefile = yield document.querySelector('#file');
+        //formData.append("image", imagefile.files[0]);
+        formData.append("file", action.file, action.file.name);
+        const response = yield axiosInstance.post(`/Hotel/UploadPhoto/${action.hotelId}`,
+            formData, { headers: headers });
+
+        if (response?.status === 200) {
+            yield put(commonActions.operationSucceeded(OperationsEnum.Upload));
+        }
+        yield put(commonActions.hideLoader());
+    } catch (error) {
+        yield put(commonActions.raiseError(error));
+    }
+}
+
+export function* removeHotelPhotoSaga(action) {
+    yield put(commonActions.showLoader());
+    const headers = {
+        'Content-Type': 'application/json; charset=utf-8',
+        Authorization: `Bearer ${action.token}`
+    };
+    try {
+        const response = yield axiosInstance.delete('/Hotel/RemovePhotoFile/' + action.id, { headers: headers });
+        if (response?.status === 200) {
+            yield put(commonActions.operationSucceeded(OperationsEnum.Delete));
+        }
+        yield put(commonActions.hideLoader());
+    } catch (error) {
+        yield put(commonActions.raiseError(error));
+    }
+}
+
+export function* saveHotelPhotoSaga(action) {
+    yield put(commonActions.showLoader());
+    const headers = {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': `Bearer ${action.token}`
+    };
+    try {
+        const response = yield axiosInstance.post('/Hotel/InsertPhoto', action.hotelPhoto, { headers: headers });
+       
+        if (response?.status === 200) {
+            yield put(commonActions.operationSucceeded(OperationsEnum.Insert));
+        }
+        yield put(commonActions.hideLoader());
+    } catch (error) {
+        yield put(commonActions.raiseError(error));
+    }
+}
+
+export function* deleteHotelPhotoSaga(action) {
+    yield put(commonActions.showLoader());
+    const headers = {
+        'Content-Type': 'application/json; charset=utf-8',
+        Authorization: `Bearer ${action.token}`
+    };
+    try {
+        const response = yield axiosInstance.delete('/Hotel/DeletePhoto/' + action.id, { headers: headers });
+        if (response?.status === 200) {
+            yield put(commonActions.operationSucceeded(OperationsEnum.Delete));
+        }
+        yield put(commonActions.hideLoader());
+    } catch (error) {
+        yield put(commonActions.raiseError(error));
+    }
+}
+

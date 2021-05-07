@@ -40,13 +40,18 @@
                 height: auto;
                 margin-right: 10px;
             }
-            /*> span {
-                margin: 0 30px;
-            }*/
         }
     }
 
     .SelecedItem {
         background-color: $light-green;
+    }
+}
+
+@media(max-width:800px) {
+
+    button {
+        overflow-x: hidden;
+        content: '';
     }
 }

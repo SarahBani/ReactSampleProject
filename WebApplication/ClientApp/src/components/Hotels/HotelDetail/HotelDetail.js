@@ -1,27 +1,39 @@
-import { React, useState, useEffect, useCallback, useMemo } from 'react';
-import { Redirect } from 'react-router';
+import { React, useState, useEffect, useCallback, useMemo, Fragment } from 'react';
+import { Redirect, useParams } from 'react-router';
 import { connect } from 'react-redux';
+import styles from 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 import classes from './HotelDetail.module.scss';
 import Modal from '../../UI/Modal/Modal';
 import ConfirmDelete from '../../UI/ConfirmDelete/ConfirmDelete';
-import * as actions from '../../../store/actions/hotelActions';
 import { OperationsEnum } from '../../../shared/constant';
-import { Fragment } from 'react';
+import HotelPhotos from '../HotelPhotos/HotelPhotos';
+import { ModalType } from '../../../shared/constant';
+import * as actions from '../../../store/actions/hotelActions';
+
+const Carousel = require('react-responsive-carousel').Carousel;
 
 const HotelDetail = props => {
 
-    const { id, photos, successfulOperation, loggedIn, token,
+    const { id, hotelPhotos, successfulOperation, loggedIn, token,
         onFetchHotel, onFetchHotelPhotos, onDeleteHotel } = props;
+    const { photos } = useParams();
     const { stars } = props.hotel || {}; // { ...props.hotel };
-    const [imageUrl, setImageUrl] = useState('images/no-image.png');
     const [redirect, setRedirect] = useState();
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    //const [showPhotosModal, setShowPhotosModal] = useState(false);
 
     useEffect(() => {
         onFetchHotel(id);
         onFetchHotelPhotos(id);
     }, [id, onFetchHotel, onFetchHotelPhotos]);
+
+    const photosModalContent = useMemo(() => (
+        photos &&
+        <Modal show="true" type={ModalType.COMPONENT}>
+            <HotelPhotos />
+        </Modal>
+    ), [photos]);
 
     const starsContent = useMemo(() => {
         const arr = [];
@@ -34,15 +46,6 @@ const HotelDetail = props => {
         }
         return arr;
     }, [stars]);
-
-    useEffect(() => {
-        if (photos?.length > 0) {
-            setImageUrl(`Resources/Images/hotels/${photos[0].photoUrl}`);
-        }
-        else {
-            setImageUrl('images/no-image.png');
-        }
-    }, [photos, setImageUrl]);
 
     useEffect(() => {
         if (successfulOperation === OperationsEnum.Delete) {
@@ -65,7 +68,7 @@ const HotelDetail = props => {
 
     const deleteConfirmContent = useMemo(() => {
         return (
-            <Modal show={showDeleteConfirm} type="confirm">
+            <Modal show={showDeleteConfirm} type={ModalType.COMPONENT}>
                 <ConfirmDelete onOK={() => confirmDeleteHandler(true)}
                     onCancel={() => confirmDeleteHandler(false)} />
             </Modal>
@@ -83,14 +86,38 @@ const HotelDetail = props => {
         setShowDeleteConfirm(false);
     }, [id, token, setShowDeleteConfirm, onDeleteHotel]);
 
+    const photosContent = useMemo(() => {
+        if (hotelPhotos?.length > 0) {
+            const thumbs = hotelPhotos.map(q =>
+                <div key={q.id}>
+                    <img label={q.id} src={`Resources/Images/hotels/${q.photoUrl}`}
+                        className={classes.Image} />
+                    {/*<p className="legend">Legend 1</p>*/}
+                </div>);
+            return (
+                <Carousel>
+                    {thumbs}
+                </Carousel>
+            );
+        }
+        else {
+            return <img className="img-response" src='images/no-image.png' />
+        }
+    }, [hotelPhotos]);
+
     return (
         <div className={classes.HotelDetail}>
             {redirect}
             {deleteConfirmContent}
+            {photosModalContent}
+
+            {/*
+            <CarouselSlider photos={ hotelPhotos} />
+            */}
 
             <div className="row">
-                <div className="col-12">
-                    <img className="img-response selected-photo" src={imageUrl} />
+                <div className="col-12 text-center">
+                    {photosContent}
                 </div>
             </div>
 
@@ -149,7 +176,7 @@ const HotelDetail = props => {
 const mapStateToProps = state => {
     return {
         hotel: state.hotel.selectedHotel,
-        photos: state.hotel.photos,
+        hotelPhotos: state.hotel.photos,
         successfulOperation: state.common.successfulOperation,
         loggedIn: state.auth.loggedIn,
         token: state.auth.token,

@@ -5,6 +5,7 @@ import Modal from '../../components/UI/Modal/Modal';
 import useHttpErrorHandler from '../../hooks/http-error-handler';
 import axiosInstance from '../../axios-instance';
 import * as actions from '../../store/actions/commonActions';
+import { ModalType } from '../../shared/constant';
 
 const withErrorHandler = (WrappedComponent) => {
 
@@ -21,11 +22,11 @@ const withErrorHandler = (WrappedComponent) => {
                     ...axiosError,
                     message: axiosError.message + '!'
                 });
-                setErrorType('error');
+                setErrorType(ModalType.ERROR);
             }
             else if (customError) {
                 setError(customError);
-                setErrorType('warning');
+                setErrorType(ModalType.WARNING);
             }
             else {
                 setError();

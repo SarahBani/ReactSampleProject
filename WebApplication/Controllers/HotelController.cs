@@ -118,16 +118,48 @@ namespace WebApplication.Controllers
 
         [Authorize]
         [HttpPost("UploadPhoto/{hotelId}"), DisableRequestSizeLimit]
-        public IActionResult UploadPhoto(long hotelId)
+        public IActionResult UploadPhotoFile(long hotelId)
         {
             return UploadImage(@$"Hotels\{hotelId}");
         }
 
         [Authorize]
-        [HttpDelete("DeletePhoto")]
-        public IActionResult DeletePhoto(string filePath)
+        [HttpDelete("RemovePhotoFile")]
+        public IActionResult RemovePhotoFile(string filePath)
         {
             return DeleteImage(filePath);
+        }
+
+        [Authorize]
+        [HttpPost("InsertPhoto")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> InsertPhotoAsync([FromBody] HotelPhoto hotelPhoto)
+        {
+            var result = await this._hotelPhotoService.InsertAsync(hotelPhoto);
+            if (result.IsSuccessful)
+            {
+                return base.GetOKResult();
+            }
+            return base.GetErrorResult(result);
+        }
+
+        [Authorize]
+        [HttpDelete("DeletePhoto/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> DeletePhotoAsync([FromRoute] long id)
+        {
+            if (id <= 0)
+            {
+                return base.GetInvalidRequestResult();
+            }
+            var result = await this._hotelPhotoService.DeleteAsync(id);
+            if (result.IsSuccessful)
+            {
+                return base.GetOKResult();
+            }
+            return base.GetErrorResult(result);
         }
 
         #endregion /Actions   

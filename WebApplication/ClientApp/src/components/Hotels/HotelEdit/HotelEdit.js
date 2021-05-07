@@ -10,6 +10,7 @@ import { OperationsEnum, FormControlTypesEnum } from '../../../shared/constant';
 import * as actions from '../../../store/actions/hotelActions';
 import * as locationActions from '../../../store/actions/locationActions';
 import * as authActions from '../../../store/actions/authActions';
+import { ModalType } from '../../../shared/constant';
 
 const initialFormState = {
     name: {
@@ -325,7 +326,7 @@ const HotelEdit = props => {
 
     const deleteConfirmContent = useMemo(() => {
         return (
-            <Modal show={showDeleteConfirm} type="confirm">
+            <Modal show={showDeleteConfirm} type={ModalType.COMPONENT}>
                 <ConfirmDelete onOK={() => confirmDeleteHandler(true)}
                     onCancel={() => confirmDeleteHandler(false)} />
             </Modal>

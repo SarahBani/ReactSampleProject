@@ -1,10 +1,14 @@
 $gradient-background: linear-gradient(to bottom right, #4BA18E, #50AF9C, #63BB84, #DDE65A);
 
-@mixin border($color, $radius: 0) {
-    border: 1px solid $color;
+@function is-important($important) {
+    @return #{if($important, '!important', '')};
+}
+
+@mixin border($color, $radius: 0, $width: 1px, $important: false) {
+    border: $width solid $color is-important($important);
 
     @if($radius > 0) {
-        border-radius: $radius;
+        border-radius: $radius is-important($important);
     }
 }
 
