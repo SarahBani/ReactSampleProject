@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { getUpdatedForm, getFormElements, ValidateForm, checkValidity } from '../../../shared/utility';
 import FormElement from '../../UI/FormElement/FormElement';
-import { OperationsEnum, FormControlTypesEnum } from '../../../shared/constant';
+import { SuccessfulOperationsEnum, FormControlTypesEnum } from '../../../shared/constant';
 import * as actions from '../../../store/actions/hotelActions';
 import * as locationActions from '../../../store/actions/locationActions';
 import * as authActions from '../../../store/actions/authActions';
@@ -234,8 +234,8 @@ const HotelNew = props => {
     }, [formControls]);
 
     useEffect(() => {
-        if (successfulOperation === OperationsEnum.Delete) {
-            setRedirect(<Redirect to="/hotels/" />);
+        if (successfulOperation === SuccessfulOperationsEnum.Insert) {
+            cancelHandler();
         }
     }, [successfulOperation]);
 

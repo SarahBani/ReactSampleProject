@@ -1,11 +1,15 @@
 ﻿export const UNKNOWN_ERROR_MESSAGE = "An error has occured!";
 
-export const OperationsEnum = Object.freeze({
+export const SuccessfulOperationsEnum = Object.freeze({
     Insert: 'Insert',
     Update: 'Update',
     Delete: 'Delete',
     Upload: 'Upload',
     Remove: 'Remove'
+});
+
+export const FailedOperationsEnum = Object.freeze({
+    FetchHotel: 'FetchHotel'
 });
 
 export const FormControlTypesEnum = Object.freeze({

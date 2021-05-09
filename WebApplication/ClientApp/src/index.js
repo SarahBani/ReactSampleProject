@@ -13,6 +13,7 @@ import commonReducer from './store/reducers/commonReducer';
 import authReducer from './store/reducers/authReducer';
 import locationReducer from './store/reducers/locationReducer';
 import hotelReducer from './store/reducers/hotelReducer';
+import uploadReducer from './store/reducers/uploadReducer';
 import { watchAuth, watchLocation, watchHotel } from './store/sagas';
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
     auth: authReducer,
     location: locationReducer,
     hotel: hotelReducer,
+    upload: uploadReducer
 });
 const composeEnhancers = (process.env.NODE_ENV === 'developement' ?
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ :

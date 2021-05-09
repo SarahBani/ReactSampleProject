@@ -6,7 +6,7 @@ import { getUpdatedForm, getFormElements, ValidateForm, checkValidity } from '..
 import FormElement from '../../UI/FormElement/FormElement';
 import ConfirmDelete from '../../UI/ConfirmDelete/ConfirmDelete';
 import Modal from '../../UI/Modal/Modal';
-import { OperationsEnum, FormControlTypesEnum } from '../../../shared/constant';
+import { SuccessfulOperationsEnum, FormControlTypesEnum, FailedOperationsEnum } from '../../../shared/constant';
 import * as actions from '../../../store/actions/hotelActions';
 import * as locationActions from '../../../store/actions/locationActions';
 import * as authActions from '../../../store/actions/authActions';
@@ -169,7 +169,7 @@ const getDropDownCitiesData = (cities) => {
 const HotelEdit = props => {
 
     const {
-        id, hotel, countries, cities, successfulOperation, loading, loggedIn, token,
+        id, hotel, countries, cities, successfulOperation, failedOperation, loading, loggedIn, token,
         onFetchHotel, onFetchCountries, onSelectCountry, onDeleteHotel, onSave, onSetRedirect
     } = props;
     const location = useLocation();
@@ -184,6 +184,12 @@ const HotelEdit = props => {
         'countryId': onSelectCountry,
         //'cityId': () => { }
     };
+
+    useEffect(() => {
+        if (failedOperation && failedOperation === FailedOperationsEnum.FetchHotel) {
+            setRedirect(<Redirect to={'/hotels'} />);
+        }
+    }, [failedOperation]);
 
     useEffect(() => {
         if (!loggedIn) {
@@ -272,10 +278,10 @@ const HotelEdit = props => {
 
     useEffect(() => {
         switch (successfulOperation) {
-            case OperationsEnum.Update:
+            case SuccessfulOperationsEnum.Update:
                 cancelHandler();
                 break;
-            case OperationsEnum.Delete:
+            case SuccessfulOperationsEnum.Delete:
                 setRedirect(<Redirect to="/hotels/" />);
             default:
         }
@@ -386,7 +392,8 @@ const mapStateToProps = state => {
         loggedIn: state.auth.loggedIn,
         token: state.auth.token,
         loading: state.common.isLoading,
-        successfulOperation: state.common.successfulOperation
+        successfulOperation: state.common.successfulOperation,
+        failedOperation: state.common.failedOperation
     };
 };
 

@@ -1,12 +1,12 @@
 import { React, useState, useEffect, useCallback, useMemo, Fragment } from 'react';
-import { Redirect, useParams } from 'react-router';
+import { Redirect, useParams, useHistory } from 'react-router';
 import { connect } from 'react-redux';
 import styles from 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 import classes from './HotelDetail.module.scss';
 import Modal from '../../UI/Modal/Modal';
 import ConfirmDelete from '../../UI/ConfirmDelete/ConfirmDelete';
-import { OperationsEnum } from '../../../shared/constant';
+import { SuccessfulOperationsEnum, FailedOperationsEnum } from '../../../shared/constant';
 import HotelPhotos from '../HotelPhotos/HotelPhotos';
 import { ModalType } from '../../../shared/constant';
 import * as actions from '../../../store/actions/hotelActions';
@@ -15,25 +15,35 @@ const Carousel = require('react-responsive-carousel').Carousel;
 
 const HotelDetail = props => {
 
-    const { id, hotelPhotos, successfulOperation, loggedIn, token,
+    const { id, hotelPhotos, successfulOperation, failedOperation, loggedIn, token,
         onFetchHotel, onFetchHotelPhotos, onDeleteHotel } = props;
-    const { photos } = useParams();
+    const { action } = useParams();
     const { stars } = props.hotel || {}; // { ...props.hotel };
+    const history = useHistory();
     const [redirect, setRedirect] = useState();
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    //const [showPhotosModal, setShowPhotosModal] = useState(false);
 
     useEffect(() => {
         onFetchHotel(id);
         onFetchHotelPhotos(id);
     }, [id, onFetchHotel, onFetchHotelPhotos]);
 
+    useEffect(() => {
+        if (failedOperation && failedOperation === FailedOperationsEnum.FetchHotel) {
+            cancelHandler();
+        }
+    }, [failedOperation]);
+
+    const closePhotosHandler = useCallback(() => {
+        history.replace({ pathname: `/hotels/${id}` })
+    }, [history]);
+
     const photosModalContent = useMemo(() => (
-        photos &&
-        <Modal show="true" type={ModalType.COMPONENT}>
+        action?.toLowerCase() === 'photos' &&
+        <Modal show="true" type={ModalType.COMPONENT} hide={closePhotosHandler}>
             <HotelPhotos />
         </Modal>
-    ), [photos]);
+    ), [action]);
 
     const starsContent = useMemo(() => {
         const arr = [];
@@ -48,8 +58,7 @@ const HotelDetail = props => {
     }, [stars]);
 
     useEffect(() => {
-        if (successfulOperation === OperationsEnum.Delete) {
-            console.log('useEffect-successfulOperation');
+        if (!action && successfulOperation === SuccessfulOperationsEnum.Delete) {
             cancelHandler();
         }
     }, [successfulOperation]);
@@ -59,12 +68,12 @@ const HotelDetail = props => {
     }, [setRedirect]);
 
     const showPhotosHandler = useCallback(() => {
-        setRedirect(<Redirect to={`/hotels/${id}/photos`} />);
-    }, [id, setRedirect]);
+        history.push(`/hotels/${id}/photos`);
+    }, [id, history]);
 
     const editHandler = useCallback(() => {
-        setRedirect(<Redirect to={`/hotels/${id}/edit`} />);
-    }, [id, setRedirect]);
+        history.push(`/hotels/${id}/edit`);
+    }, [id, history]);
 
     const deleteConfirmContent = useMemo(() => {
         return (
@@ -178,8 +187,10 @@ const mapStateToProps = state => {
         hotel: state.hotel.selectedHotel,
         hotelPhotos: state.hotel.photos,
         successfulOperation: state.common.successfulOperation,
+        failedOperation: state.common.failedOperation,
         loggedIn: state.auth.loggedIn,
         token: state.auth.token,
+        error: state.common.error
     };
 };
 

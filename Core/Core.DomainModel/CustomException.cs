@@ -9,7 +9,7 @@ namespace Core.DomainModel
 
         TimeoutExpired = -2,
         HasForeignKey = 547,
-        HasDuplicateInfo = 2601,
+        HasDuplicateInfo = -2147467259,// 2601,
         KeyAlreadyExsits = 2627,
         ArithmeticOverflow = 8115,
 

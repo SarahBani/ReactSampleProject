@@ -44,8 +44,12 @@ namespace Core.ApplicationService.Implementation
                 base.BeginTransaction();
                 foreach (var hotelPhoto in await GetListByHotelIdAsync(hotelId))
                 {
+                    //string path = @$"Resources\Images\Hotels\{hotelPhoto.PhotoUrl}";
+                    //Utility.DeleteFile(path);
                     await base.DeleteAsync(hotelPhoto);
                 }
+                string path = @$"Resources\Images\Hotels\{hotelId}";
+                Utility.DeleteFolder(path);
                 return await base.CommitTransactionAsync();
             }
             catch (Exception ex)

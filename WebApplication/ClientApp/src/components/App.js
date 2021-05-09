@@ -38,7 +38,6 @@ export const App = (props) => {
         routes = (
             <Switch>
                 <Route path='/hotels/new' render={(props) => <Hotels {...props} add />} />
-                <Route path='/hotels/:id/:photos' exact component={Hotels} />
                 <Route path='/hotels/:id?/:action?' exact component={Hotels} />
                 <Route path='/profile' component={Profile} />
                 <Route path='/about' component={About} />
@@ -52,7 +51,6 @@ export const App = (props) => {
         routes = (
             <Switch>
                 <Route path='/hotels/new' render={(props) => <Hotels {...props} add />} />
-                <Route path='/hotels/:id/:photos' exact component={Hotels} />
                 <Route path='/hotels/:id?/:action?' exact component={Hotels} />
                 <Route path='/profile' component={AccessDenied} />
                 <Route path='/about' component={About} />

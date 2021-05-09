@@ -37,9 +37,7 @@ const withErrorHandler = (WrappedComponent) => {
             if (axiosError) {
                 axiosErrorConfirmHandler();
             }
-            else if (customError) {
-                props.onClearCustomError();
-            }
+            props.onClearCustomError();
         };
 
         //const [ error, errorConfirmHandler ] = useHttpErrorHandler(axiosInstance);

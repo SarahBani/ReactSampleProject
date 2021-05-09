@@ -80,8 +80,15 @@ main {
 }
 
 .dropdown-menu {
+    padding: 0;
+
     .dropdown-item {
+        padding:5x;
         cursor: pointer;
+
+        &:hover {
+            background-color: $light-blue;
+        }
     }
 
     .dropdown-divider {
@@ -107,7 +114,7 @@ main {
         }
 
         &.selected, &:hover {
-            @include border($light-green, 2px, 3px , true);
+            @include border($light-green, 2px, 3px, true);
         }
     }
 }

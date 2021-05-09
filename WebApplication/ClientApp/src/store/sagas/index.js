@@ -1,15 +1,16 @@
-﻿import { takeEvery, all, takeLatest, cancel, take, fork } from 'redux-saga/effects';
+﻿import { takeEvery, all, takeLatest, cancel, take, fork, call } from 'redux-saga/effects';
 
 import { autoSignInSaga, checkAuthTimeoutSaga, signInSaga, signOutSaga } from './auth';
 import { fetchCountriesSaga, selectCountrySaga, selectCitySaga } from './location';
 import {
     fetchHotelsSaga, fetchHotelSaga, fetchHotelPhotosSaga, fetchHotelsCountSaga,
     deleteHotelSaga, saveHotelSaga, uploadHotelPhotoSaga, deleteHotelPhotoSaga,
-    saveHotelPhotoSaga, removeHotelPhotoSaga
+    saveHotelPhotoSaga, removeHotelPhotoSaga, uploadFileSaga
 } from './hotel';
 import * as authActionTypes from '../actions/authActionTypes';
 import * as locationActionTypes from '../actions/locationActionTypes';
 import * as hotelActionTypes from '../actions/hotelActionTypes';
+import createUploadFileChannel from './createFileUploadChannel';
 
 export function* watchAuth() {
     yield all([
@@ -40,9 +41,9 @@ export function* watchAuth() {
     }
 }
 
-function* watchCheckAuthTimeout() {
-    yield takeLatest(authActionTypes.CHECK_AUTH_TIMEOUT, checkAuthTimeoutSaga);
-}
+//function* watchCheckAuthTimeout() {
+//    yield takeLatest(authActionTypes.CHECK_AUTH_TIMEOUT, checkAuthTimeoutSaga);
+//}
 
 function* cancelWorkerSaga(task) {
     yield cancel(task);
@@ -67,6 +68,22 @@ export function* watchHotel() {
         takeLatest(hotelActionTypes.UPLOAD_HOTEL_PHOTO, uploadHotelPhotoSaga),
         takeLatest(hotelActionTypes.REMOVE_HOTEL_PHOTO, removeHotelPhotoSaga),
         takeLatest(hotelActionTypes.SAVE_HOTEL_PHOTO, saveHotelPhotoSaga),
-        takeLatest(hotelActionTypes.DELETE_HOTEL_PHOTO, deleteHotelPhotoSaga)
+        takeLatest(hotelActionTypes.DELETE_HOTEL_PHOTO, deleteHotelPhotoSaga),
+
+        //takeEvery(hotelActionTypes.UPLOAD_HOTEL_PHOTO, function* (action) {
+        //    const file = action.payload;
+        //    yield call(uploadFileSaga, file);
+        //})
     ]);
 }
+
+
+
+//// Watch for an upload request and then
+//// defer to another saga to perform the actual upload
+//export function* uploadRequestWatcherSaga() {
+//    yield takeEvery(ActionTypes.UPLOAD_REQUEST, function* (action) {
+//        const file = action.payload;
+//        yield call(uploadFileSaga, file);
+//    });
+//}

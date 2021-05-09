@@ -40,17 +40,17 @@ const modalTypeReducer = (currentModalType, action) => {
                 title: 'Error',
                 icon: <span className="fa fa-warning" ></span>
             };
-        case ModalType.CONFIRM:
+        case ModalType.COMPONENT:
             return {
                 ...currentModalType,
-                typeClass: classes.Confirm,
+                typeClass: classes.Component,
                 title: null,
                 icon: null,
             };
         case '':
             return {
                 ...currentModalType,
-                typeClass: classes.Confirm,
+                typeClass: classes.Component, 
                 title: null,
                 icon: null,
             };
@@ -72,7 +72,7 @@ const Modal = props => {
 
     return (
         <Fragment>
-            <Backdrop show={props.show} clicked={props.hide}>
+            <Backdrop show={props.show} clicked={props.hide} type={type}>
             </Backdrop>
             <div className={[classes.Modal, modalType.typeClass].join(' ')}
                 style=

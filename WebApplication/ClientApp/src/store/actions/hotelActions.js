@@ -91,11 +91,11 @@ export const uploadHotelPhoto = (hotelId, file, token) => {
     };
 };
 
-export const removeHotelPhoto = (hotelId, file, token) => {
+export const removeHotelPhoto = (id, filePath, token) => {
     return {
         type: actionTypes.REMOVE_HOTEL_PHOTO,
-        hotelId: hotelId,
-        file: file,
+        id: id,
+        filePath: filePath,
         token: token
     };
 };

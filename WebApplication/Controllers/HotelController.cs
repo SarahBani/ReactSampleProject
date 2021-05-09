@@ -120,7 +120,7 @@ namespace WebApplication.Controllers
         [HttpPost("UploadPhoto/{hotelId}"), DisableRequestSizeLimit]
         public IActionResult UploadPhotoFile(long hotelId)
         {
-            return UploadImage(@$"Hotels\{hotelId}");
+            return UploadImage($"Hotels\\{hotelId}");
         }
 
         [Authorize]

@@ -72,6 +72,15 @@ namespace Core.DomainService
             }
         }
 
+        public static void DeleteFolder(string relativePath)
+        {
+            var fullPath = Path.Combine(Directory.GetCurrentDirectory(), relativePath);
+            if (Directory.Exists(fullPath))
+            {
+                Directory.Delete(fullPath, true);
+            }
+        }
+
         private static string GetUniqueFileName(string fileName)
         {
             string fullFileName = Path.GetFileName(fileName);
@@ -232,7 +241,7 @@ namespace Core.DomainService
                 var newPropValue = Convert.ChangeType(propertyValue.ToString().Trim(), propertyType);
                 prop.SetValue(obj, newPropValue);
             }
-        }    
+        }
 
     }
 }

@@ -9,12 +9,13 @@
         height: 120px;
         margin: 5px 2px;
         position: relative;
+        @include border(#ccc, 3px );
 
         > div {
             border: 1px solid #8d8d8d;
             max-width: 100px;
             max-height: 100px;
-            margin: 5px;
+            margin: 2px;
             position: relative;
             float: left;
 
@@ -27,8 +28,8 @@
             }
 
             > img {
-                max-width: 100px;
-                max-height: 100px;
+                max-width: 100px !important;
+                max-height: 100px !important;
                 margin: auto;
             }
 
@@ -51,10 +52,20 @@
                 }
             }
         }
+
+        p {
+            margin: 40px 0;
+        }
     }
 
     .DeleteImage {
         cursor: pointer;
         float: right;
+    }
+
+    input[type="file"] {
+        color: $dark-green;
+        padding: 5px;
+        @include border(#ccc, 3px, 1px, true);
     }
 }

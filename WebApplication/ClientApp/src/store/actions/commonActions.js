@@ -33,6 +33,13 @@ export const clearError = () => {
 export const operationSucceeded = (operation) => {
     return {
         type: actionTypes.OPERATION_SUCCEEDED,
-        operation: operation
+        successfulOperation: operation
+    };
+};
+
+export const operationFailed = (operation) => {
+    return {
+        type: actionTypes.OPERATION_FAILED,
+        failedOperation: operation
     };
 };
