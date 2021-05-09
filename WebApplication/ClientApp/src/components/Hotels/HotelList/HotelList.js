@@ -6,15 +6,29 @@ import classes from './HotelList.module.scss';
 import HotelItem from '../HotelItem/HotelItem';
 import NoHotel from '../NoHotel/NoHotel';
 import * as actions from '../../../store/actions/hotelActions';
+import Pagination from '../../UI/Pagination/Pagination';
+import { useState } from 'react';
+
+const pageCount = 10;
 
 const HotelList = props => {
 
-    const { hotels, hotelsCount, successfulOperation, selectedCountryId, selectedCityId, loggedIn, 
+    const { hotels, hotelsCount, successfulOperation, selectedCountryId, selectedCityId, loggedIn,
         onFetchHotels, onFetchHotelsCount } = props;
+    const [pageNo, setPageNo] = useState(1);
+    const [pagesCount, setPagesCount] = useState(1);
 
     useEffect(() => {
-        refreshHandler();
-    }, [selectedCountryId, selectedCityId, onFetchHotels, onFetchHotelsCount]);
+        onFetchHotels(selectedCountryId, selectedCityId, pageNo, pageCount);
+    }, [selectedCountryId, selectedCityId, pageNo, pageCount, onFetchHotels]);
+
+    useEffect(() => {
+        onFetchHotelsCount(selectedCountryId, selectedCityId);
+    }, [selectedCountryId, selectedCityId, onFetchHotelsCount]);
+
+    useEffect(() => {
+        setPagesCount(parseInt(hotelsCount / pageCount) + ((hotelsCount % pageCount) === 0 ? 0 : 1));
+    }, [hotelsCount]);
 
     useEffect(() => {
         if (successfulOperation) {
@@ -23,9 +37,13 @@ const HotelList = props => {
     }, [successfulOperation]);
 
     const refreshHandler = useCallback(() => {
-        onFetchHotels(props.selectedCountryId, props.selectedCityId);
-        onFetchHotelsCount(props.selectedCountryId, props.selectedCityId);
+        onFetchHotels(selectedCountryId, selectedCityId, pageNo, pageCount);
+        onFetchHotelsCount(selectedCountryId, selectedCityId);
     }, [onFetchHotels, onFetchHotelsCount]);
+
+    const changePageHandler = useCallback((no) => {
+        setPageNo(no);
+    }, [setPageNo]);
 
     const hotelItems = useMemo(() => {
         return hotels.map(hotel =>
@@ -33,20 +51,35 @@ const HotelList = props => {
         );
     }, [hotels]);
 
-    const content = useMemo(() => {
-        return (hotels.length > 0 && hotelsCount > 0) ?
-            <div className="list-group">
-                {hotelItems}
-                <div className={["text-center", classes.Counter].join(' ')}>
-                    <b>Total: </b><span>{hotelsCount}</span>
+    const footerContent =// useMemo(() => 
+        (
+            hotelsCount > 0 &&
+            <div className={classes.Counter}>
+                <div className="float-left text-right">
+                    <b>Count: </b><span>{hotelsCount}</span>
+                </div>
+                <div>
+                    <Pagination pageNo={pageNo} pagesCount={pagesCount}
+                        onChange={changePageHandler} />
                 </div>
             </div>
-            : <NoHotel />;
-    }, [hotelItems, hotelsCount]);
+        );
+    //, [hotelsCount, pageNo, pagesCount, changePageHandler]);
+
+    const listContent = //useMemo(() =>
+        (
+            (hotels.length > 0 && hotelsCount > 0) ?
+                <div className="list-group">
+                    {hotelItems}
+                    {footerContent}
+                </div>
+                : <NoHotel />
+        );
+    //, [hotelItems, hotelsCount, footerContent]);
 
     return (
         <div className={classes.HotelList}>
-            {content}
+            {listContent}
             <div>
                 {loggedIn && <Link className="btn btn-primary" to="/hotels/new">Add</Link>}
                 <button className="btn btn-success" onClick={refreshHandler}>Refresh</button>
@@ -66,7 +99,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onFetchHotels: (selectedCountryId, selectedCityId) => dispatch(actions.fetchHotels(selectedCountryId, selectedCityId)),
+        onFetchHotels: (selectedCountryId, selectedCityId, pageNo, pageCount) =>
+            dispatch(actions.fetchHotels(selectedCountryId, selectedCityId, pageNo, pageCount)),
         onFetchHotelsCount: (selectedCountryId, selectedCityId) => dispatch(actions.fetchHotelsCount(selectedCountryId, selectedCityId)),
     };
 };

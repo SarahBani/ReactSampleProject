@@ -52,7 +52,7 @@ namespace Core.ApplicationService.Implementation
             }
             if (page != null)
             {
-                list = list.Skip(page.FirstRowIndex * page.Count).Take(page.Count);
+                list = list.Skip(page.FirstRowIndex).Take(page.Count);
             }
             var hotels = await list.Include(q => q.City).Include(q => q.City.Country).ToListAsync();
             foreach (var hotel in hotels)

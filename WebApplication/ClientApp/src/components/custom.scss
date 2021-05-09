@@ -48,11 +48,11 @@ main {
     }
 
     &.fa-star {
-        color: #343A40;
-        @include shadow(#343A40);
+        color: $dark-color;
+        @include shadow($dark-color);
 
         &.checked {
-            color: #FFD119;
+            color: $medium-yellow;
             @include shadow(black);
         }
     }

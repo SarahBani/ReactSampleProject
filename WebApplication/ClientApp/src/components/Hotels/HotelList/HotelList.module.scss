@@ -8,5 +8,12 @@
         @include bottom-border(#ccc);
         margin-bottom: 5px;
         background-color: $light-yellow;
+
+        > div:last-child {
+            display: inline-block;
+            left: 50%; /* left-align your element to center */
+            transform: translateX(-50%); /* offset left by half the width of your element */
+            position: absolute; /* use or dont' use depending on element parent */
+        }
     }
 }
