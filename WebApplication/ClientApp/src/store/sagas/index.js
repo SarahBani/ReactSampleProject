@@ -5,12 +5,11 @@ import { fetchCountriesSaga, selectCountrySaga, selectCitySaga } from './locatio
 import {
     fetchHotelsSaga, fetchHotelSaga, fetchHotelPhotosSaga, fetchHotelsCountSaga,
     deleteHotelSaga, saveHotelSaga, uploadHotelPhotoSaga, deleteHotelPhotoSaga,
-    saveHotelPhotoSaga, removeHotelPhotoSaga, uploadFileSaga
+    saveHotelPhotoSaga, removeHotelPhotoSaga
 } from './hotel';
 import * as authActionTypes from '../actions/authActionTypes';
 import * as locationActionTypes from '../actions/locationActionTypes';
 import * as hotelActionTypes from '../actions/hotelActionTypes';
-import createUploadFileChannel from './createFileUploadChannel';
 
 export function* watchAuth() {
     yield all([

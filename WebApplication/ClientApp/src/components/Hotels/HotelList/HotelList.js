@@ -55,12 +55,12 @@ const HotelList = props => {
         (
             hotelsCount > 0 &&
             <div className={classes.Counter}>
-                <div className="float-left text-right">
-                    <b>Count: </b><span>{hotelsCount}</span>
-                </div>
                 <div>
                     <Pagination pageNo={pageNo} pagesCount={pagesCount}
                         onChange={changePageHandler} />
+                </div>
+                <div className="float-right">
+                    <b>Count: </b><span>{hotelsCount}</span>
                 </div>
             </div>
         );

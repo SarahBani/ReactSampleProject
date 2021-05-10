@@ -1,11 +1,12 @@
-﻿import { put, take, call, fork } from 'redux-saga/effects';
+﻿import { put, take, call, fork, cancelled } from 'redux-saga/effects';
 
 import axiosInstance from '../../axios-instance';
 import { SuccessfulOperationsEnum, FailedOperationsEnum } from '../../shared/constant';
 import * as actions from '../actions/hotelActions';
 import * as commonActions from '../actions/commonActions';
 import * as uploadActions from '../actions/uploadActions';
-import createUploadFileChannel from './createFileUploadChannel';
+import uploadFileChannel from './uploadFileChannel';
+import { END, eventChannel } from 'redux-saga';
 
 export function* fetchHotelsSaga(action) {
     yield put(commonActions.showLoader());
@@ -139,46 +140,27 @@ export function* deleteHotelSaga(action) {
     }
 }
 
-function uploadPhoto(action) {
-    //let emit;
-    //const chan = eventEmitter(emitter => {
-
-    //    emit = emitter;
-    //    return () => { }; // it's necessarily. event channel should 
-    //    // return unsubscribe function. In our case 
-    //    // it's empty function
-    //});
-
-    const headers = {
-        'Content-Type': 'multipart/form-data',
-        'Authorization': `Bearer ${action.token}`,
-
-        reportProgress: true,
-        observe: 'events'
-    }; console.log(`/Hotel/UploadPhoto/${action.hotelId}`);
-    const formData = new FormData();
-    formData.append("file", action.file, action.file.name);
-    return axiosInstance.post(`/Hotel/UploadPhoto/${action.hotelId}`,
-        formData,
-        {
-            headers: headers,
-            onUploadProgress: event => {
-                put(uploadActions.showProgress(14));
-            },
-        });
-}
-
 //export function* uploadHotelPhotoSaga(action) {
 //    yield put(commonActions.showLoader());
-//    yield put(uploadActions.startUpload());
-//    const [uploadPromise, chan] = uploadPhoto(action);
-//    yield fork(watchOnProgress, chan);
+//    const headers = {
+//        'Content-Type': 'multipart/form-data',
+//        'Authorization': `Bearer ${action.token}`,
+//        //reportProgress: true,
+//        //observe: 'events'
+//    };
+//    const config = {
+//        headers: headers,
+//        onUploadProgress: event => {
+//            const uploadedPercentage = Math.round((100 * event.loaded) / event.total);
+//            alert(uploadedPercentage);
+//        },
+//    };
 //    try {
+//        yield put(uploadActions.startUpload());
+//        const formData = yield new FormData();
+//        yield formData.append("file", action.file, action.file.name);
 
-//        //const response = yield call(uploadPhoto, action);
-//        const response = yield call(() => uploadPromise);
-//        console.log('SUCCESS');
-//        console.log(response);
+//        const response = yield axiosInstance.post(`/Hotel/UploadPhoto/${action.hotelId}`, formData, config);
 
 //        if (response?.status === 200) {
 //            const imageUrl = response.data.content.replace('Resources\\Images\\Hotels\\', '');
@@ -193,6 +175,77 @@ function uploadPhoto(action) {
 //    }
 //}
 
+//function createUploaderChannel(action) {
+//    return eventChannel(emit => {
+
+//        const onProgress = ({ total, loaded }) => {
+//            const percentage = Math.round((loaded * 100) / total);
+//            emit({ progress: percentage });
+//        }
+//        const headers = {
+//            'Content-Type': 'multipart/form-data',
+//            'Authorization': `Bearer ${action.token}`,
+//            reportProgress: true,
+//            observe: 'events'
+//        };
+//        const formData = new FormData();
+//        formData.append("file", action.file, action.file.name);
+//        axiosInstance.post(`/Hotel/UploadPhoto/${action.hotelId}`,
+//            formData,
+//            {
+//                headers: headers,
+//                onUploadProgress: onProgress
+//            })
+//            .then(() => {
+//                emit({
+//                    success: true
+//                });
+//                emit(END);
+//            }).catch(err => {
+//                emit({
+//                    err: new Error(err.message)
+//                });
+//                emit(END);
+//            })
+
+//        const unsubscribe = () => { };
+//        return unsubscribe;
+//    })
+//}
+
+//function* watchOnProgress(channel) {
+//    while (true) {
+//        //const progress = yield take(channel);
+//        const { progress, err, success } = yield take(channel);
+//        console.log(progress);
+//        //if (progress === 100) {
+//        //}
+//        if (err) {
+//            yield put(commonActions.raiseError(err));
+//            alert('errr');
+//            return;
+//        }
+//        if (success) {
+//            alert('success');
+//            return;
+//        }
+//        yield put(uploadActions.showProgress(progress));
+//    }
+//}
+
+//export function* uploadHotelPhotoSaga(action) {
+//    yield put(commonActions.showLoader());
+//    yield put(uploadActions.startUpload());
+
+//    try {
+//        const uploadChannel = yield call(createUploaderChannel, action);
+//        yield fork(watchOnProgress, uploadChannel);
+//        //put({ type: 'SUCCESS', payload: result });
+
+//    } catch (err) {
+//        yield put(commonActions.raiseError(err));
+//    }
+//}
 
 export function* uploadHotelPhotoSaga(action) {
     yield put(commonActions.showLoader());
@@ -200,7 +253,10 @@ export function* uploadHotelPhotoSaga(action) {
 
     const formData = new FormData();
     formData.append("file", action.file, action.file.name);
-    const channel = yield call(createUploadFileChannel, `/Hotel/UploadPhoto/${action.hotelId}`, formData, action.token);
+    const channel = yield call(uploadFileChannel,
+        `/Hotel/UploadPhoto/${action.hotelId}`,
+        formData,
+        action.token);
 
     while (true) {
         const { progress = 0, err, success, filePath } = yield take(channel);
@@ -217,118 +273,6 @@ export function* uploadHotelPhotoSaga(action) {
             return;
         }
         yield put(uploadActions.showProgress(progress));
-    }
-}
-
-
-
-//export function* uploadHotelPhotoSaga(action) {
-//    yield put(commonActions.showLoader());
-//    const headers = {
-//        'Content-Type': 'multipart/form-data',
-//        'Authorization': `Bearer ${action.token}`,
-
-//        reportProgress: true,
-//        observe: 'events'
-//    };
-//    try {
-//        yield put(uploadActions.startUpload());
-//        const formData = yield new FormData();
-//        yield formData.append("file", action.file, action.file.name);
-
-
-//        const response = yield axiosInstance.post(`/Hotel/UploadPhoto/${action.hotelId}`,
-//            formData,
-//            {
-//                headers: headers,
-//                onUploadProgress: event => {
-//                    const uploadedPercentage = Math.round((100 * event.loaded) / event.total);
-//                    //setTimeout(() => { alert(uploadedPercentage)}, 5000);
-
-//                    //return function action(dispatch) {
-//                    //    dispatch(uploadActions.showProgress(14));
-//                    //};
-//                    put(uploadActions.showProgress(14));
-//                },
-//            });
-//        //.subscribe(event => {
-//        //    if (event.type === HttpEventType.UploadProgress) {
-//        //        const uploadedPercentage = Math.round(100 * event.loaded / event.total);
-//        //        console.log(this.uploadedPercentage);
-//        //    }
-//        //    else if (event.type === HttpEventType.Response) {
-//        //        const actionResult = event.body;
-//        //        const uploadedImageUrl = actionResult.content;
-//        //        //this.hotelService.insertPhoto(this.hotelId, uploadedImageUrl.toString());
-//        //    }
-//        //}
-
-//        if (response?.status === 200) {
-//            const imageUrl = response.data.content.replace('Resources\\Images\\Hotels\\', '');
-//            yield put(actions.saveHotelPhoto({
-//                hotelId: action.hotelId,
-//                photoUrl: imageUrl
-//            }, action.token));
-//        }
-//        yield put(commonActions.hideLoader());
-//    } catch (error) {
-//        yield put(commonActions.raiseError(error));
-//    }
-//}
-
-
-
-function createUploader(payload) {
-    //let emit;
-    //const chan = eventEmitter(emitter => {
-
-    //    emit = emitter;
-    //    return () => { }; // it's necessarily. event channel should 
-    //    // return unsubscribe function. In our case 
-    //    // it's empty function
-    //});
-
-    //const uploadPromise = upload(payload, (event) => {
-    //    if (event.loaded.total === 1) {
-    //        emit(END);
-    //    }
-
-    //    emit(event.loaded.total);
-    //});
-
-    //return [uploadPromise, chan];
-}
-
-//function upload
-
-function* watchOnProgress(chan) {
-    while (true) {
-        const data = yield take(chan);
-        //yield put({ type: 'PROGRESS', payload: data });
-        yield put(uploadActions.showProgress(14));
-    }
-}
-
-function* uploadSource(action) {
-    //const [uploadPromise, chan] = createUploader(action.payload);
-    const [uploadPromise, chan] = createUploader(action.payload);
-    yield fork(watchOnProgress, chan);
-
-    try {
-        const result = yield call(() => uploadPromise);
-        //put({ type: 'SUCCESS', payload: result });
-        alert('SUCCESS');
-    } catch (err) {
-        //put({ type: 'ERROR', payload: err });
-        alert('ERROR');
-    }
-}
-
-//function* watchOnProgress(chan) {
-function* progressListener(chan) {
-    while (true) {
-        const data = yield take(chan)
-        yield put({ type: 'PROGRESS', payload: data })
     }
 }
 
@@ -350,7 +294,6 @@ export function* removeHotelPhotoSaga(action) {
 }
 
 export function* saveHotelPhotoSaga(action) {
-    console.log(action);
     yield put(commonActions.showLoader());
     yield put(uploadActions.reset());
     const headers = {
