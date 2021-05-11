@@ -1,4 +1,4 @@
-﻿import { put, take, call, fork, cancelled } from 'redux-saga/effects';
+﻿import { put, take, call } from 'redux-saga/effects';
 
 import axiosInstance from '../../axios-instance';
 import { SuccessfulOperationsEnum, FailedOperationsEnum } from '../../shared/constant';
@@ -6,7 +6,6 @@ import * as actions from '../actions/hotelActions';
 import * as commonActions from '../actions/commonActions';
 import * as uploadActions from '../actions/uploadActions';
 import uploadFileChannel from './uploadFileChannel';
-import { END, eventChannel } from 'redux-saga';
 
 export function* fetchHotelsSaga(action) {
     yield put(commonActions.showLoader());

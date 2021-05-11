@@ -8,11 +8,6 @@ export const About = () => (
     <div className="container">
         <PageTitle title="About" />
 
-        <h2 className="row">
-            This project is under Construction...
-        </h2>
-        <br />
-
         <p className="row">
             <b>
                 This project is implemented in the following technologies and frameworks:
@@ -32,7 +27,7 @@ export const About = () => (
             <li><em>HTML 5</em></li>
             <li><em>Sass / SCSS</em></li>
             <li><em>Bootstrap 4.6.0</em></li>
-            <li><em>Jest & Karma (Testing utility) for Unit Testing</em></li>
+            {/*<li><em>Jest & Karma (Testing utility) for Unit Testing</em></li>*/}
         </ul>
         <br />
 

@@ -1,10 +1,4 @@
 <p>
-	<h2>
-		This project is under Construction...
-	</h2>
-</p>
-
-<p>
 	<b>
 		This project is implemented in the following technologies and frameworks:
     </b>
@@ -22,7 +16,7 @@
 	<li><em>HTML 5</em></li>
 	<li><em>Sass / SCSS</em></li>
 	<li><em>Bootstrap 4.6.0</em></li>
-	<li><em>Jest & Karma (Testing utility) for Unit Testing</em></li>
+	/*<li><em>Jest & Karma (Testing utility) for Unit Testing</em></li>*/
 </ul>
 
 <p>
