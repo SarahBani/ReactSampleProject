@@ -1,9 +1,9 @@
-﻿import { React, useState, useEffect, useMemo, memo } from 'react';
+﻿import { React, useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 import classes from './HotelItem.module.scss';
 
-const HotelItem = memo(props => {
+const HotelItem = props => {
 
     const { stars, photos } = props.hotel;
     const [imageUrl, setImageUrl] = useState('images/no-image.png');
@@ -37,6 +37,6 @@ const HotelItem = memo(props => {
             </div>
         </Link>
     );
-});
+};
 
 export default HotelItem;

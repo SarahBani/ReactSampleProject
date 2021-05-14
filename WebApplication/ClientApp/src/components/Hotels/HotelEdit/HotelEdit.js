@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useCallback, useMemo, useReducer } from 'react';
+import { React, useState, useEffect, useCallback, useMemo, useReducer, memo } from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -166,7 +166,7 @@ const getDropDownCitiesData = (cities) => {
     }));
 };
 
-const HotelEdit = props => {
+const HotelEdit = memo(props => {
 
     const {
         id, hotel, countries, cities, successfulOperation, failedOperation, loading, loggedIn, token,
@@ -382,7 +382,7 @@ const HotelEdit = props => {
             </form>
         </div>
     );
-};
+});
 
 const mapStateToProps = state => {
     return {
