@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useCallback, useMemo, Fragment } from 'react';
+import { React, useState, useEffect, useCallback, useMemo, Fragment, memo } from 'react';
 import { Redirect, useParams, useHistory } from 'react-router';
 import { connect } from 'react-redux';
 import styles from 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -13,7 +13,7 @@ import * as actions from '../../../store/actions/hotelActions';
 
 const Carousel = require('react-responsive-carousel').Carousel;
 
-const HotelDetail = props => {
+const HotelDetail = memo(props => {
 
     const { id, hotelPhotos, successfulOperation, failedOperation, loggedIn, token,
         onFetchHotel, onFetchHotelPhotos, onDeleteHotel } = props;
@@ -180,7 +180,7 @@ const HotelDetail = props => {
         </div>
 
     );
-};
+});
 
 const mapStateToProps = state => {
     return {

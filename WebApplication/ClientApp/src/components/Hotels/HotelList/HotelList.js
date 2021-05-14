@@ -1,4 +1,4 @@
-﻿import { React, useEffect, useMemo, useCallback } from 'react';
+﻿import { React, useEffect, useMemo, useCallback, memo } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -11,7 +11,7 @@ import { useState } from 'react';
 
 const pageCount = 10;
 
-const HotelList = props => {
+const HotelList = memo(props => {
 
     const { hotels, hotelsCount, successfulOperation, selectedCountryId, selectedCityId, loggedIn,
         onFetchHotels, onFetchHotelsCount } = props;
@@ -86,7 +86,7 @@ const HotelList = props => {
             </div>
         </div>
     );
-};
+});
 
 const mapStateToProps = state => {
     return {
