@@ -9,9 +9,9 @@ namespace Core.DomainModel.Entities
 
         public DbSet<Country> Countries { get; set; }
 
-        //public DbSet<Hotel> Hotels { get; set; }
+        public DbSet<Hotel> Hotels { get; set; }
 
-        //public DbSet<HotelPhoto> HotelPhotos { get; set; }
+        public DbSet<HotelPhoto> HotelPhotos { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -36,8 +36,8 @@ namespace Core.DomainModel.Entities
 
             modelBuilder.ApplyConfiguration(new CountryEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new CityEntityTypeConfiguration());
-            //modelBuilder.ApplyConfiguration(new HotelEntityTypeConfiguration());
-            //modelBuilder.ApplyConfiguration(new HotelPhotoEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new HotelEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new HotelPhotoEntityTypeConfiguration());
         }
     }
 }
