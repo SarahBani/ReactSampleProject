@@ -1,9 +1,13 @@
 ﻿using Core.DomainModel.Entities;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Core.DomainService
 {
@@ -116,6 +120,18 @@ namespace Core.DomainService
             }
             return entity;
         }
+
+        public static TEntity Clone<TEntity, TKey>(this TEntity source)
+            where TEntity : BaseEntity<TKey>
+        {
+            var serialized = JsonConvert.SerializeObject(source);
+            return JsonConvert.DeserializeObject<TEntity>(serialized);
+        }
+
+        public static Task<IList<TSource>> ToIListAsync<TSource>(this IQueryable<TSource> source,
+            CancellationToken cancellationToken = default) =>
+                source.ToListAsync(cancellationToken)
+                    .ContinueWith<IList<TSource>>(q => q.Result, TaskContinuationOptions.ExecuteSynchronously);
 
     }
 }

@@ -8,7 +8,7 @@
     box-shadow: 0 2px 3px $medium-gray;
     padding: 10px;
     box-sizing: border-box;
-    @include border( #eee);
+    @include border(#eee);
 
     input {
         display: block;

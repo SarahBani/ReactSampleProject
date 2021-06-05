@@ -7,13 +7,7 @@ using System.Linq.Expressions;
 using Core.DomainModel.Settings;
 using Microsoft.AspNetCore.Http;
 using System.Drawing;
-using Newtonsoft.Json;
-using Core.DomainModel.Entities;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Threading;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 
 namespace Core.DomainService
 {
@@ -211,18 +205,6 @@ namespace Core.DomainService
             }
             return $"{text}s";
         }
-
-        public static TEntity Clone<TEntity, TKey>(this TEntity source)
-            where TEntity : BaseEntity<TKey>
-        {
-            var serialized = JsonConvert.SerializeObject(source);
-            return JsonConvert.DeserializeObject<TEntity>(serialized);
-        }
-
-        public static Task<IList<TSource>> ToIListAsync<TSource>(this IQueryable<TSource> source,
-            CancellationToken cancellationToken = default) =>
-            source.ToListAsync(cancellationToken)
-                 .ContinueWith<IList<TSource>>(q => q.Result, TaskContinuationOptions.ExecuteSynchronously);
 
         public static void TrimCharProperties(Type type, object obj)
         {
